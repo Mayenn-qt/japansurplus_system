@@ -9,20 +9,16 @@
     <!--Sidebar-->
     @include('dashboard.sidebar')
 
-    
-        
         <!-- Top NavBar -->
         @include('dashboard.topnavbar')
 
-        <div class="main-content-wrapper">
-     
+        <div class="main-content-wrapper">    
         <div class="page-selection active-page" id="page-dashboard">
         <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
                 <h4 class="text-black mb-1 ">
                     Welcome back,
-                    <span id="dashName"></span>
-                    
+                    <span id="dashName">{{ $user->name }}</span>  
                 </h4>
                 <p class="text-black-50">
                     Here's an overview of your store's performance today.
@@ -44,7 +40,7 @@
        
        <!-- TOP ROW CARDS (4 Stats Cards) -->
             <div class="row g-3 mb-4">
-                <!-- Card 1: Total Sales (Red Theme) -->
+                <!-- Card 1: Total Sales -->
                 <div class="col-xl-3 col-md-6">
                     <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('reports', document.querySelector('[data-page=reports]'))">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -59,7 +55,7 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Monthly Revenue (Green Theme) -->
+                <!-- Card 2: Monthly Revenue -->
                 <div class="col-xl-3 col-md-6">
                     <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('analytics', document.querySelector('[data-page=analytics]'))">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -74,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Total Visitors (Primary/Blue Theme) -->
+                <!-- Card 3: Total Products -->
                 <div class="col-xl-3 col-md-6">
                     <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('customers', document.querySelector('[data-page=customers]'))">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -89,7 +85,7 @@
                     </div>
                 </div>
 
-                <!-- Card 4: Total Products Sold (Warning/Yellow Theme) -->
+                <!-- Card 4: Low Stock -->
                 <div class="col-xl-3 col-md-6">
                     <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('stock', document.querySelector('[data-page=stock]'))">
                         <div class="d-flex justify-content-between align-items-start mb-3">
@@ -105,15 +101,15 @@
                 </div>
             </div>
 
-        <!-- MIDDLE SECTION: Bar Chart & Product Statistic Donut Style Card -->
+        <!-- MIDDLE SECTION: Monthly Sale Total Transactions Card -->
         @include('dashboard.statistic')
 
-        <!-- 3 BRANCH PERFORMANCE CARDS -->
+        <!-- recent sales and low stock products -->
         @include('dashboard.branch')
 
         
         <div class="row g-4">
-    <!-- Recent Activities Component -->
+    <!-- Recent Activities and sms stsatus -->
     <div class="col-lg-7">
         <div class="dashboard-card h-100 p-4 d-flex flex-column justify-content-between">
             <div>
@@ -126,7 +122,7 @@
                             <i class="fa-solid fa-cart-shopping"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Naga Branch</b></div>
+                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Gubat Branch</b></div>
                             <div class="text-black-50" style="font-size: 11.5px;">2 minutes ago</div>
                         </div>
                     </div>
@@ -137,7 +133,7 @@
                             <i class="fa-solid fa-truck-ramp-box"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Stock In: <b class="text-black">20 units</b> Steel Kitchen Rack — Naga</div>
+                            <div class="text-black" style="font-size: 13px;">Stock In: <b class="text-black">20 units</b> Steel Kitchen Rack — Gubat Branch</div>
                             <div class="text-black-50" style="font-size: 11.5px;">38 minutes ago</div>
                         </div>
                     </div>
@@ -148,7 +144,7 @@
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Toshiba TV 32"</b> — Sorsogon Branch</div>
+                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Toshiba TV 32"</b> — Main Branch</div>
                             <div class="text-black-50" style="font-size: 11.5px;">1 hour ago</div>
                         </div>
                     </div>
@@ -159,7 +155,7 @@
                             <i class="fa-solid fa-user-plus"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">New staff account created for <b class="text-black">Legazpi Branch</b></div>
+                            <div class="text-black" style="font-size: 13px;">New staff account created for <b class="text-black">Juban Branch</b></div>
                             <div class="text-black-50" style="font-size: 11.5px;">Yesterday, 4:18 PM</div>
                         </div>
                     </div>

@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Owner',
             'email' => 'owner@ohaiyo.com',
-            'password' => Hash::make('admin123'),
+            'password' => Hash::make('admin_ohaiyo'),
             'role' => 'owner',
             'branch_id' => null,
         ]);
@@ -23,16 +23,16 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Main Branch Staff',
             'email' => 'main@ohaiyo.com',
-            'password' => Hash::make('staff123'),
+            'password' => Hash::make('main_ohaiyo'),
             'role' => 'staff',
             'branch_id' => 1,
         ]);
 
-        // Bacon Branch Staff
+        // Juban Branch Staff
         User::create([
-            'name' => 'Bacon Branch Staff',
-            'email' => 'bacon@ohaiyo.com',
-            'password' => Hash::make('staff123'),
+            'name' => 'Juban Branch Staff',
+            'email' => 'juban@ohaiyo.com',
+            'password' => Hash::make('juban_ohaiyo'),
             'role' => 'staff',
             'branch_id' => 2,
         ]);
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Gubat Branch Staff',
             'email' => 'gubat@ohaiyo.com',
-            'password' => Hash::make('staff123'),
+            'password' => Hash::make('gubat_ohaiyo'),
             'role' => 'staff',
             'branch_id' => 3,
         ]);
