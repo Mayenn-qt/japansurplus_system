@@ -9,7 +9,8 @@
     <!--Sidebar-->
     @include('dashboard.sidebar')
 
-       
+    
+        
         <!-- Top NavBar -->
         @include('dashboard.topnavbar')
 
@@ -18,12 +19,12 @@
         <div class="page-selection active-page" id="page-dashboard">
         <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
-                <h4 class="text-white mb-1 ">
+                <h4 class="text-black mb-1 ">
                     Welcome back,
                     <span id="dashName"></span>
                     
                 </h4>
-                <p class="text-white-50">
+                <p class="text-black-50">
                     Here's an overview of your store's performance today.
                 </p>
             </div>
@@ -52,9 +53,9 @@
                             </div>
                             <span class="badge bg-success bg-opacity-10 text-success fw-semibold" style="font-size: 0.7rem;">Sales</span>
                         </div>
-                        <span class="text-white small fw-medium d-block mb-1">Total Sales</span>
-                        <h3 class="fw-bold mb-1 text-white">₱ 0.00</h3>
-                        <span class="text-white" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        <span class="text-black small fw-medium d-block mb-1">Total Sales</span>
+                        <h3 class="fw-bold mb-1 text-black">₱ 0.00</h3>
+                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
                     </div>
                 </div>
 
@@ -67,9 +68,9 @@
                             </div>
                             <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold" style="font-size: 0.7rem;">Revenue</span>
                         </div>
-                        <span class="text-white small fw-medium d-block mb-1">Monthly Revenue</span>
-                        <h3 class="fw-bold mb-1 text-white">0</h3>
-                        <span class="text-white" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        <span class="text-black small fw-medium d-block mb-1">Monthly Revenue</span>
+                        <h3 class="fw-bold mb-1 text-black">0</h3>
+                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
                     </div>
                 </div>
 
@@ -82,9 +83,9 @@
                             </div>
                             <span class="badge bg-info bg-opacity-10 text-info fw-semibold" style="font-size: 0.7rem;">3 Branches</span>
                         </div>
-                        <span class="text-white small fw-medium d-block mb-1">Total Products</span>
-                        <h3 class="fw-bold mb-1 text-white">0</h3>
-                        <span class="text-white" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        <span class="text-black small fw-medium d-block mb-1">Total Products</span>
+                        <h3 class="fw-bold mb-1 text-black">0</h3>
+                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
                     </div>
                 </div>
 
@@ -97,9 +98,9 @@
                             </div>
                             <span class="badge bg-danger bg-opacity-10 text-danger fw-semibold" style="font-size: 0.7rem;">Low Stock</span>
                         </div>
-                        <span class="text-white small fw-medium d-block mb-1">Low Stock Items</span>
-                        <h3 class="fw-bold mb-1 text-white">0</h3>
-                        <span class="text-white" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        <span class="text-black small fw-medium d-block mb-1">Low Stock Items</span>
+                        <h3 class="fw-bold mb-1 text-black">0</h3>
+                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
                     </div>
                 </div>
             </div>
@@ -116,50 +117,50 @@
     <div class="col-lg-7">
         <div class="dashboard-card h-100 p-4 d-flex flex-column justify-content-between">
             <div>
-                <div class="fw-bold h6 mb-4 text-white">Recent Activities</div>
+                <div class="fw-bold h6 mb-4 text-black">Recent Activities</div>
                 
                 <div class="d-flex flex-column gap-3">
                     <!-- Activity 1 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #1e293b; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(37, 99, 235, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);">
+                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(37, 99, 235, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2);">
                             <i class="fa-solid fa-cart-shopping"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-white" style="font-size: 13px;">Sale <b class="text-white">INV-10231</b> recorded at <b class="text-white">Naga Branch</b></div>
-                            <div class="text-white-50" style="font-size: 11.5px;">2 minutes ago</div>
+                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Naga Branch</b></div>
+                            <div class="text-black-50" style="font-size: 11.5px;">2 minutes ago</div>
                         </div>
                     </div>
 
                     <!-- Activity 2 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #141c2e; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
                             <i class="fa-solid fa-truck-ramp-box"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-white" style="font-size: 13px;">Stock In: <b class="text-white">20 units</b> Steel Kitchen Rack — Naga</div>
-                            <div class="text-white-50" style="font-size: 11.5px;">38 minutes ago</div>
+                            <div class="text-black" style="font-size: 13px;">Stock In: <b class="text-black">20 units</b> Steel Kitchen Rack — Naga</div>
+                            <div class="text-black-50" style="font-size: 11.5px;">38 minutes ago</div>
                         </div>
                     </div>
 
                     <!-- Activity 3 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #1e293b; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">
+                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-white" style="font-size: 13px;">Low stock alert: <b class="text-white">Toshiba TV 32"</b> — Sorsogon Branch</div>
-                            <div class="text-white-50" style="font-size: 11.5px;">1 hour ago</div>
+                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Toshiba TV 32"</b> — Sorsogon Branch</div>
+                            <div class="text-black-50" style="font-size: 11.5px;">1 hour ago</div>
                         </div>
                     </div>
 
                     <!-- Activity 4 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #141c2e; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2);">
+                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(0, 0, 0, 0.05); color: #0f172a; border: 1px solid rgba(0, 0, 0, 0.1);">
                             <i class="fa-solid fa-user-plus"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-white" style="font-size: 13px;">New staff account created for <b class="text-white">Legazpi Branch</b></div>
-                            <div class="text-white-50" style="font-size: 11.5px;">Yesterday, 4:18 PM</div>
+                            <div class="text-black" style="font-size: 13px;">New staff account created for <b class="text-black">Legazpi Branch</b></div>
+                            <div class="text-black-50" style="font-size: 11.5px;">Yesterday, 4:18 PM</div>
                         </div>
                     </div>
                 </div>
@@ -171,25 +172,25 @@
     <div class="col-lg-5">
         <div class="dashboard-card h-100 p-4 d-flex flex-column justify-content-between">
             <div>
-                <div class="fw-bold h6 mb-4 text-white">SMS Notification Status</div>
+                <div class="fw-bold h6 mb-4 text-black">SMS Notification Status</div>
                 
                 <div class="d-flex flex-column gap-3">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background-color: #1e293b; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
-                        <span class="text-white" style="font-size: 13px;">Gateway status</span>
+                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
+                        <span class="text-black" style="font-size: 13px;">Gateway status</span>
                         <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Online</span>
                     </div>
 
-                    <div class="p-3 rounded-3 d-flex flex-column gap-2.5" style="background-color: #141c2e; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);">
+                    <div class="p-3 rounded-3 d-flex flex-column gap-2.5" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
                         <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-white-50">Sent today</span>
-                            <b class="text-white">142</b>
+                            <span class="text-black-50">Sent today</span>
+                            <b class="text-black">142</b>
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-white-50">Delivered</span>
-                            <b class="text-white">139</b>
+                            <span class="text-black-50">Delivered</span>
+                            <b class="text-black">139</b>
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-white-50">Failed</span>
+                            <span class="text-black-50">Failed</span>
                             <b class="text-danger">3</b>
                         </div>
                     </div>
@@ -197,7 +198,7 @@
             </div>
 
             <div class="mt-4">
-                <button class="btn btn-dark w-100 btn-sm py-2 border border-secondary border-opacity-25 text-white shadow-sm rounded-pill fw-medium" style="font-size: 0.8rem;" onclick="showPage('sms', document.querySelector('[data-page=sms]'))">
+                <button class="btn btn-light w-100 btn-sm py-2 border border-secondary border-opacity-25 text-black shadow-sm rounded-pill fw-medium" style="font-size: 0.8rem;" onclick="showPage('sms', document.querySelector('[data-page=sms]'))">
                     <i class="fa-solid fa-paper-plane me-2 text-primary"></i> Compose Broadcast
                 </button>
             </div>
@@ -206,4 +207,3 @@
 </div>
 
     </div>
-
