@@ -1,0 +1,150 @@
+/* Colors (Red, White, & Clean Gray Theme) */
+:root {
+    --bs-primary: #dc3545;
+    --bs-primary-hover: #b02a37;
+    --accent-red: #dc3545;
+}
+
+/* General */
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* Background */
+.login-bg {
+    background: linear-gradient(rgba(20, 20, 20, 0.8), rgba(30, 30, 30, 0.9)),
+                url('../images/login-bg.jpg');
+    background-size: cover;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Left Side */
+.brand-section {
+    color: #ffffff;
+    z-index: 2;
+}
+
+/* Badge */
+.badge-internal {
+    background: rgba(220, 53, 69, 0.15);
+    color: #ff8589;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 0.5rem 1rem;
+    border-radius: 50rem;
+}
+
+/* Login Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+    color: #f8f9fa;
+}
+
+/* Input */
+.form-control {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    border-radius: 0.75rem;
+}
+
+/* Input kapag naka-focus */
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: var(--bs-primary) !important;
+    box-shadow: 0 0 0 .25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Placeholder */
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Icon sa input */
+.input-group-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Show password */
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Remember me */
+.form-check-label {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Links */
+a {
+    color: #ff8589;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffb3b5;
+}
+
+/* Login Button */
+.btn-primary-custom {
+    background: var(--bs-primary);
+    border: none;
+    border-radius: .75rem;
+    padding: .75rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.btn-primary-custom:hover {
+    background: var(--bs-primary-hover);
+    color: #ffffff;
+}
+
+/* Logo */
+.logo-placeholder {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #dc3545, #6c757d);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .login-bg {
+        padding: 2rem 1rem;
+    }
+
+    .brand-section {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+}

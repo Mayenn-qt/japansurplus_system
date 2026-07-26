@@ -1,0 +1,102 @@
+:root {
+    --bg-main: #0f172a;
+    --sidebar-bg: #151C2C;
+    --sidebar-hover: #334155;
+    --accent-red: #EF4444;
+    --card-bg: #1e293b;
+    --text-dark: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: var(--bg-main) !important;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
+}
+
+/* Enterprise Card Elements */
+.dashboard-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: var(--text-dark);
+}
+
+.btn-red-custom {
+    background-color: var(--accent-red);
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 0.75rem;
+    transition: opacity 0.2s;
+}
+
+.btn-red-custom:hover {
+    opacity: 0.9;
+    color: white;
+}
+
+.table {
+    color: var(--text-dark);
+}
+
+.table tr {
+    vertical-align: middle;
+}
+
+.form-control,
+.form-select {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-light {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+.text-muted {
+    color: #94a3b8 !important;
+}
+
+/* Para sa mobile: Itago muna ang sidebar sa gilid */
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Kapag pinindot ang button at lumitaw ang 'show' class, papasok ito */
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}
+
+/* --- MAIN CONTENT WRAPPER --- */
+.main-content-wrapper {
+    margin-left: 250px;
+    padding-top: 95px;
+    /* Sapat na espasyo para sa fixed top navbar */
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+}
+
+/* Custom Simple Card Design para sa Beginner */
+.simple-card {
+    background-color: #1e293b;
+    /* Dark theme card background */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.simple-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    border-color: rgba(220, 53, 69, 0.4);
+    /* Subtle red accent on hover */
+}
