@@ -51,8 +51,7 @@
                         </div>
                         <span class="text-black small fw-medium d-block mb-1">Total Sales</span>
                         <h3 class="fw-bold mb-1 text-black">₱ 0.00</h3>
-                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
-                    </div>
+                        </div>
                 </div>
 
                 <!-- Card 2: Monthly Revenue -->
@@ -66,7 +65,7 @@
                         </div>
                         <span class="text-black small fw-medium d-block mb-1">Monthly Revenue</span>
                         <h3 class="fw-bold mb-1 text-black">0</h3>
-                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        
                     </div>
                 </div>
 
@@ -81,7 +80,7 @@
                         </div>
                         <span class="text-black small fw-medium d-block mb-1">Total Products</span>
                         <h3 class="fw-bold mb-1 text-black">0</h3>
-                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        
                     </div>
                 </div>
 
@@ -96,7 +95,7 @@
                         </div>
                         <span class="text-black small fw-medium d-block mb-1">Low Stock Items</span>
                         <h3 class="fw-bold mb-1 text-black">0</h3>
-                        <span class="text-black-50" style="font-size: 0.65rem;"><i class="fa-solid fa-arrow-pointer me-1"></i> Click to view</span>
+                        
                     </div>
                 </div>
             </div>
@@ -122,43 +121,26 @@
                             <i class="fa-solid fa-cart-shopping"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Gubat Branch</b></div>
+                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Juban Branch</b></div>
                             <div class="text-black-50" style="font-size: 11.5px;">2 minutes ago</div>
                         </div>
                     </div>
 
                     <!-- Activity 2 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">
-                            <i class="fa-solid fa-truck-ramp-box"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Stock In: <b class="text-black">20 units</b> Steel Kitchen Rack — Gubat Branch</div>
-                            <div class="text-black-50" style="font-size: 11.5px;">38 minutes ago</div>
-                        </div>
-                    </div>
-
+                   
                     <!-- Activity 3 -->
                     <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);">
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Toshiba TV 32"</b> — Main Branch</div>
+                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Japanese Hard-Case Travel Luggage</b> — Main Branch</div>
                             <div class="text-black-50" style="font-size: 11.5px;">1 hour ago</div>
                         </div>
                     </div>
 
                     <!-- Activity 4 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(0, 0, 0, 0.05); color: #0f172a; border: 1px solid rgba(0, 0, 0, 0.1);">
-                            <i class="fa-solid fa-user-plus"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">New staff account created for <b class="text-black">Juban Branch</b></div>
-                            <div class="text-black-50" style="font-size: 11.5px;">Yesterday, 4:18 PM</div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

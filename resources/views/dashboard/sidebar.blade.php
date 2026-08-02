@@ -2,11 +2,11 @@
 <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
 <div id="appShell" style="display:block">
-<!-- LEFT SIDEBAR -->
+
 <div class="sidebar d-flex flex-column justify-content-between p-3 h-100 border-end border-secondary border-opacity-10" id="sidebar">
         <div>
             <div>
-            <!-- System Logo & Name -->
+   <!-- System Logo & Name -->
             <div class="d-flex align-items-center gap-3 mb-4 px-2 pt-2">
                 <div class="bg-danger text-white rounded-3 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0 sidebar-brand-box">
                     <i class="fa-solid fa-store"></i>
@@ -37,7 +37,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="sidebar-link" href="#">
+                    <a class="{{ request()->routeIs('owner.salesrecording') ? 'sidebar-link-active' : 'sidebar-link'}}" 
+                    href="{{route('owner.salesrecording')}}">
                         <i class="fa-solid fa-layer-group sidebar-icon text-muted"></i> Sales Recording
                     </a>
                 </li>

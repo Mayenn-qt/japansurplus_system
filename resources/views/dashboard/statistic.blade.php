@@ -1,76 +1,78 @@
 <div class="row g-3 mb-4">
-    <!-- Bar Chart Section (Monthly Sales Trend - Ranked Bar Colors) -->
+    <!-- Left Column: Monthly Sales Trend (Line Chart Card) -->
     <div class="col-lg-8">
-        <div class="dashboard-card p-4 h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="card shadow mb-4 h-100 border-0">
+            <!-- Card Header -->
+            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
                 <div>
-                    <h5 class="fw-bold h6 mb-1 text-black">Monthly Sales Trend</h5>
-                    <span class="text-black-50 small" style="font-size: 0.75rem;">Jan – Jul 2026</span>
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Sales Trend</h6>
+                    <div class="text-muted mt-1" style="font-size: 11px;">Jan – Jul 2026</div>
                 </div>
-                <!-- Professional Toggle Buttons -->
                 <div class="btn-group btn-group-sm bg-light p-1 rounded border border-secondary border-opacity-25" role="group">
                     <button type="button" class="btn btn-primary btn-sm px-3 py-1 shadow-sm text-white fw-medium" style="font-size: 0.75rem; background-color: #2563eb; border: none;">Revenue</button>
-                    <button type="button" class="btn btn-light btn-sm px-3 py-1 text-black-50 border-0" style="font-size: 0.75rem;">Transactions</button>
+                    <button type="button" class="btn btn-light btn-sm px-3 py-1 text-black-50 border-0 shadow-none" style="font-size: 0.75rem;">Transactions</button>
                 </div>
             </div>
-
-            <!-- Bar Chart Visual Container (Scaled for 100 pesos uniform values with left-side labels) -->
-            <div class="position-relative pt-3 ps-5 border-top border-secondary border-opacity-25" style="height: 230px;">
-                <!-- Professional Grid Lines & Axis Values (Left-Aligned) -->
-                <div class="position-absolute w-100 h-100 d-flex flex-column justify-content-between pointer-events-none text-black" style="top: 0; left: 0; font-size: 0.65rem; z-index: 1; padding-left: 0.5rem; padding-right: 1rem;">
-                    <div class="border-bottom border-secondary border-opacity-25 w-100 d-flex justify-content-start pb-1 text-black-50"><span>₱100</span></div>
-                    <div class="border-bottom border-secondary border-opacity-25 w-100 d-flex justify-content-start pb-1 text-black-50"><span>₱75</span></div>
-                    <div class="border-bottom border-secondary border-opacity-25 w-100 d-flex justify-content-start pb-1 text-black-50"><span>₱50</span></div>
-                    <div class="border-bottom border-secondary border-opacity-25 w-100 d-flex justify-content-start pb-1 text-black-50"><span>₱25</span></div>
-                </div>
-
-                <!-- Clean Bars Container (All set to 100% height for ₱100) -->
-                <div class="d-flex justify-content-between align-items-end h-100 position-relative px-3 pb-1" style="z-index: 2;">
+            
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area position-relative pt-2 ps-5 border-top border-secondary border-opacity-10 mt-1" style="height: 210px;">
                     
-                    <!-- Jan -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #ef4444 !important;" title="Jan: ₱100"></button>
+                    <!-- Y-Axis Grid Lines & Values -->
+                    <div class="position-absolute w-100 h-100 d-flex flex-column justify-content-between pointer-events-none text-muted" style="top: 0; left: 0; font-size: 0.65rem; z-index: 1; padding-left: 0.5rem; padding-right: 1.5rem;">
+                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>400,000</span></div>
+                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>360,000</span></div>
+                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>320,000</span></div>
+                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>280,000</span></div>
                     </div>
 
-                    <!-- Feb -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #f59e0b !important;" title="Feb: ₱100"></button>
-                    </div>
+                    <!-- SVG Smooth Line Graph with Area Fill -->
+                    <div class="position-absolute w-100 h-100" style="top: 0; left: 0; padding-left: 3rem; padding-right: 2rem; padding-top: 10px; padding-bottom: 25px; z-index: 2;">
+                        <svg viewBox="0 0 600 180" class="w-100 h-100 overflow-visible">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"></stop>
+                                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"></stop>
+                                </linearGradient>
+                            </defs>
 
-                    <!-- Mar -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #f97316 !important;" title="Mar: ₱100"></button>
-                    </div>
+                            <!-- Area Gradient Under the Line -->
+                            <path d="M 0,140 Q 100,100 200,110 T 400,60 T 600,20 L 600,160 L 0,160 Z" fill="url(#chartGradient)"></path>
 
-                    <!-- Apr -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #6366f1 !important;" title="Apr: ₱100"></button>
-                    </div>
+                            <!-- Main Smooth Trend Line -->
+                            <path d="M 0,140 Q 100,100 200,110 T 400,60 T 600,20" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"></path>
 
-                    <!-- May -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #3b82f6 !important;" title="May: ₱100"></button>
-                    </div>
-
-                    <!-- Jun -->
-                    <div class="d-flex flex-column align-items-center justify-content-end h-100 position-relative group" style="width: 12%;">
-                        <button type="button" class="btn w-100 p-0 border-0 rounded-top shadow-sm transition-all" style="height: 100%; background-color: #2563eb !important;" title="Jun: ₱100"></button>
+                            <!-- Data Points (Circles) -->
+                            <circle cx="0" cy="140" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="100" cy="116" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="200" cy="110" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="300" cy="85" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="400" cy="60" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="500" cy="40" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                            <circle cx="600" cy="20" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
+                        </svg>
                     </div>
 
                 </div>
-            </div>
 
-            <!-- Months labels in solid black -->
-            <div class="d-flex justify-content-between px-3 text-black fw-medium mt-2 ps-5" style="font-size: 0.75rem;">
-                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                <!-- X-Axis Months Labels -->
+                <div class="d-flex justify-content-between text-muted fw-medium mt-1 ps-5 pe-3" style="font-size: 0.75rem;">
+                    <span>Jan</span>
+                    <span>Feb</span>
+                    <span>Mar</span>
+                    <span>Apr</span>
+                    <span>May</span>
+                    <span>Jun</span>
+                    <span>Jul</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Product Statistic Card -->
+    <!-- Right Column: Product Statistic / Donut Chart Card -->
     <div class="col-lg-4">
-        <div class="dashboard-card p-4 h-100 position-relative overflow-hidden">
-            <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="card h-100 border-0 shadow-sm p-4 position-relative overflow-hidden">
+            <div class="d-flex justify-content-between align-items-center mb-1">
                 <h5 class="fw-bold h6 mb-0 text-black">Total Transactions</h5>
                 <select class="form-select form-select-sm border-0 w-auto py-0 px-2 shadow-sm bg-light text-black" style="font-size: 0.75rem;">
                     <option>Today</option>
@@ -103,7 +105,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium text-black"><span class="badge rounded-circle me-1" style="width: 8px; height: 8px; display: inline-block; background-color: #64748b;"></span> GubatBranch</span>
+                    <span class="fw-medium text-black"><span class="badge rounded-circle me-1" style="width: 8px; height: 8px; display: inline-block; background-color: #64748b;"></span> Magallanes Branch</span>
                     <div class="d-flex align-items-center gap-2">
                         <span class="text-black-50">₱200</span>
                         <span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.65rem;">44.4%</span>

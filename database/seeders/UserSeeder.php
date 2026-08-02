@@ -37,11 +37,11 @@ class UserSeeder extends Seeder
             'branch_id' => 2,
         ]);
 
-        // Gubat Branch Staff
+        // magallanes Branch Staff
         User::create([
-            'name' => 'Gubat Branch Staff',
-            'email' => 'gubat@ohaiyo.com',
-            'password' => Hash::make('gubat_ohaiyo'),
+            'name' => 'Magallanes Branch Staff',
+            'email' => 'magallanes@ohaiyo.com',
+            'password' => Hash::make('magallanes_ohaiyo'),
             'role' => 'staff',
             'branch_id' => 3,
         ]);

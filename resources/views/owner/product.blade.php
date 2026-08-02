@@ -45,7 +45,7 @@
                         <option>All Branches</option>
                         <option>Sorsogon</option>
                         <option>Juban</option>
-                        <option>Gubat</option>
+                        <option>Magallanes</option>
                     </select>
                     <select class="form-select" style="width:auto; border-radius:9px; font-size:13px;">
                         <option>All Status</option>
@@ -108,7 +108,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                       <img src="{{ asset('images/products/plateandbowl.jpg') }}" alt="Plate" class="prod-thumb">                                          
                                         <div>
-                                            <div class="fw-semibold">Surplus Ceramic Plate & Bowl Set"</div>
+                                            <div class="fw-semibold">Ceramic Plate & Bowl Set"</div>
                                             <div class="text-muted" style="font-size:11.5px;">SKU-HS-002</div>
                                         </div>
                                     </div>
@@ -225,7 +225,7 @@
                             <tr>
                                 <td class="ps-3"><input type="checkbox"></td>
                                 <td>
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2">l
                                         <img src="{{asset('images/products/chainsaw.jpg')}}" alt="Chainsaw" class="prod-thumb">
                                         <div>
                                             <div class="fw-semibold">Shindaiwa Gasoline Engine Chainsaw</div>
@@ -257,7 +257,7 @@
                 
                 <!-- Pagination Footer -->
                 <div class="d-flex justify-content-between align-items-center p-3 px-4 border-top">
-                    <span class="text-muted" style="font-size:12.5px;">Showing 1–6 of 1,284 products</span>
+                    <span class="text-muted" style="font-size:12.5px;">Showing 1–6 of secret products</span>
                     <nav>
                         <ul class="pagination pagination-sm mb-0">
                             <li class="page-item disabled"><a class="page-link" href="#">Prev</a></li>
