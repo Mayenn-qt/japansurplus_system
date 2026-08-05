@@ -31,9 +31,8 @@ Route::middleware(['auth'])->prefix('staff')->group(function () {
     Route::get('/product', [ProductController::class, 'index'])->name('staff.product');
 });
 
-Route::get('/owner/sales-recording', [SalesController::class, 'index'])->name('owner.salesrecording');
-
 Route::middleware(['auth'])->prefix('owner')->group(function () {
+    Route::get('/sales-recording', [SalesController::class, 'index'])->name('owner.salesrecording');
     Route::get('/product', [ProductController::class, 'index'])->name('owner.product');
-   
+    Route::get('/stock', [ProductController::class, 'stockManagement'])->name('owner.stock');
 });

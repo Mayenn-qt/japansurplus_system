@@ -13,7 +13,7 @@
         @include('dashboard.topnavbar')
 
         <div class="main-content-wrapper">    
-        <div class="page-selection active-page" id="page-dashboard">
+        <div cla    ss="page-selection active-page" id="page-dashboard">
         <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
             <div>
                 <h4 class="text-black mb-1 ">

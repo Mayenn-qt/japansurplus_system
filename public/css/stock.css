@@ -1,0 +1,36 @@
+/* Custom UI Components */
+.modal-content-custom {
+    border-radius: 12px;
+}
+
+.form-label-custom {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-field-custom {
+    border-radius: 8px !important;
+    font-size: 13.5px !important;
+}
+
+.btn-action-custom {
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+
+.table-header-custom {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.badge-custom {
+    font-weight: 500;
+    font-size: 11.5px;
+}
+
+.text-ink {
+    color: var(--ink);
+}
