@@ -33,79 +33,95 @@
                 </li>
             </ul>
 
-            <!-- OPERATIONS -->
-            <div class="sidebar-label">OPERATIONS</div>
+            <!-- Management -->
+            <div class="sidebar-label">MANAGEMENT</div>
 
             <ul class="nav flex-column gap-1 mb-3">
 
                 <li class="nav-item">
                     <a class="{{ request()->routeIs('owner.product') ? 'sidebar-link-active' : 'sidebar-link' }}"
                         href="{{ route('owner.product') }}">
-                        <i class="fa-solid fa-boxes-stacked sidebar-icon text-muted"></i>
-                        Products
+                        <i class="fa-solid fa-box sidebar-icon text-muted"></i>
+                        Product 
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="{{ request()->routeIs('owner.stock') ? 'sidebar-link-active' : 'sidebar-link' }}"
                         href="{{ route('owner.stock') }}">
-                        <i class="fa-solid fa-warehouse sidebar-icon text-muted"></i>
-                        Stock Management
+                        <i class="fa-solid fa-boxes-stacked sidebar-icon text-muted"></i>
+                        Inventory
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="{{ request()->routeIs('owner.salesrecording') ? 'sidebar-link-active' : 'sidebar-link' }}"
-                        href="{{ route('owner.salesrecording') }}">
-                        <i class="fa-solid fa-layer-group sidebar-icon text-muted"></i>
-                        Sales Recording
+                    <a class="{{ request()->routeIs('owner.branch') ? 'sidebar-link-active' : 'sidebar-link' }}"
+                        href="{{ route('owner.branch') }}">
+                        <i class="fa-solid fa-shop sidebar-icon text-muted"></i>
+                        Branch 
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('owner.user') ? 'sidebar-link-active' : 'sidebar-link' }}"
+                        href="{{ route('owner.user') }}">
+                        <i class="fa-solid fa-users sidebar-icon text-muted"></i>
+                        User 
+                    </a>
+
+                </li>
+            </ul>
+
+            <!-- Reports -->
+            <div class="sidebar-label">REPORTS</div>
+
+            <ul class="nav flex-column gap-1 mb-3">
+
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('owner.reports.sales') ? 'sidebar-link-active' : 'sidebar-link' }}" href="{{ route('owner.reports.sales') }}">
+                        <i class="fa-solid fa-chart-line sidebar-icon text-muted"></i>
+                        Sales Reports
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('owner.reports.inventory') ? 'sidebar-link-active' : 'sidebar-link' }}" 
+                    href="{{ route('owner.reports.inventory') }}">
+                        <i class="fa-solid fa-boxes-stacked sidebar-icon text-muted"></i>
+                        Inventory Reports
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('owner.reports.branchreport') ? 'sidebar-link-active' : 'sidebar-link' }}" href="{{ route('owner.reports.branchreport') }}">
+                        <i class="fa-solid fa-shop sidebar-icon text-muted"></i>
+                        Branch Performance
                     </a>
                 </li>
 
             </ul>
 
-            <!-- INSIGHTS -->
-            <div class="sidebar-label">INSIGHTS</div>
+            <!-- Communication -->
+            <div class="sidebar-label">COMMUNICATION</div>
 
             <ul class="nav flex-column gap-1 mb-3">
 
                 <li class="nav-item">
-                    <a class="sidebar-link" href="#">
-                        <i class="fa-solid fa-chart-line sidebar-icon text-muted"></i>
-                        Reports
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="sidebar-link" href="#">
-                        <i class="fa-solid fa-shop sidebar-icon text-muted"></i>
-                        Branches
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="sidebar-link" href="#">
-                        <i class="fa-solid fa-comment-sms sidebar-icon text-muted"></i>
+                        <a class="{{ request()->routeIs('owner.sms') ? 'sidebar-link-active' : 'sidebar-link' }}" href="{{ route('owner.sms') }}">
+                            <i class="fa-solid fa-comment-sms sidebar-icon text-muted"></i>
                         SMS Notifications
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="sidebar-link" href="#">
-                        <i class="fa-solid fa-users-gear sidebar-icon text-muted"></i>
-                        User Management
-                    </a>
-                </li>
-
             </ul>
 
-            <!-- ADMINISTRATION -->
-            <div class="sidebar-label">ADMINISTRATION</div>
+            <!-- SYSTEM -->
+            <div class="sidebar-label">SYSTEM</div>
 
             <ul class="nav flex-column gap-1 mb-3">
 
                 <li class="nav-item">
-                    <a class="sidebar-link" href="#">
+                    <a class="{{ request()->routeIs('owner.settings') ? 'sidebar-link-active' : 'sidebar-link' }}" href="{{ route('owner.settings') }}">
                         <i class="fa-solid fa-gear sidebar-icon text-muted"></i>
                         Settings
                     </a>
@@ -129,19 +145,15 @@
 
         </div>
 
-        <!-- BOTTOM PART -->
+        <!-- BOTTOM PART (LOGOUT) -->
         <div class="pt-3 border-top border-secondary border-opacity-25">
-
-            <form action="#" method="POST" class="m-0">
+            <form action="{{ route('logout') }}" method="POST" class="m-0">
                 @csrf
-
                 <button type="submit" class="sidebar-logout-btn shadow-sm">
                     <i class="fa-solid fa-right-from-bracket sidebar-icon"></i>
                     Logout
                 </button>
-
             </form>
-
         </div>
 
     </div>

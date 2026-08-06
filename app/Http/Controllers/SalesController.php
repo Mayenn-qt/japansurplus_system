@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 class SalesController extends Controller
 {
-    public function index()
+    public function salesReport()
     {
-        return view('owner.salesrecording'); 
+        return view('owner.reports.sales'); 
         }
 }

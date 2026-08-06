@@ -84,7 +84,7 @@
                                     </div>
                                 </td>
                                 <td>Furniture</td>
-                                <td class="fw-semibold">₱10,00</td>
+                                <td class="fw-semibold">₱10,000</td>
                                 <td>5 units</td>
                                 <td><span class="badge-status badge-instock">In Stock</span></td>
                                 <td class="pe-4 text-end">

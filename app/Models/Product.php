@@ -15,7 +15,8 @@ class Product extends Model
         'category',
         'branch',
         'price',
-        'stock',
+        'current_stock',
+        'reorder_level',
         'status',
     ];
 }

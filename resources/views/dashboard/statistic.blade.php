@@ -1,71 +1,22 @@
 <div class="row g-3 mb-4">
     <!-- Left Column: Monthly Sales Trend (Line Chart Card) -->
     <div class="col-lg-8">
-        <div class="card shadow mb-4 h-100 border-0">
-            <!-- Card Header -->
-            <div class="card-header py-3 d-flex justify-content-between align-items-center bg-white">
-                <div>
-                    <h6 class="m-0 font-weight-bold text-primary">Monthly Sales Trend</h6>
-                    <div class="text-muted mt-1" style="font-size: 11px;">Jan – Jul 2026</div>
-                </div>
-                <div class="btn-group btn-group-sm bg-light p-1 rounded border border-secondary border-opacity-25" role="group">
-                    <button type="button" class="btn btn-primary btn-sm px-3 py-1 shadow-sm text-white fw-medium" style="font-size: 0.75rem; background-color: #2563eb; border: none;">Revenue</button>
-                    <button type="button" class="btn btn-light btn-sm px-3 py-1 text-black-50 border-0 shadow-none" style="font-size: 0.75rem;">Transactions</button>
-                </div>
-            </div>
+        <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
             
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-area position-relative pt-2 ps-5 border-top border-secondary border-opacity-10 mt-1" style="height: 210px;">
-                    
-                    <!-- Y-Axis Grid Lines & Values -->
-                    <div class="position-absolute w-100 h-100 d-flex flex-column justify-content-between pointer-events-none text-muted" style="top: 0; left: 0; font-size: 0.65rem; z-index: 1; padding-left: 0.5rem; padding-right: 1.5rem;">
-                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>400,000</span></div>
-                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>360,000</span></div>
-                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>320,000</span></div>
-                        <div class="border-bottom border-secondary border-opacity-10 w-100 d-flex justify-content-start pb-1"><span>280,000</span></div>
-                    </div>
-
-                    <!-- SVG Smooth Line Graph with Area Fill -->
-                    <div class="position-absolute w-100 h-100" style="top: 0; left: 0; padding-left: 3rem; padding-right: 2rem; padding-top: 10px; padding-bottom: 25px; z-index: 2;">
-                        <svg viewBox="0 0 600 180" class="w-100 h-100 overflow-visible">
-                            <defs>
-                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"></stop>
-                                    <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.0"></stop>
-                                </linearGradient>
-                            </defs>
-
-                            <!-- Area Gradient Under the Line -->
-                            <path d="M 0,140 Q 100,100 200,110 T 400,60 T 600,20 L 600,160 L 0,160 Z" fill="url(#chartGradient)"></path>
-
-                            <!-- Main Smooth Trend Line -->
-                            <path d="M 0,140 Q 100,100 200,110 T 400,60 T 600,20" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"></path>
-
-                            <!-- Data Points (Circles) -->
-                            <circle cx="0" cy="140" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="100" cy="116" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="200" cy="110" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="300" cy="85" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="400" cy="60" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="500" cy="40" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                            <circle cx="600" cy="20" r="2.5" fill="#ffffff" stroke="#2563eb" stroke-width="1.5"></circle>
-                        </svg>
-                    </div>
-
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6 class="fw-bold text-dark m-0"><i class="fa-solid fa-chart-line text-danger me-2"></i> Monthly Sales Trend</h6>
+                    <span class="text-muted" style="font-size: 11px;">Jan – Jul 2026</span>
                 </div>
-
-                <!-- X-Axis Months Labels -->
-                <div class="d-flex justify-content-between text-muted fw-medium mt-1 ps-5 pe-3" style="font-size: 0.75rem;">
-                    <span>Jan</span>
-                    <span>Feb</span>
-                    <span>Mar</span>
-                    <span>Apr</span>
-                    <span>May</span>
-                    <span>Jun</span>
-                    <span>Jul</span>
-                </div>
+                <span class="badge bg-light text-muted border border-secondary border-opacity-15 px-2 py-1" style="font-size: 11px;">Revenue</span>
             </div>
+
+            <!-- Simple Placeholder Box para sa Chart -->
+            <div style="height: 230px; display: flex; align-items: center; justify-content: center; background-color: #f8fafc; border-radius: 8px; border: 1px dashed #e2e8f0;">
+                <span class="text-muted small"><i class="fa-solid fa-chart-area me-1"></i> Sales Trend Chart Area</span>
+            </div>
+
         </div>
     </div>
 

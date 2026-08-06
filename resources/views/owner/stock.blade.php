@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Sales Recording - Ohaiyo Japan Surplus')
+@section('title', 'Inventory & Stock Management - Ohaiyo Japan Surplus')
 
 @section('content')
 
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/stock.css') }}">
 
-    <!--Sidebar-->
+    <!-- Sidebar -->
     @include('dashboard.sidebar')
 
     <!-- Top NavBar -->
@@ -17,11 +17,12 @@
         <div id="content">
 
             <div class="page-section active-page" id="page-stock">
+                
                 <!-- Header & Action Buttons -->
                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                     <div>
                         <h4 class="fw-bold mb-1" style="color: var(--ink); letter-spacing: -0.5px;">Stock Management</h4>
-                        <p class="text-muted mb-0" style="font-size:13.5px;">Real-time inventory levels and warehouse tracking for <strong>Naga Branch</strong></p>
+                        <p class="text-muted mb-0" style="font-size:13.5px;">Real-time inventory levels and multi-branch warehouse tracking</p>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalStockOut" style="border-radius: 8px; font-size: 13.5px; font-weight: 500;">
@@ -76,129 +77,148 @@
                     </div>
                 </div>
 
-                <!-- Filters & Search Toolbar -->
-                <div class="card mb-3 border-0 shadow-sm rounded-3" style="background-color: var(--bs-card-bg, #fff);">
-                    <div class="p-3 d-flex gap-3 flex-wrap align-items-center justify-content-between">
-                        <div class="search-box flex-grow-1 d-flex align-items-center px-3 py-2 rounded-2 border bg-light" style="min-width:280px;">
-                            <i class="fa-solid fa-magnifying-glass text-muted me-2"></i>
-                            <input type="text" placeholder="Search by product name or SKU..." style="border:none; background:transparent; outline:none; font-size:13.5px; width:100%; color: var(--ink);">
-                        </div>
-                        <div class="d-flex gap-2 flex-wrap">
-                            <select class="form-select border-0 bg-light px-3 py-2" style="border-radius:8px; font-size:13px; font-weight: 500;">
-                                <option>All Categories</option>
-                                <option>Appliances</option>
-                                <option>Electronics</option>
-                                <option>Furniture</option>
-                            </select>
-                            <select class="form-select border-0 bg-light px-3 py-2" style="border-radius:8px; font-size:13px; font-weight: 500;">
-                                <option>All Stock Levels</option>
-                                <option>Healthy Stock</option>
-                                <option>Below Reorder Level</option>
-                                <option>Out of Stock</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <!-- Refined Filters & Search Toolbar with Accent Colors & Filter Button -->
+<div class="card mb-4 border-0 shadow-sm rounded-3" style="background-color: var(--bs-card-bg, #fff);">
+    <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+        
+        <!-- Search Box with Integrated Filter Button -->
+        <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 400px; min-width: 280px;">
+            <div class="search-box d-flex align-items-center px-3 py-2 rounded-2 border bg-light flex-grow-1">
+                <i class="fa-solid fa-magnifying-glass text-danger me-2" style="font-size: 13px;"></i>
+                <input type="text" placeholder="Search product or SKU..." style="border:none; background:transparent; outline:none; font-size:13px; width:100%; color: var(--ink);">
+            </div>
+            <button class="btn btn-light border px-3 py-2 d-flex align-items-center gap-2 shadow-sm text-secondary" style="border-radius: 8px; font-size: 13px; font-weight: 500; white-space: nowrap;">
+                <i class="fa-solid fa-filter text-danger" style="font-size: 12px;"></i> Filter
+            </button>
+        </div>
 
-                <!-- Main Data Table -->
+        <!-- Clean Filter Dropdowns with Colored Icons -->
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="input-group input-group-sm bg-light rounded-2 border" style="width: 170px;">
+                <span class="input-group-text bg-transparent border-0 text-danger ps-2 pe-1" style="font-size: 12px;"><i class="fa-solid fa-store"></i></span>
+                <select class="form-select form-select-sm border-0 bg-transparent shadow-none px-1" style="font-size: 12.5px; font-weight: 500;">
+                    <option value="">All Branches</option>
+                    <option>Main Branch</option>
+                    <option>Gubat Branch</option>
+                    <option>Naga Branch</option>
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm bg-light rounded-2 border" style="width: 170px;">
+                <span class="input-group-text bg-transparent border-0 text-dark ps-2 pe-1" style="font-size: 12px;"><i class="fa-solid fa-sliders"></i></span>
+                <select class="form-select form-select-sm border-0 bg-transparent shadow-none px-1" style="font-size: 12.5px; font-weight: 500;">
+                    <option value="">All Stock Levels</option>
+                    <option>Well Stocked</option>
+                    <option>Low Stock</option>
+                    <option>Out of Stock</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+                <!-- Stock Monitoring Table -->
+                <div class="card border-0 shadow-sm rounded-3 overflow-hidden mb-5" style="background-color: var(--bs-card-bg, #fff);">
+    <div class="p-3 border-bottom bg-light">
+        <h6 class="fw-bold mb-0" style="color: var(--ink);">Stock Monitoring</h6>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light text-uppercase text-muted" style="font-size: 11px; letter-spacing: 0.5px;">
+                <tr>
+                    <th class="py-3 ps-4">Branch</th>
+                    <th class="py-3">Product Name</th>
+                    <th class="py-3">SKU</th>
+                    <th class="py-3">Current Stock</th>
+                    <th class="py-3 pe-4">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="ps-4 py-3 fw-semibold text-secondary">Main Branch</td>
+                    <td class="fw-semibold text-dark">Minoyaki Ceramic Ramen Bowl</td>
+                    <td><span class="text-muted" style="font-size: 11.5px;">MINO-RAM-01</span></td>
+                    <td class="fw-semibold text-dark">15 units</td>
+                    <td class="pe-4"><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Well Stocked</span></td>
+                </tr>
+                <tr>
+                    <td class="ps-4 py-3 fw-semibold text-secondary">Main Branch</td>
+                    <td class="fw-semibold text-dark">Handcrafted Damascus Santoku Knife</td>
+                    <td><span class="text-muted" style="font-size: 11.5px;">DKN-SAN-99</span></td>
+                    <td class="fw-semibold text-dark">15 units</td>
+                    <td class="pe-4"><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Well Stocked</span></td>
+                </tr>
+                <tr>
+                    <td class="ps-4 py-3 fw-semibold text-secondary">Main Branch</td>
+                    <td class="fw-semibold text-dark">Retro Bandai Gundam Model Kit 1995</td>
+                    <td><span class="text-muted" style="font-size: 11.5px;">BAN-GUN-95</span></td>
+                    <td class="fw-semibold text-dark">4 units</td>
+                    <td class="pe-4"><span class="badge rounded-pill bg-danger bg-opacity-10 text-danger px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Low Stock</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                <!-- Stock Movement History Table -->
                 <div class="card border-0 shadow-sm rounded-3 overflow-hidden" style="background-color: var(--bs-card-bg, #fff);">
+                    <div class="p-3 border-bottom bg-light">
+                        <h6 class="fw-bold mb-0" style="color: var(--ink);">Stock Movement History</h6>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light text-uppercase text-muted" style="font-size: 11px; letter-spacing: 0.5px;">
                                 <tr>
-                                    <th class="py-3 ps-4">Product Details</th>
-                                    <th class="py-3">Current Stock</th>
-                                    <th class="py-3">Reorder Level</th>
-                                    <th class="py-3">Status</th>
-                                    <th class="py-3 pe-4 text-end">Quick Actions</th>
+                                    <th class="py-3 ps-4">Date / Time</th>
+                                    <th class="py-3">Branch</th>
+                                    <th class="py-3">Product SKU</th>
+                                    <th class="py-3">Quantity</th>
+                                    <th class="py-3">Type</th>
+                                    <th class="py-3">Authorized By</th>
+                                    <th class="py-3 pe-4">Notes</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="ps-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-2 bg-light border d-flex align-items-center justify-content-center text-danger flex-shrink-0" style="width: 40px; height: 40px;"><i class="fa-solid fa-bowl-rice"></i></div>
-                                            <div><span class="fw-semibold d-block text-dark" style="font-size: 14px;">Panasonic Rice Cooker</span><span class="text-muted" style="font-size: 11.5px;">SKU: PRC-8821</span></div>
-                                        </div>
-                                    </td>
-                                    <td class="fw-semibold text-dark">8 units</td>
-                                    <td><span class="text-muted fw-medium">5 units</span></td>
-                                    <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Healthy</span></td>
-                                    <td class="pe-4 text-end">
-                                        <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm" title="Stock Out" style="border-radius: 6px;"><i class="fa-solid fa-arrow-down text-danger" style="font-size: 12px;"></i></button>
-                                        <button class="btn btn-sm btn-light border px-2 py-1 shadow-sm" title="Stock In" style="border-radius: 6px;"><i class="fa-solid fa-arrow-up text-success" style="font-size: 12px;"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-2 bg-light border d-flex align-items-center justify-content-center text-primary flex-shrink-0" style="width: 40px; height: 40px;"><i class="fa-solid fa-tv"></i></div>
-                                            <div><span class="fw-semibold d-block text-dark" style="font-size: 14px;">Toshiba TV 32"</span><span class="text-muted" style="font-size: 11.5px;">SKU: TV-32-TSB</span></div>
-                                        </div>
-                                    </td>
+                                    <td class="ps-4 py-3 text-muted" style="font-size: 13px;">Aug 02, 2026 07:10 AM</td>
+                                    <td class="fw-semibold text-secondary">Main Branch</td>
+                                    <td><span class="text-muted">RYO-PLN-08</span></td>
                                     <td class="fw-semibold text-dark">1 unit</td>
-                                    <td><span class="text-muted fw-medium">3 units</span></td>
-                                    <td><span class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Below Reorder</span></td>
-                                    <td class="pe-4 text-end">
-                                        <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm" title="Stock Out" style="border-radius: 6px;"><i class="fa-solid fa-arrow-down text-danger" style="font-size: 12px;"></i></button>
-                                        <button class="btn btn-sm btn-light border px-2 py-1 shadow-sm" title="Stock In" style="border-radius: 6px;"><i class="fa-solid fa-arrow-up text-success" style="font-size: 12px;"></i></button>
-                                    </td>
+                                    <td><span class="badge border text-primary bg-light px-2 py-1" style="font-weight: 500; font-size: 11px;">Sale</span></td>
+                                    <td>Aiko Tanaka</td>
+                                    <td class="pe-4 text-muted" style="font-size: 13px;">Sold via POS</td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-2 bg-light border d-flex align-items-center justify-content-center text-warning flex-shrink-0" style="width: 40px; height: 40px;"><i class="fa-solid fa-volume-high"></i></div>
-                                            <div><span class="fw-semibold d-block text-dark" style="font-size: 14px;">Sony Speaker Set</span><span class="text-muted" style="font-size: 11.5px;">SKU: SPK-SN-99</span></div>
-                                        </div>
-                                    </td>
-                                    <td class="fw-semibold text-dark">0 units</td>
-                                    <td><span class="text-muted fw-medium">3 units</span></td>
-                                    <td><span class="badge rounded-pill bg-danger bg-opacity-10 text-danger px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Out of Stock</span></td>
-                                    <td class="pe-4 text-end">
-                                        <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm" title="Stock Out" style="border-radius: 6px;"><i class="fa-solid fa-arrow-down text-danger" style="font-size: 12px;"></i></button>
-                                        <button class="btn btn-sm btn-light border px-2 py-1 shadow-sm" title="Stock In" style="border-radius: 6px;"><i class="fa-solid fa-arrow-up text-success" style="font-size: 12px;"></i></button>
-                                    </td>
+                                    <td class="ps-4 py-3 text-muted" style="font-size: 13px;">Jul 26, 2026 02:47 AM</td>
+                                    <td class="fw-semibold text-secondary">Gubat Branch</td>
+                                    <td><span class="text-muted">RYO-PLN-08</span></td>
+                                    <td class="fw-semibold text-dark">1 unit</td>
+                                    <td><span class="badge border text-primary bg-light px-2 py-1" style="font-weight: 500; font-size: 11px;">Sale</span></td>
+                                    <td>Sakura Ito</td>
+                                    <td class="pe-4 text-muted" style="font-size: 13px;">Sold via POS</td>
                                 </tr>
                                 <tr>
-                                    <td class="ps-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-2 bg-light border d-flex align-items-center justify-content-center text-success flex-shrink-0" style="width: 40px; height: 40px;"><i class="fa-solid fa-chair"></i></div>
-                                            <div><span class="fw-semibold d-block text-dark" style="font-size: 14px;">Office Swivel Chair</span><span class="text-muted" style="font-size: 11.5px;">SKU: CHR-SW-01</span></div>
-                                        </div>
-                                    </td>
+                                    <td class="ps-4 py-3 text-muted" style="font-size: 13px;">Jul 26, 2026 02:40 AM</td>
+                                    <td class="fw-semibold text-secondary">Main Branch</td>
+                                    <td><span class="text-muted">MINO-RAM-01</span></td>
                                     <td class="fw-semibold text-dark">15 units</td>
-                                    <td><span class="text-muted fw-medium">5 units</span></td>
-                                    <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Healthy</span></td>
-                                    <td class="pe-4 text-end">
-                                        <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm" title="Stock Out" style="border-radius: 6px;"><i class="fa-solid fa-arrow-down text-danger" style="font-size: 12px;"></i></button>
-                                        <button class="btn btn-sm btn-light border px-2 py-1 shadow-sm" title="Stock In" style="border-radius: 6px;"><i class="fa-solid fa-arrow-up text-success" style="font-size: 12px;"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-2 bg-light border d-flex align-items-center justify-content-center text-info flex-shrink-0" style="width: 40px; height: 40px;"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-                                            <div><span class="fw-semibold d-block text-dark" style="font-size: 14px;">Makita Cordless Drill</span><span class="text-muted" style="font-size: 11.5px;">SKU: MKT-DR-55</span></div>
-                                        </div>
-                                    </td>
-                                    <td class="fw-semibold text-dark">10 units</td>
-                                    <td><span class="text-muted fw-medium">4 units</span></td>
-                                    <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2" style="font-weight: 500; font-size: 11.5px;">Healthy</span></td>
-                                    <td class="pe-4 text-end">
-                                        <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm" title="Stock Out" style="border-radius: 6px;"><i class="fa-solid fa-arrow-down text-danger" style="font-size: 12px;"></i></button>
-                                        <button class="btn btn-sm btn-light border px-2 py-1 shadow-sm" title="Stock In" style="border-radius: 6px;"><i class="fa-solid fa-arrow-up text-success" style="font-size: 12px;"></i></button>
-                                    </td>
+                                    <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-2 py-1" style="font-weight: 500; font-size: 11px;">Stock In</span></td>
+                                    <td>Kenji Sato (Owner)</td>
+                                    <td class="pe-4 text-muted" style="font-size: 13px;">Initial system seeding</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
 
         </div>
     </div>
 
-    <!-- Stock In Modal (UI Preview Only) -->
+    <!-- Modals -->
+    <!-- Stock In Modal -->
     <div class="modal fade" id="modalStockIn" tabindex="-1" aria-labelledby="modalStockInLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
@@ -212,11 +232,9 @@
                             <label class="form-label text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Product</label>
                             <select class="form-select bg-light border-0 py-2" style="border-radius: 8px; font-size: 13.5px;">
                                 <option selected disabled>Select product...</option>
-                                <option value="1">Panasonic Rice Cooker</option>
-                                <option value="2">Toshiba TV 32"</option>
-                                <option value="3">Sony Speaker Set</option>
-                                <option value="4">Office Swivel Chair</option>
-                                <option value="5">Makita Cordless Drill</option>
+                                <option value="1">Minoyaki Ceramic Ramen Bowl</option>
+                                <option value="2">Handcrafted Damascus Santoku Knife</option>
+                                <option value="3">Retro Bandai Gundam Model Kit 1995</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -241,7 +259,7 @@
         </div>
     </div>
 
-    <!-- Stock Out Modal (UI Preview Only) -->
+    <!-- Stock Out Modal -->
     <div class="modal fade" id="modalStockOut" tabindex="-1" aria-labelledby="modalStockOutLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
@@ -255,11 +273,9 @@
                             <label class="form-label text-muted" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Product</label>
                             <select class="form-select bg-light border-0 py-2" style="border-radius: 8px; font-size: 13.5px;">
                                 <option selected disabled>Select product...</option>
-                                <option value="1">Panasonic Rice Cooker</option>
-                                <option value="2">Toshiba TV 32"</option>
-                                <option value="3">Sony Speaker Set</option>
-                                <option value="4">Office Swivel Chair</option>
-                                <option value="5">Makita Cordless Drill</option>
+                                <option value="1">Minoyaki Ceramic Ramen Bowl</option>
+                                <option value="2">Handcrafted Damascus Santoku Knife</option>
+                                <option value="3">Retro Bandai Gundam Model Kit 1995</option>
                             </select>
                         </div>
                         <div class="mb-3">
