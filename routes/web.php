@@ -31,7 +31,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| 1. Owner / Admin Routes (Executive Dashboard) - NAUNA
+| 1. Owner / Admin Routes (Executive Dashboard)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('owner')->group(function () {
@@ -41,7 +41,14 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
 
     // Management (Products, Stock, Branches, Users)
     Route::get('/product', [ProductController::class, 'index'])->name('owner.product');
+    Route::post('/product', [ProductController::class, 'store'])->name('owner.product.store');
+    
+    // Stock Management & Backend Actions
     Route::get('/stock', [ProductController::class, 'stockManagement'])->name('owner.stock');
+    Route::post('/stock/in', [ProductController::class, 'storeStockIn'])->name('owner.stock.in');
+    Route::post('/stock/out', [ProductController::class, 'storeStockOut'])->name('owner.stock.out');
+    Route::get('/owner/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all');
+
     Route::get('/branches', [BranchController::class, 'branch'])->name('owner.branch'); 
     Route::get('/users', [UserController::class, 'user'])->name('owner.user');
 
@@ -64,7 +71,7 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| 2. Staff Routes (Staff Side UI) - SUMUNOD
+| 2. Staff Routes (Staff Side UI)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('staff')->group(function () {
@@ -76,7 +83,7 @@ Route::middleware(['auth'])->prefix('staff')->group(function () {
     Route::get('/sales/cart', [StaffSalesController::class, 'cart'])->name('staff.sales.cart');
     Route::get('/sales/checkout', [StaffSalesController::class, 'checkout'])->name('staff.sales.checkout');
 
-    // Products (Gamitin na ang ating ginawang StaffProductController)
+    // Products
     Route::get('/products', [StaffProductController::class, 'index'])->name('staff.products.index');
     Route::get('/products/{id}', [StaffProductController::class, 'show'])->name('staff.products.show');
 

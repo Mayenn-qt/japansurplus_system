@@ -12,11 +12,19 @@ class Product extends Model
     protected $fillable = [
         'name',
         'sku',
-        'category',
-        'branch',
+        'category_id',
         'price',
-        'current_stock',
         'reorder_level',
-        'status',
+    
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
 }

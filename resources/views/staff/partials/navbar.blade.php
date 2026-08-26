@@ -1,22 +1,30 @@
-<div style="position: fixed; top: 0; left: 250px; right: 0; height: 70px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.01);">
+<div class="app-topbar" style="position: fixed; top: 0; left: 250px; right: 0; height: 70px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.01);">
     
-    <!-- Left: Sleek Search Bar -->
-    <div style="display: flex; align-items: center; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 280px; transition: all 0.2s ease;">
-        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; font-size: 13px; margin-right: 10px;"></i>
-        <input type="text" placeholder="Search products, transactions..." style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
+    <!-- Left: Hamburger Button (Mobile) & Sleek Search Bar -->
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <!-- Hamburger Toggle Button (Lilitaw lang sa Mobile/Tablet) -->
+        <button class="btn btn-light border d-lg-none p-2" id="sidebarToggle" type="button" style="border-radius: 8px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background-color: #f8fafc; border-color: #e2e8f0 !important;">
+            <i class="fa-solid fa-bars text-dark" style="font-size: 14px;"></i>
+        </button>
+
+        <!-- Search Bar -->
+        <div class="d-none d-md-flex align-items-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 280px; transition: all 0.2s ease;">
+            <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; font-size: 13px; margin-right: 10px;"></i>
+            <input type="text" placeholder="Search products, transactions..." style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
+        </div>
     </div>
 
     <!-- Right: Branch Info, Utility Actions & Profile Dropdown -->
     <div style="display: flex; align-items: center; gap: 14px;">
         
-        <!-- Assigned Branch Badge (Static or Staff Branch) -->
-        <div class="d-flex align-items-center gap-2" style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 10px; color: #0f172a; font-size: 13px; font-weight: 500;">
+        <!-- Assigned Branch Badge -->
+        <div class="d-none sm-flex align-items-center gap-2" style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 10px; color: #0f172a; font-size: 13px; font-weight: 500;">
             <i class="fa-solid fa-store" style="color: #ef4444; font-size: 12px;"></i> 
             <span>Counter Terminal #1</span>
         </div>
 
         <!-- Vertical Divider -->
-        <div style="height: 24px; width: 1px; background-color: #e2e8f0;"></div>
+        <div class="d-none d-sm-block" style="height: 24px; width: 1px; background-color: #e2e8f0;"></div>
 
         <!-- Quick Action Icons (Notifications) -->
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -32,7 +40,7 @@
                 <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #475569, #1e293b); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; box-shadow: 0 2px 4px rgba(71, 85, 105, 0.2);">
                     ST
                 </div>
-                <div style="display: flex; flex-direction: column; text-align: left;">
+                <div class="d-none d-sm-flex" style="flex-direction: column; text-align: left;">
                     <span style="color: #0f172a; font-size: 13px; font-weight: 600; line-height: 1.2;">Staff User</span>
                     <span style="color: #64748b; font-size: 11px;">Counter Staff</span>
                 </div>

@@ -9,7 +9,7 @@
     @include('staff.partials.sidebar')
     @include('staff.partials.navbar')
 
-    <div style="margin-left: 250px; margin-top: 70px; padding: 24px; background-color: #f8fafc; min-height: calc(100vh - 70px);">
+    <div style="background-color: #f8fafc; min-height: calc(100vh - 70px);">
         
         <!-- Header & Actions -->
         <div class="d-flex justify-content-between align-items-center mb-4">

@@ -18,4 +18,4 @@ class StaffProductController extends Controller
     {
         return view('staff.products.show');
     }
-}
+}   

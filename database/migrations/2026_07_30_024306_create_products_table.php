@@ -15,10 +15,9 @@ return new class extends Migration
         $table->id();
         $table->string('name');
         $table->string('sku')->unique();
-        $table->string('category');
-        $table->integer('current_stock')->default(0);
+        $table->string('category_id');
+        $table->decimal('price', 10, 2)->default(0.00); 
         $table->integer('reorder_level')->default(5);
-        $table->string('status')->default('Healthy');
         $table->timestamps();
     });
 }

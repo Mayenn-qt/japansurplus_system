@@ -98,7 +98,7 @@
                         <tbody>
                             <tr>
                                 <td class="ps-3 fw-medium">Main Branch</td>
-                                <td class="text-muted">City Center</td>
+                                <td class="text-muted">Pangpang</td>
                                 <td><span class="badge bg-light text-dark border">120</span></td>
                                 <td class="fw-bold text-success">₱180,450</td>
                                 <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Top Performer</span></td>

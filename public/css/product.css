@@ -3,14 +3,10 @@
 /* Product Thumbnail sa kaliwa ng pangalan */
 /* --- Product Thumbnail Tamang Sukat (Parang Blue Box) --- */
 .prod-thumb {
-    width: 50px !important;
-    height: 50px !important;
-    min-width: 50px !important;
-    min-height: 50px !important;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #dee2e6;
-    background-color: #f1f3f5;
+    width: 45px !important;     /* Itakda ang lapad */
+    height: 45px !important;    /* Itakda ang taas para maging square */
+    object-fit: cover !important; /* Para hindi ma-distort o maipit ang mukha ng picture */
+    border-radius: 6px;         /* Optional: Para medyo bilugan ang gilid */
     flex-shrink: 0;
 }
 

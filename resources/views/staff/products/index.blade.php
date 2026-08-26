@@ -9,7 +9,7 @@
     @include('staff.partials.sidebar')
     @include('staff.partials.navbar')
 
-    <div style="margin-left: 250px; margin-top: 70px; padding: 24px; background-color: #f8fafc; min-height: calc(100vh - 70px);">
+    <div style="background-color: #f8fafc; min-height: calc(100vh - 70px);">
         
         <!-- Header & Actions -->
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -60,8 +60,8 @@
                                 </div>
                             </td>
                             <td class="py-3">
-                                <span class="fw-bold text-dark d-block">Japanese Ceramic Bowl</span>
-                                <span class="text-muted small">SKU-CER-01</span>
+                                <span class="fw-bold text-dark d-block">Japanese Wooden Wardrobe Cabinet</span>
+                                <span class="text-muted small">SKU-HS-001</span>
                             </td>
                             <td class="py-3 text-muted">Ceramics</td>
                             <td class="py-3 fw-semibold text-danger">₱350.00</td>

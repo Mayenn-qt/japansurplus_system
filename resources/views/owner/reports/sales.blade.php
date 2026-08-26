@@ -35,28 +35,28 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Today's Sales</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱12,500</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> +12% from yesterday</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱0.00</h3>
+                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> 0% from yesterday</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">This Week</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱85,300</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> +5.4% vs last week</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱0.00</h3>
+                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> 0% vs last week</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">This Month</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱320,450</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱0.00</h3>
                         <span class="text-muted small mt-1">Updated just now</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-info h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Transactions</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">215</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                         <span class="text-info small mt-1"><i class="fa-solid fa-receipt"></i> Across all branches</span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                         </select>
                     </div>
                     <div class="col-xl-4 col-md-3">
-                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-filter me-1"></i> Apply Filter</button>
+                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
                     </div>
                 </form>
             </div>
@@ -117,19 +117,19 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="ps-3 fw-medium">Rice Cooker</td>
-                                        <td><span class="badge bg-light text-dark border">45</span></td>
-                                        <td class="pe-3 text-end fw-semibold">₱67,500</td>
+                                        <td class="ps-3 fw-medium">Office Swivel Chair</td>
+                                        <td><span class="badge bg-light text-dark border">20</span></td>
+                                        <td class="pe-3 text-end fw-semibold">₱24,000</td>
                                     </tr>
                                     <tr>
-                                        <td class="ps-3 fw-medium">Cabinet</td>
-                                        <td><span class="badge bg-light text-dark border">28</span></td>
-                                        <td class="pe-3 text-end fw-semibold">₱56,000</td>
+                                        <td class="ps-3 fw-medium">Ceramic Plate & Bowl Set</td>
+                                        <td><span class="badge bg-light text-dark border">50</span></td>
+                                        <td class="pe-3 text-end fw-semibold">₱22,500</td>
                                     </tr>
                                     <tr>
-                                        <td class="ps-3 fw-medium">Electric Fan</td>
-                                        <td><span class="badge bg-light text-dark border">22</span></td>
-                                        <td class="pe-3 text-end fw-semibold">₱19,800</td>
+                                        <td class="ps-3 fw-medium">Japanese Hard-Case Travel Luggage</td>
+                                        <td><span class="badge bg-light text-dark border">15</span></td>
+                                        <td class="pe-3 text-end fw-semibold">₱21,750</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -159,17 +159,17 @@
                                     <tr>
                                         <td class="ps-3 fw-semibold text-primary">#INV-1092</td>
                                         <td>Main</td>
-                                        <td>Rico D.</td>
+                                        <td>Marianne</td>
                                         <td>Walk-in</td>
-                                        <td class="fw-bold">₱3,500</td>
-                                        <td class="pe-3 text-muted" style="font-size: 11px;">Apr 6, 2:40 PM</td>
+                                        <td class="fw-bold">₱43,500</td>
+                                        <td class="pe-3 text-muted" style="font-size: 11px;">Apr 6, 4:40 PM</td>
                                     </tr>
                                     <tr>
                                         <td class="ps-3 fw-semibold text-primary">#INV-1091</td>
                                         <td>Juban</td>
-                                        <td>Jenny O.</td>
-                                        <td>Juan Dela Cruz</td>
-                                        <td class="fw-bold">₱1,200</td>
+                                        <td>Mark</td>
+                                        <td>Ronnel D.</td>
+                                        <td class="fw-bold">₱6,200</td>
                                         <td class="pe-3 text-muted" style="font-size: 11px;">Apr 6, 1:15 PM</td>
                                     </tr>
                                 </tbody>

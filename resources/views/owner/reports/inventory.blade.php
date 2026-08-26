@@ -35,28 +35,28 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Total Products</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">1,240</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                         <span class="text-muted small mt-1">Across all categories</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">In Stock Items</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">1,185</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                         <span class="text-success small mt-1"><i class="fa-solid fa-check"></i> Ready for sale</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Low Stock Alerts</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">38</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                         <span class="text-warning small mt-1"><i class="fa-solid fa-triangle-exclamation"></i> Needs reorder</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-danger h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Out of Stock</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">17</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                         <span class="text-danger small mt-1"><i class="fa-solid fa-ban"></i> Action required</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                         </select>
                     </div>
                     <div class="col-xl-4 col-md-3">
-                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-filter me-1"></i> Apply Filter</button>
+                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
                     </div>
                 </form>
             </div>
@@ -100,7 +100,7 @@
                         <thead class="bg-light text-muted text-uppercase" style="font-size: 10px;">
                             <tr>
                                 <th class="ps-3 py-2">Product Name</th>
-                                <th class="py-2">Category</th>
+                                <th class="py-2">Category</th>filter
                                 <th class="py-2">Branch</th>
                                 <th class="py-2">Current Stock</th>
                                 <th class="py-2">Status</th>
@@ -109,8 +109,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="ps-3 fw-medium">Asahi Electric Fan</td>
-                                <td>Appliances</td>
+                                <td class="ps-3 fw-medium">Shindaiwa Gasoline Engine Chainsaw</td>
+                                <td>Tools & Equipment</td>
                                 <td>Main</td>
                                 <td><span class="fw-bold text-danger">2</span></td>
                                 <td><span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Low Stock</span></td>
@@ -119,7 +119,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="ps-3 fw-medium">Wooden Wardrobe Cabinet</td>
+                                <td class="ps-3 fw-medium">Japanese Wooden Wardrobe Cabinet</td>
                                 <td>Furniture</td>
                                 <td>Juban</td>
                                 <td><span class="fw-bold text-danger">0</span></td>

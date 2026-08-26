@@ -36,18 +36,18 @@
                     <div class="col-md-4">
                         <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Naga Branch</h6>
+                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Main Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
                             <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Magsaysay Ave, Naga City
+                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Pangpang, Sorsogon City
                             </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Branch Manager</span>
-                                <span class="fw-semibold text-dark">Rico Delmonte</span>
+                                <span class="fw-semibold text-dark">Marianne</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Active Staff</span>
@@ -69,18 +69,18 @@
                     <div class="col-md-4">
                         <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Legazpi Branch</h6>
+                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Juban Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
                             <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Rizal St, Legazpi City
+                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Juban part basta, Sorsogon City
                             </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Branch Manager</span>
-                                <span class="fw-semibold text-dark">Jenny Ocampo</span>
+                                <span class="fw-semibold text-dark">Mark </span>
                             </div>
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Active Staff</span>
@@ -102,18 +102,18 @@
                     <div class="col-md-4">
                         <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Sorsogon Branch</h6>
+                                <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Magallanes Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
                             <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Burgos St, Sorsogon City
+                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Basta sa Magallanes, Sorsogon City
                             </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Branch Manager</span>
-                                <span class="fw-semibold text-dark">Mark Antolin</span>
+                                <span class="fw-semibold text-dark">Robin </span>
                             </div>
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
                                 <span class="text-muted">Active Staff</span>

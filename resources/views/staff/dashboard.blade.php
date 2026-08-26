@@ -14,7 +14,7 @@
     @include('staff.partials.navbar')
 
     <!-- Main Content Wrapper (Pushed right for sidebar and down for topnavbar) -->
-    <div style="margin-left: 250px; margin-top: 70px; padding: 28px; background-color: #f8fafc; min-height: calc(100vh - 70px);">
+    <div style="background-color: #f8fafc; min-height: calc(100vh - 70px);">
         
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">

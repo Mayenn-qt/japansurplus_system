@@ -2,46 +2,46 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        // Owner
         User::create([
-            'name' => 'Owner',
-            'email' => 'owner@ohaiyo.com',
-            'password' => Hash::make('admin_ohaiyo'),
+            'name' => 'Store Owner',
+            'email' => 'owner@ohaiyojapan.com',
+            'password' => Hash::make('owner_ohaiyojapan'),
             'role' => 'owner',
-            'branch_id' => null,
+            'branch_id' => 1,
         ]);
 
-        // Main Branch Staff
         User::create([
-            'name' => 'Main Branch Staff',
-            'email' => 'main@ohaiyo.com',
-            'password' => Hash::make('main_ohaiyo'),
+            'name' => 'Main Staff',
+            'email' => 'staffmain@ohaiyojapan.com',
+            'password' => Hash::make('main_ohaiyojapan'),
             'role' => 'staff',
             'branch_id' => 1,
         ]);
 
-        // Juban Branch Staff
         User::create([
-            'name' => 'Juban Branch Staff',
-            'email' => 'juban@ohaiyo.com',
-            'password' => Hash::make('juban_ohaiyo'),
+            'name' => 'Juban Staff',
+            'email' => 'staffjuban@ohaiyojapan',
+            'password' => Hash::make('juban_ohaiyojapan'),
             'role' => 'staff',
             'branch_id' => 2,
         ]);
 
-        // magallanes Branch Staff
         User::create([
-            'name' => 'Magallanes Branch Staff',
-            'email' => 'magallanes@ohaiyo.com',
-            'password' => Hash::make('magallanes_ohaiyo'),
+            'name' => 'Magallanes Staff',
+            'email' => 'staffmagallanes@ohaiyojapan',
+            'password' => Hash::make('magallanes_ohaiyojapan'),
             'role' => 'staff',
             'branch_id' => 3,
         ]);

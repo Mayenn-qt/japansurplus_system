@@ -125,3 +125,55 @@
 .sidebar-logout-btn:hover {
     background-color: #f1f5f9;
 }
+
+/* --- MOBILE RESPONSIVE ADJUSTMENTS --- */
+@media (min-width: 992px) {
+    /* Desktop View: Mag-iwan ng espasyo sa kaliwa para sa fixed sidebar at sa taas para sa navbar */
+    .app-topbar {
+        left: 250px !important;
+    }
+    .main-content-wrapper {
+        margin-left: 250px;
+        margin-top: 70px;
+        padding: 24px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* Mobile / Tablet View: Itago ang sidebar sa gilid */
+    .sidebar {
+        left: -280px;
+        transition: left 0.3s ease-in-out;
+    }
+
+    /* Kapag pinindot ang hamburger menu, lalabas ang sidebar */
+    .sidebar.show {
+        left: 0 !important;
+    }
+
+    /* Navbar at Main Content ay magiging full-width (walang margin sa kaliwa) */
+    .app-topbar {
+        left: 0 !important;
+    }
+    
+    .main-content-wrapper {
+        margin-left: 0 !important;
+        margin-top: 70px;
+        padding: 16px;
+    }
+
+    /* Backdrop shadow sa likod ng sidebar kapag bukas sa mobile */
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 1025;
+    }
+    .sidebar-backdrop.show {
+        display: block;
+    }
+}

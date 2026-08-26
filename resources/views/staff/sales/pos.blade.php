@@ -9,7 +9,7 @@
     @include('staff.partials.sidebar')
     @include('staff.partials.navbar')
 
-    <div style="margin-left: 250px; margin-top: 70px; padding: 24px; background-color: #f8fafc; min-height: calc(100vh - 70px);">
+    <div style="background-color: #f8fafc; min-height: calc(100vh - 70px);">
         
         <div class="row g-4">
             <!-- KALIWA: Product Catalog & Search -->
@@ -37,10 +37,10 @@
                             <div class="bg-light rounded-3 d-flex align-items-center justify-content-center mb-3" style="height: 120px; color: #94a3b8;">
                                 <i class="fa-solid fa-box-open fa-2x"></i>
                             </div>
-                            <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">Japanese Ceramic Bowl</h6>
-                            <span class="text-muted small mb-2 d-block">SKU-CER-01</span>
+                            <h6 class="fw-bold text-dark mb-1" style="font-size: 14px;">Japanese Wooden Wardrobe Cabinet</h6>
+                            <span class="text-muted small mb-2 d-block">SKU-HS-001</span>
                             <div class="d-flex justify-content-between align-items-center mt-auto">
-                                <span class="fw-bold text-danger">₱350.00</span>
+                                <span class="fw-bold text-danger">₱10,000.00</span>
                                 <button class="btn btn-sm btn-dark px-2 py-1" style="border-radius: 6px;"><i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
@@ -112,42 +112,5 @@
                 </div>
             </div>
 
-            <!-- KANAN: Cart Section -->
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100 d-flex flex-column">
-                    <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-cart-shopping me-2 text-danger"></i> Current Order</h6>
-                    
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-semibold">Customer Name (Optional)</label>
-                        <input type="text" class="form-control form-control-sm bg-light border-0" placeholder="Walk-in Customer" style="font-size: 13px;">
-                    </div>
-
-                    <!-- Tamang pagtawag sa cart partial sa loob ng staff/sales/ folder -->
-                    <div class="flex-grow-1 overflow-auto mb-3 border-top border-bottom border-light py-2" style="max-height: 320px;">
-                        @include('staff.sales.cart')
-                    </div>
-
-                    <div class="mt-auto pt-2">
-                        <div class="d-flex justify-content-between mb-1 text-muted small">
-                            <span>Subtotal</span>
-                            <span>₱1,050.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2 text-muted small">
-                            <span>Tax (Optional)</span>
-                            <span>₱0.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3 text-dark fw-bold fs-5 border-top pt-2">
-                            <span>Total</span>
-                            <span class="text-danger">₱1,050.00</span>
-                        </div>
-                        <!-- Siguraduhin na ang route name ay naayon sa iyong web.php -->
-                        <a href="{{ route('staff.sales.checkout') }}" class="btn btn-danger w-100 py-2 fw-semibold shadow-sm" style="border-radius: 8px;">
-                            Proceed to Checkout <i class="fa-solid fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-@endsection
+            
+@endsection 
