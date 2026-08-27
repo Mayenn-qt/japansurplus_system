@@ -38,8 +38,8 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-danger h-100">
                     <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Today's Sales</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">₱18,450.00</h3>
-                    <span class="text-success small mt-1"><i class="fa-solid fa-arrow-trend-up"></i> +8.4% vs yesterday</span>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">₱0</h3>
+                    <span class="text-success small mt-1"><i class="fa-solid fa-arrow-trend-up"></i> +0% vs yesterday</span>
                 </div>
             </div>
 
@@ -47,7 +47,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
                     <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Transactions Today</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">32</h3>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                     <span class="text-muted small mt-1"><i class="fa-solid fa-receipt"></i> Completed tickets</span>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                     <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Products Sold</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">64 pcs</h3>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">0 pc</h3>
                     <span class="text-muted small mt-1"><i class="fa-solid fa-boxes-stacked"></i> Items checked out</span>
                 </div>
             </div>
@@ -65,7 +65,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
                     <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Current Inventory</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">1,280</h3>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                     <span class="text-success small mt-1"><i class="fa-solid fa-warehouse"></i> Total active stock</span>
                 </div>
             </div>

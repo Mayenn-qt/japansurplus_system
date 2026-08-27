@@ -42,12 +42,13 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     // Management (Products, Stock, Branches, Users)
     Route::get('/product', [ProductController::class, 'index'])->name('owner.product');
     Route::post('/product', [ProductController::class, 'store'])->name('owner.product.store');
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('owner.product.update'); // <--- Inayos dito (tinanggal ang dobleng 'owner/')
     
     // Stock Management & Backend Actions
     Route::get('/stock', [ProductController::class, 'stockManagement'])->name('owner.stock');
     Route::post('/stock/in', [ProductController::class, 'storeStockIn'])->name('owner.stock.in');
     Route::post('/stock/out', [ProductController::class, 'storeStockOut'])->name('owner.stock.out');
-    Route::get('/owner/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all');
+    Route::get('/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all'); // <--- Inayos din dito para pareho sa prefix
 
     Route::get('/branches', [BranchController::class, 'branch'])->name('owner.branch'); 
     Route::get('/users', [UserController::class, 'user'])->name('owner.user');

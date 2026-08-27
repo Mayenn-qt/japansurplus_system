@@ -31,6 +31,7 @@
             </div>
 
             
+            <!-- ADD PRODUCT MODAL -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content" style="border-radius: 12px;">
@@ -39,6 +40,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         
+                        <!-- Single Clean Form with enctype for Image Upload -->
                         <form action="{{ route('owner.product.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
@@ -83,10 +85,10 @@
                                         <input type="number" name="stock_magallanes" class="form-control" value="0" min="0" required style="border-radius: 8px;">
                                     </div>
                                 </div>
-
+                            
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" style="font-size: 13px;">Product Image</label>
-                                    <input type="file" name="image" class="form-control" style="border-radius: 8px;">
+                                    <input type="file" name="image" class="form-control" id="image" accept="image/*">
                                 </div>
                             </div>
                             
@@ -159,44 +161,85 @@
                         <tbody>
                             @forelse($products ?? [] as $product)
                             <tr>
-                             <!-- Column 1: Image pa lang -->
-                             <td class="ps-4">
-                             <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" alt="{{ $product->name }}" class="prod-thumb">
-                            </td>
+                                <td class="ps-4">
+                                    <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" 
+                                        alt="{{ $product->name }}" 
+                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                </td>
 
-                             <!-- Column 2: Product Name at SKU na -->
-                            <td>
-                            <div class="fw-semibold">{{ $product->name }}</div>
-                            <div class="text-muted" style="font-size:11.5px;">{{ $product->sku }}</div>
-                            </td>
+                                <td>
+                                    <div class="fw-semibold">{{ $product->name }}</div>
+                                    <div class="text-muted" style="font-size:11.5px;">{{ $product->sku }}</div>
+                                </td>
 
-                            <td>{{ $product->category->name ?? 'Uncategorized' }}</td>
-                            <td class="fw-semibold">₱{{ number_format($product->price, 2) }}</td>
-                            <td>{{ $product->total_stock ?? 0 }} units</td>
-                             <td>
-                
-                             @php $stock = $product->total_stock ?? 0; @endphp
-                @if($stock > 5)
-                    <span class="badge-status badge-instock">In Stock</span>
-                @elseif($stock > 0)
-                    <span class="badge-status badge-low">Low Stock</span>
-                @else
-                    <span class="badge-status badge-out">Out of Stock</span>
-                @endif
-            </td>
-            <td class="pe-4 text-end">
-                <div class="d-flex align-items-center justify-content-end gap-1">
-                    <button type="button" class="action-icon" title="View"><i class="fa-solid fa-eye"></i></button>
-                    <button type="button" class="action-icon" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                </div>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="7" class="text-center py-4 text-muted">NO PRODUCT.</td>
-        </tr>
-    @endforelse
-</tbody>
+                                <td>{{ $product->category->name ?? 'Uncategorized' }}</td>
+                                <td class="fw-semibold">₱{{ number_format($product->price, 2) }}</td>
+                                <td>{{ $product->total_stock ?? 0 }} units</td>
+                                <td>
+                                    @php $stock = $product->total_stock ?? 0; @endphp
+                                    @if($stock > 5)
+                                        <span class="badge-status badge-instock">In Stock</span>
+                                    @elseif($stock > 0)
+                                        <span class="badge-status badge-low">Low Stock</span>
+                                    @else
+                                        <span class="badge-status badge-out">Out of Stock</span>
+                                    @endif
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="d-flex align-items-center justify-content-end gap-1">
+                                        <!-- View Modal Trigger -->
+                                        <button type="button" class="action-icon btn btn-sm btn-light border-0" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}" title="View Info">
+                                            <i class="fa-solid fa-eye text-secondary"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- VIEW PRODUCT MODAL -->
+                            <div class="modal fade" id="viewProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content" style="border-radius: 12px;">
+                                        <div class="modal-header border-bottom-0 pb-0">
+                                            <h5 class="modal-title fw-bold">Product Information</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-4 text-center mb-3">
+                                                    <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" alt="{{ $product->name }}" class="img-fluid rounded border" style="max-height: 180px; object-fit: cover;">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <h4 class="fw-bold text-dark mb-1">{{ $product->name }}</h4>
+                                                    <p class="text-muted mb-2" style="font-size: 13px;"><b>{{ $product->sku }}</b></p>
+                                                    <p class="mb-2"><b>Category:</b> {{ $product->category->name ?? 'Uncategorized' }}</p>
+                                                    <p class="mb-3"><b>Price:</b> <span class="text-success fw-bold">₱{{ number_format($product->price, 2) }}</span></p>
+                                                    
+                                                    <div class="bg-light p-3 rounded border">
+                                                        <h6 class="fw-bold mb-2" style="font-size: 13px;"><i class="fa-solid fa-store me-1"></i> Stock per Branch:</h6>
+                                                        <div class="row text-muted" style="font-size: 12.5px;">
+                                                            @foreach($product->inventories ?? [] as $inv)
+                                                                <div class="col-6 mb-1">
+                                                                    {{ $inv->branch->branch_name ?? 'Branch' }}: <b class="text-dark">{{ $inv->current_stock }} units</b>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-top-0 pt-0">
+                                            <button type="button" class="btn btn-secondary px-4 btn-sm" data-bs-dismiss="modal" style="border-radius: 8px;">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">NO PRODUCT.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
                     </table>
                 </div>
                 

@@ -14,6 +14,7 @@ class Product extends Model
         'sku',
         'category_id',
         'price',
+        'image',
         'reorder_level',
     
     ];

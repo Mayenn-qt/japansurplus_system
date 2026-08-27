@@ -63,7 +63,7 @@ class ProductController extends Controller
                     $subQuery->select(DB::raw('COALESCE(SUM(current_stock), 0)'))
                              ->from('inventories')
                              ->whereColumn('inventories.product_id', 'products.id');
-                             
+                           
                     if ($branchId) {
                         $subQuery->where('branch_id', $branchId);
                     }
@@ -72,7 +72,7 @@ class ProductController extends Controller
                     $subQuery->select(DB::raw('COALESCE(SUM(current_stock), 0)'))
                              ->from('inventories')
                              ->whereColumn('inventories.product_id', 'products.id');
-                             
+                           
                     if ($branchId) {
                         $subQuery->where('branch_id', $branchId);
                     }
@@ -83,7 +83,7 @@ class ProductController extends Controller
                     $subQuery->select(DB::raw('COALESCE(SUM(current_stock), 0)'))
                              ->from('inventories')
                              ->whereColumn('inventories.product_id', 'products.id');
-                             
+                           
                     if ($branchId) {
                         $subQuery->where('branch_id', $branchId);
                     }
@@ -141,104 +141,100 @@ class ProductController extends Controller
     }
 
     public function allStocks(Request $request)
-{
-    $user = Auth::user();
-    $query = Inventory::with(['product', 'branch']);
+    {
+        $user = Auth::user();
+        $query = Inventory::with(['product', 'branch']);
 
-    // Search filter (Product Name o SKU)
-    if ($request->filled('search')) {
-        $search = $request->search;
-        $query->whereHas('product', function($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%")
-              ->orWhere('sku', 'like', "%{$search}%");
-        });
-    }
-
-    // Branch filter
-    if ($request->filled('branch_id')) {
-        $query->where('branch_id', $request->branch_id);
-    }
-
-    // Status filter
-    if ($request->filled('status')) {
-        $status = $request->status;
-        if ($status == 'in_stock') {
-            $query->where('current_stock', '>', 5);
-        } elseif ($status == 'low_stock') {
-            $query->where('current_stock', '>', 0)->where('current_stock', '<=', 5);
-        } elseif ($status == 'out_of_stock') {
-            $query->where('current_stock', '<=', 0);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('product', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
+            });
         }
+
+        if ($request->filled('branch_id')) {
+            $query->where('branch_id', $request->branch_id);
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->status;
+            if ($status == 'in_stock') {
+                $query->where('current_stock', '>', 5);
+            } elseif ($status == 'low_stock') {
+                $query->where('current_stock', '>', 0)->where('current_stock', '<=', 5);
+            } elseif ($status == 'out_of_stock') {
+                $query->where('current_stock', '<=', 0);
+            }
+        }
+
+        $stocks = $query->orderBy('branch_id')->latest()->paginate(15)->appends($request->query());
+        $branches = Branch::all();
+
+        return view('owner.stock_all', compact('stocks', 'user', 'branches'));
     }
-
-    $stocks = $query->orderBy('branch_id')->latest()->paginate(15)->appends($request->query());
-    $branches = Branch::all();
-
-    return view('owner.stock_all', compact('stocks', 'user', 'branches'));
-}
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock_main' => 'required|integer|min:0',
-            'stock_juban' => 'required|integer|min:0',
-            'stock_magallanes' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+{
+    // 1. Validate ang mga input
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'sku' => 'required|string|max:255|unique:products,sku',
+        'category_id' => 'required|exists:categories,id',
+        'price' => 'required|numeric',
+        'stock_main' => 'required|integer|min:0',
+        'stock_juban' => 'required|integer|min:0',
+        'stock_magallanes' => 'required|integer|min:0',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    try {
+        DB::beginTransaction();
+
+        $imageName = null;
+        // 2. Handle ang image upload kung meron
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images/products'), $imageName);
+        }
+
+        // 3. I-save ang Product (Siguraduhing 'image' lang ang kasama sa fillable, huwag ang stock_main/etc. kung wala sa products table)
+        $product = Product::create([
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'category_id' => $request->category_id,
+            'price' => $request->price,
+            'image' => $imageName,
         ]);
 
-        try {
-            DB::beginTransaction();
+        // 4. I-save ang stocks sa Inventory table para lumabas sa search, filters, at branches
+        // (Palitan mo ang branch_id kung magkaiba ang ID sa database mo, e.g. 1 = Main, 2 = Juban, 3 = Magallanes)
+        $branchesData = [
+            1 => $request->stock_main,       // Main Branch ID
+            2 => $request->stock_juban,      // Juban Branch ID
+            3 => $request->stock_magallanes, // Magallanes Branch ID
+        ];
 
-            $imageName = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images/product'), $imageName);
-            }
-
-            $product = Product::create([
-                'name' => $request->name,
-                'sku' => $request->sku,
-                'category_id' => $request->category_id,
-                'price' => $request->price,
-                'image' => $imageName,
-            ]);
-
-            $branches = Branch::all();
-
-            foreach ($branches as $branch) {
-                $stockValue = 0;
-                $branchNameLower = strtolower($branch->branch_name);
-                
-                if (str_contains($branchNameLower, 'main')) {
-                    $stockValue = $request->stock_main;
-                } elseif (str_contains($branchNameLower, 'juban')) {
-                    $stockValue = $request->stock_juban;
-                } elseif (str_contains($branchNameLower, 'magallanes')) {
-                    $stockValue = $request->stock_magallanes;
-                }
-
+        foreach ($branchesData as $branchId => $stockValue) {
+            if ($stockValue !== null) {
                 Inventory::create([
                     'product_id' => $product->id,
-                    'branch_id' => $branch->id,
+                    'branch_id' => $branchId,
                     'current_stock' => $stockValue,
                 ]);
             }
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Product added successfully!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'May nangyaring mali sa pag-save: ' . $e->getMessage()])->withInput();
         }
-    }
 
+        DB::commit();
+
+        return redirect()->route('owner.product')->with('success', 'Product added successfully!');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()->withErrors(['error' => 'Error saving product: ' . $e->getMessage()])->withInput();
+    }
+}
     public function storeStockIn(Request $request)
     {
         $request->validate([
@@ -296,6 +292,51 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['error' => 'Error in stock-out: ' . $e->getMessage()])->withInput();
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|unique:products,sku,' . $product->id,
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $imageName = $product->image;
+            if ($request->hasFile('image')) {
+                if ($imageName && file_exists(public_path('images/products/' . $imageName))) {
+                    @unlink(public_path('images/products/' . $imageName));
+                }
+
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images/products'), $imageName);
+            }
+
+            // Product details lang ang iu-update
+            $product->update([
+                'name' => $request->name,
+                'sku' => $request->sku,
+                'category_id' => $request->category_id,
+                'price' => $request->price,
+                'image' => $imageName,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Product details updated successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'May nangyaring mali sa pag-update: ' . $e->getMessage()])->withInput();
         }
     }
 }
