@@ -39,6 +39,14 @@
                         POS Terminal
                     </a>
                 </li>
+                <!-- Idinagdag na Sales History Link dito -->
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('staff.sales.history') ? 'sidebar-link-active' : 'sidebar-link' }}"
+                        href="{{ route('staff.sales.history') }}">
+                        <i class="fa-solid fa-clock-rotate-left sidebar-icon {{ request()->routeIs('staff.sales.history') ? 'text-danger' : 'text-muted' }}"></i>
+                        Sales History
+                    </a>
+                </li>
             </ul>
 
             <!-- PRODUCTS -->

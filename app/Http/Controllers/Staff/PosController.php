@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
@@ -7,12 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
 
-class StaffProductController extends Controller
+class PosController extends Controller
 {
-    // Ipinapakita ang Product Inventory List
     public function index(Request $request)
     {
         $user = Auth::user();
+        
+        // Kunin ang branch_id ng naka-login na staff
         $branchId = $user->branch_id ?? null;
 
         $query = Product::with(['category', 'inventories' => function($q) use ($branchId) {
@@ -21,7 +23,7 @@ class StaffProductController extends Controller
             }
         }]);
 
-        // Search filter para sa pangalan o SKU
+        // Search filter para sa pangalan o SKU ng produkto
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -30,36 +32,22 @@ class StaffProductController extends Controller
             });
         }
 
-        // Category filter
+        // Category filter galing sa database
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->category_id);
         }
 
-        // I-filter na dapat ay may inventory record sa branch na ito
+        // Gamitin ang subquery o branch filter direkta sa inventories para sigurado
         if ($branchId) {
             $query->whereHas('inventories', function($q) use ($branchId) {
-                $q->where('branch_id', $branchId);
+                $q->where('branch_id', $branchId)
+                  ->where('current_stock', '>', 0); // Opsyonal: kung gusto mong itago ang out-of-stock
             });
         }
 
-        $products = $query->orderBy('sku', 'asc')->paginate(10)->appends($request->query());
+        $products = $query->orderBy('sku', 'asc')->paginate(12)->appends($request->query());
         $categories = Category::all();
 
-        return view('staff.products.index', compact('products', 'categories', 'user'));
-    }
-
-    // Ipinapakita ang Product Details page
-    public function show($id)
-    {
-        $user = Auth::user();
-        $branchId = $user->branch_id ?? null;
-
-        $product = Product::with(['category', 'inventories' => function($q) use ($branchId) {
-            if ($branchId) {
-                $q->where('branch_id', $branchId);
-            }
-        }])->findOrFail($id);
-
-        return view('staff.products.show', compact('product', 'user'));
+        return view('staff.sales.pos', compact('products', 'categories', 'user'));
     }
 }

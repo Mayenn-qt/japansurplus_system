@@ -39,94 +39,70 @@
                                 <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Main Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
-                            <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Pangpang, Sorsogon City
-                            </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Branch Manager</span>
+                                <span class="text-muted">Staff</span>
                                 <span class="fw-semibold text-dark">Marianne</span>
                             </div>
-                            <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Active Staff</span>
-                                <span class="fw-semibold text-dark">4 members</span>
-                            </div>
                             <div class="d-flex justify-content-between mb-4" style="font-size: 13.5px;">
-                                <span class="text-muted">Total Products</span>
-                                <span class="fw-semibold text-dark">512 units</span>
+                                <span class="text-muted">Total Sales Recorded</span>
+                                <span class="fw-semibold text-dark">₱45,200</span>
                             </div>
 
                             <div class="d-flex gap-2 mt-auto">
-                                <button class="btn btn-light border btn-sm flex-fill shadow-sm text-secondary py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">Edit</button>
-                                <button class="btn btn-outline-dark btn-sm flex-fill py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View</button>
+                                <button class="btn btn-outline-dark btn-sm w-100 py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View Branch Operations</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Legazpi Branch -->
+                    <!-- Juban Branch -->
                     <div class="col-md-4">
                         <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Juban Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
-                            <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Juban part basta, Sorsogon City
-                            </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Branch Manager</span>
-                                <span class="fw-semibold text-dark">Mark </span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Active Staff</span>
-                                <span class="fw-semibold text-dark">3 members</span>
+                                <span class="text-muted">Staff</span>
+                                <span class="fw-semibold text-dark">Mark</span>
                             </div>
                             <div class="d-flex justify-content-between mb-4" style="font-size: 13.5px;">
-                                <span class="text-muted">Total Products</span>
-                                <span class="fw-semibold text-dark">398 units</span>
+                                <span class="text-muted">Total Sales Recorded</span>
+                                <span class="fw-semibold text-dark">₱32,800</span>
                             </div>
 
                             <div class="d-flex gap-2 mt-auto">
-                                <button class="btn btn-light border btn-sm flex-fill shadow-sm text-secondary py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">Edit</button>
-                                <button class="btn btn-outline-dark btn-sm flex-fill py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View</button>
+                                <button class="btn btn-outline-dark btn-sm w-100 py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View Branch Operations</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sorsogon Branch -->
+                    <!-- Magallanes Branch -->
                     <div class="col-md-4">
                         <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">Magallanes Branch</h6>
                                 <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                             </div>
-                            <div class="text-muted mb-3 d-flex align-items-center gap-1.5" style="font-size: 13px;">
-                                <i class="fa-solid fa-location-dot text-danger" style="font-size: 12px;"></i> Basta sa Magallanes, Sorsogon City
-                            </div>
                             
                             <hr class="text-muted opacity-10 my-3">
 
                             <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Branch Manager</span>
-                                <span class="fw-semibold text-dark">Robin </span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2" style="font-size: 13.5px;">
-                                <span class="text-muted">Active Staff</span>
-                                <span class="fw-semibold text-dark">3 members</span>
+                                <span class="text-muted">Staff</span>
+                                <span class="fw-semibold text-dark">Robin</span>
                             </div>
                             <div class="d-flex justify-content-between mb-4" style="font-size: 13.5px;">
-                                <span class="text-muted">Total Products</span>
-                                <span class="fw-semibold text-dark">374 units</span>
+                                <span class="text-muted">Total Sales Recorded</span>
+                                <span class="fw-semibold text-dark">₱28,500</span>
                             </div>
 
                             <div class="d-flex gap-2 mt-auto">
-                                <button class="btn btn-light border btn-sm flex-fill shadow-sm text-secondary py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">Edit</button>
-                                <button class="btn btn-outline-dark btn-sm flex-fill py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View</button>
+                                <button class="btn btn-outline-dark btn-sm w-100 py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View Branch Operations</button>
                             </div>
                         </div>
                     </div>

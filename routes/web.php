@@ -13,6 +13,7 @@ use App\Http\Controllers\SmsController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffSalesController;
 use App\Http\Controllers\Staff\StaffProductController;
+use App\Http\Controllers\Staff\PosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,13 +43,13 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     // Management (Products, Stock, Branches, Users)
     Route::get('/product', [ProductController::class, 'index'])->name('owner.product');
     Route::post('/product', [ProductController::class, 'store'])->name('owner.product.store');
-    Route::put('/products/{id}', [ProductController::class, 'update'])->name('owner.product.update'); // <--- Inayos dito (tinanggal ang dobleng 'owner/')
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('owner.product.update');
     
     // Stock Management & Backend Actions
     Route::get('/stock', [ProductController::class, 'stockManagement'])->name('owner.stock');
     Route::post('/stock/in', [ProductController::class, 'storeStockIn'])->name('owner.stock.in');
     Route::post('/stock/out', [ProductController::class, 'storeStockOut'])->name('owner.stock.out');
-    Route::get('/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all'); // <--- Inayos din dito para pareho sa prefix
+    Route::get('/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all');
 
     Route::get('/branches', [BranchController::class, 'branch'])->name('owner.branch'); 
     Route::get('/users', [UserController::class, 'user'])->name('owner.user');
@@ -79,11 +80,15 @@ Route::middleware(['auth'])->prefix('staff')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
 
-    // Sales Recording / POS
+    // POS Terminal
+    Route::get('/pos', [PosController::class, 'index'])->name('staff.pos');
+
+    // Sales & Checkout Routes
     Route::get('/sales', [StaffSalesController::class, 'sales'])->name('staff.sales.pos');
     Route::get('/sales/cart', [StaffSalesController::class, 'cart'])->name('staff.sales.cart');
     Route::get('/sales/checkout', [StaffSalesController::class, 'checkout'])->name('staff.sales.checkout');
-
+    Route::post('/sales/store', [StaffSalesController::class, 'store'])->name('staff.sales.store'); // <--- Idinagdag para sa pag-record ng sale/checkout
+    Route::get('/sales/history', [StaffSalesController::class, 'history'])->name('staff.sales.history');
     // Products
     Route::get('/products', [StaffProductController::class, 'index'])->name('staff.products.index');
     Route::get('/products/{id}', [StaffProductController::class, 'show'])->name('staff.products.show');

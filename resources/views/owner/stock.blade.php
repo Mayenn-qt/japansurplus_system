@@ -41,8 +41,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                     <div>
                         <h4 class="fw-bold mb-1" style="color: var(--ink); letter-spacing: -0.5px;">Stock Management</h4>
-                        <p class="text-muted mb-0" style="font-size:13.5px;">Real-time inventory levels and multi-branch warehouse tracking</p>
-                    </div>
+                        </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalStockOut" style="border-radius: 8px; font-size: 13.5px; font-weight: 500;">
                             <i class="fa-solid fa-truck-fast text-danger"></i> Stock Out

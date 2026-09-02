@@ -17,8 +17,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold text-dark mb-1" style="letter-spacing: -0.5px;">Product Management</h4>
-                    <p class="text-muted mb-0" style="font-size:13.5px;">Seamlessly manage inventory, pricing, and stock across all branches.</p>
-                </div>
+                    </div>
                 
                 <button type="button" class="btn btn-danger btn-sm px-3 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addProductModal" style="border-radius: 10px; transition: all 0.2s;">
                     <i class="fa-solid fa-plus"></i> Add Product
@@ -302,6 +301,6 @@
             </div> <!-- End of Card Wrapper -->
 
         </div> <!-- End of Page Section -->
-    </div> <!-- End of Content Wrapper -->
+    </div> 
 
 @endsection

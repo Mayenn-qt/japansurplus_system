@@ -17,10 +17,33 @@
     <!-- Right: Branch Info, Utility Actions & Profile Dropdown -->
     <div style="display: flex; align-items: center; gap: 14px;">
         
+        @php
+            $user = Auth::user();
+            // Kunin ang pangalan ng branch kung may relasyon ito, o gumawa ng logic base sa branch_id
+            $branchName = 'Counter Terminal #1';
+            if (isset($user->branch) && $user->branch) {
+                $branchName = $user->branch->name; 
+            } elseif ($user->branch_id == 1) {
+                $branchName = 'Juban Branch';
+            } elseif ($user->branch_id == 2) {
+                $branchName = 'Magallanes Branch';
+            }
+
+            // Pagkuha ng Initials para sa Avatar
+            $name = $user->name ?? 'Staff User';
+            $words = explode(' ', trim($name));
+            $initials = '';
+            if (count($words) >= 2) {
+                $initials = strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
+            } else {
+                $initials = strtoupper(substr($name, 0, 2));
+            }
+        @endphp
+
         <!-- Assigned Branch Badge -->
-        <div class="d-none sm-flex align-items-center gap-2" style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 10px; color: #0f172a; font-size: 13px; font-weight: 500;">
+        <div class="d-none d-sm-flex align-items-center gap-2" style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 10px; color: #0f172a; font-size: 13px; font-weight: 500;">
             <i class="fa-solid fa-store" style="color: #ef4444; font-size: 12px;"></i> 
-            <span>Counter Terminal #1</span>
+            <span>{{ $branchName }}</span>
         </div>
 
         <!-- Vertical Divider -->
@@ -38,11 +61,11 @@
         <div class="dropdown ps-1">
             <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="gap: 10px;">
                 <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #475569, #1e293b); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 12px; box-shadow: 0 2px 4px rgba(71, 85, 105, 0.2);">
-                    ST
+                    {{ $initials }}
                 </div>
                 <div class="d-none d-sm-flex" style="flex-direction: column; text-align: left;">
-                    <span style="color: #0f172a; font-size: 13px; font-weight: 600; line-height: 1.2;">Staff User</span>
-                    <span style="color: #64748b; font-size: 11px;">Counter Staff</span>
+                    <span style="color: #0f172a; font-size: 13px; font-weight: 600; line-height: 1.2;">{{ $user->name ?? 'Staff User' }}</span>
+                    <span style="color: #64748b; font-size: 11px;">{{ $branchName }} Staff</span>
                 </div>
                 <i class="fa-solid fa-chevron-down text-muted ms-1" style="font-size: 10px;"></i>
             </a>
