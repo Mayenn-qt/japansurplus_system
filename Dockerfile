@@ -38,7 +38,7 @@ RUN mkdir -p \
 RUN php artisan config:clear
 
 # Run migrations
-RUN php artisan migrate:fresh --force
+RUN php artisan migrate:fresh --seed --force
 
 # Render provides the PORT environment variable
 EXPOSE 10000
