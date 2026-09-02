@@ -38,9 +38,10 @@ RUN mkdir -p \
 RUN php artisan config:clear
 
 # Run migrations
-RUN php artisan migrate --force
+RUN php artisan migrate:fresh --force
 
 # Render provides the PORT environment variable
 EXPOSE 10000
 
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+
