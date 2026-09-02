@@ -24,7 +24,7 @@ class ProductSeeder extends Seeder
         // List ng products
         $products = [
             [
-                'image' => 'cabinet.jpg',
+                'image' => 'images/products/cabinet.jpg',
                 'name' => 'Japanese Wooden Wardrobe Cabinet',
                 'sku' => 'SKU-HS-001',
                 'category_id' => $furniture->id ?? null,
@@ -32,6 +32,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 10, 'stock_juban' => 5, 'stock_magallanes' => 0,
             ], 
             [
+                'image' => 'images/products/plateandbowl.jpg',
                 'name' => 'Ceramic Plate & Bowl Set',
                 'sku' => 'SKU-HS-002',
                 'category_id' => $kitchenware->id ?? null,
@@ -39,6 +40,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 5, 'stock_juban' => 10, 'stock_magallanes' => 3,
             ],
             [
+                'image' => 'images/products/chair.jpg',
                 'name' => 'Office Swivel Chair',
                 'sku' => 'SKU-HS-003',
                 'category_id' => $furniture->id ?? null,
@@ -46,6 +48,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 15, 'stock_juban' => 5, 'stock_magallanes' => 4,
             ],
             [
+                'image' => 'images/products/luggage.jpg',       
                 'name' => 'Japanese Hard-Case Travel Luggage',
                 'sku' => 'SKU-HS-004',
                 'category_id' => $bags->id ?? null,
@@ -53,6 +56,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 0, 'stock_juban' => 2, 'stock_magallanes' => 1,
             ],
             [
+                'image' => 'images/products/chainsaw.jpg',
                 'name' => 'Shindaiwa Gasoline Engine Chainsaw',
                 'sku' => 'SKU-HS-005',
                 'category_id' => $tools->id ?? null,
@@ -60,6 +64,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 5, 'stock_juban' => 3, 'stock_magallanes' => 1,
             ],
             [
+                'image' => 'images/products/teapot.jpg',    
                 'name' => 'Traditional Cast Iron Teapot Set',
                 'sku' => 'SKU-HS-006',
                 'category_id' => $kitchenware->id ?? null,
@@ -67,6 +72,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 8, 'stock_juban' => 6, 'stock_magallanes' => 4    
             ],
             [
+                'image' => 'images/products/clock.jpg',
                 'name' => 'Vintage Seiko Wooden Wall Clock',
                 'sku' => 'SKU-HS-007',
                 'category_id' => $furniture->id ?? null,
@@ -74,6 +80,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 10, 'stock_juban' => 3, 'stock_magallanes' => 7    
             ],
             [
+                'image' => 'images/products/planer.jpg',
                 'name' => 'Hitachi Electric Wood Planer',
                 'sku' => 'SKU-HS-008',
                 'category_id' => $tools->id ?? null,
@@ -81,6 +88,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 5, 'stock_juban' => 3, 'stock_magallanes' => 1    
             ],
             [
+                'image' => 'images/products/travel.jpg',
                 'name' => 'Outdoor Camping Backpack & Gear Set',
                 'sku' => 'SKU-HS-009',
                 'category_id' => $bags->id ?? null,
@@ -88,6 +96,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 7, 'stock_juban' => 3, 'stock_magallanes' => 5
             ],
             [
+                'image' => 'images/products/ramen.jpg',
                 'name' => 'Japanese Ceramic Ramen Bowl Set',
                 'sku' => 'SKU-HS-010',
                 'category_id' => $kitchenware->id ?? null,
