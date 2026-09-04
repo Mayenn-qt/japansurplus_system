@@ -57,7 +57,11 @@
                                         Qty: {{ $branchStock }}
                                     </div>
                                     <div class="rounded-4 d-flex align-items-center justify-content-center mb-3 overflow-hidden" style="height: 110px; background-color: #f7f5f0;">
-                                        <img src="{{ $product->image ? asset('images/products/'.$product->image) : asset('images/products/default.png') }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @if($product->image)
+                                            <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <i class="fa-solid fa-image text-muted" aria-hidden="true" style="font-size: 24px;"></i>
+                                        @endif
                                     </div>
                                     <h6 class="fw-bold text-dark mb-1 text-truncate" style="font-size: 13px; color: #2c2925 !important;">{{ $product->name }}</h6>
                                     <span class="text-muted small mb-2 d-block text-truncate" style="font-size: 11px; color: #8c857b !important;">{{ $product->sku }}</span>
