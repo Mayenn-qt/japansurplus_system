@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Juban Staff',
-            'email' => 'staffjuban@ohaiyojapan.com', // Inayos ang domain
+            'email' => 'staffjuban@ohaiyojapan.com', 
             'password' => Hash::make('juban_ohaiyojapan'),
             'role' => 'staff',
             'branch_id' => 2,

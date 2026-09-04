@@ -48,7 +48,7 @@ class ProductSeeder extends Seeder
                 'stock_main' => 15, 'stock_juban' => 5, 'stock_magallanes' => 4,
             ],
             [
-                'image' => 'images/products/luggage.jpg',       
+                'image' => 'images/products/luggage.jpg',      
                 'name' => 'Japanese Hard-Case Travel Luggage',
                 'sku' => 'SKU-HS-004',
                 'category_id' => $bags->id ?? null,
@@ -107,6 +107,7 @@ class ProductSeeder extends Seeder
 
         foreach ($products as $data) {
             $product = Product::create([
+                'image' => $data['image'],
                 'name' => $data['name'],
                 'sku' => $data['sku'],
                 'category_id' => $data['category_id'],
