@@ -154,9 +154,13 @@
                             <tr>
                                 <td class="ps-4 py-3">
                                     <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center border" style="width: 48px; height: 48px;">
-                                        <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}">
-                                            alt="{{ $product->name }}" 
-                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                        @if($product->image)
+                                            <img src="{{ asset('images/products/' . basename($product->image)) }}"
+                                                 alt="{{ $product->name }}"
+                                                 style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <i class="fa-solid fa-image text-muted" aria-hidden="true"></i>
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
@@ -218,9 +222,13 @@
 
                                 <!-- Image Container -->
                                 <div class="bg-light rounded-3 overflow-hidden mb-2 d-flex align-items-center justify-content-center" style="height: 120px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}">
-                                    <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" 
-                                         alt="{{ $product->name }}" 
-                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                    @if($product->image)
+                                        <img src="{{ asset('images/products/' . basename($product->image)) }}"
+                                             alt="{{ $product->name }}"
+                                             style="width: 100%; height: 100%; object-fit: cover;">
+                                    @else
+                                        <i class="fa-solid fa-image fa-2x text-muted" aria-hidden="true"></i>
+                                    @endif
                                 </div>
 
                                 <h6 class="fw-bold text-dark mb-0 text-truncate" style="font-size: 12.5px;">{{ $product->name }}</h6>
@@ -253,7 +261,11 @@
                             <div class="modal-body p-4">
                                 <div class="row align-items-center">
                                     <div class="col-md-4 text-center mb-3 mb-md-0">
-                                        <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" alt="{{ $product->name }}" class="img-fluid rounded-3 border shadow-sm" style="max-height: 200px; width: 100%; object-fit: cover;">
+                                        @if($product->image)
+                                            <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" class="img-fluid rounded-3 border shadow-sm" style="max-height: 200px; width: 100%; object-fit: cover;">
+                                        @else
+                                            <i class="fa-solid fa-image fa-3x text-muted" aria-hidden="true"></i>
+                                        @endif
                                     </div>
                                     <div class="col-md-8">
                                         <h3 class="fw-bold text-dark mb-1">{{ $product->name }}</h3>
