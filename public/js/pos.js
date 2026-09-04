@@ -116,7 +116,16 @@ function proceedToCheckout() {
     window.location.href = "/staff/sales/checkout";
 }
 
-// Auto-load ang cart pagbukas ng POS page
+// Auto-load ang cart pagbukas ng POS page at i-check kung dapat i-clear
 window.onload = function() {
-    updateCartUI();
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.get('clear_cart') === 'true') {
+        clearCart(); // Buburahin ang cart at sessionStorage
+        
+        // Linisin ang URL para hindi magtuloy-tuloy ang pag-clear kapag nire-refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+    } else {
+        updateCartUI();
+    }
 };

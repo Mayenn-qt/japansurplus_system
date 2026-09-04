@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
 
-class StaffSalesController extends Controller
+class SalesController extends Controller
 {
     // ... iba pang methods tulad ng sales, cart, checkout, history ...
 

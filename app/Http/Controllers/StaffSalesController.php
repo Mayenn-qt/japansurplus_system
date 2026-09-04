@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\Inventory;
+use Illuminate\Support\Facades\DB;
 
 class StaffSalesController extends Controller
 {
@@ -73,19 +75,64 @@ class StaffSalesController extends Controller
 
     public function store(Request $request)
     {
-        // Validation para sa Suki discount, order type at Cash payment
         $validated = $request->validate([
+            'cart_data' => 'required|json',
             'money_received' => 'required|numeric|min:0',
             'is_suki' => 'nullable|boolean',
-            'order_type' => 'nullable|string',
+            'order_type' => 'nullable|string|in:walk-in,pickup,delivery',
         ]);
 
-        // Pansamantalang subtotal (Maaari mong baguhin depende sa iyong cart session implementation)
-        $subtotal = 2650.00; 
-        $isSuki = $request->has('is_suki') ? true : false;
+        $cart = json_decode($validated['cart_data'], true);
+        if (!is_array($cart) || empty($cart)) {
+            return back()->withErrors(['cart_data' => 'The cart is empty.']);
+        }
+
+        $productIds = collect($cart)->pluck('id')->filter()->unique();
+        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+        if ($products->count() !== $productIds->count()) {
+            return back()->withErrors(['cart_data' => 'One or more products are no longer available.']);
+        }
+
+        $branchId = Auth::user()->branch_id ?? null;
+
+        $items = collect($cart)->map(function ($item) use ($products, $branchId) {
+            $productId = (int) ($item['id'] ?? 0);
+            $quantity = (int) ($item['quantity'] ?? 0);
+
+            if ($quantity < 1 || !$products->has($productId)) {
+                return null;
+            }
+
+            // I-check kung sapat ang stock bago ituloy ang checkout
+            if ($branchId) {
+                $inventory = Inventory::where('product_id', $productId)
+                    ->where('branch_id', $branchId)
+                    ->first();
+
+                if (!$inventory || $inventory->current_stock < $quantity) {
+                    throw new \Exception("Insufficient stock for product: " . $products[$productId]->name);
+                }
+            }
+
+            $price = (float) $products[$productId]->price;
+            return [
+                'product_id' => $productId,
+                'quantity' => $quantity,
+                'price' => $price,
+                'total' => $price * $quantity,
+            ];
+        })->filter()->values();
+
+        if ($items->isEmpty()) {
+            return back()->withErrors(['cart_data' => 'The cart contains no valid products.']);
+        }
+
+        $subtotal = $items->sum('total');
+        $isSuki = $request->boolean('is_suki');
         $discount = $isSuki ? $subtotal * 0.10 : 0;
         $totalAmount = $subtotal - $discount;
-        $moneyReceived = $request->money_received;
+        $moneyReceived = (float) $validated['money_received'];
         
         if ($moneyReceived < $totalAmount) {
             return back()->withErrors(['money_received' => 'Insufficient cash amount provided.']);
@@ -93,20 +140,43 @@ class StaffSalesController extends Controller
 
         $change = $moneyReceived - $totalAmount;
 
-        // Pag-save ng transaction sa database
-        Sale::create([
-            'user_id' => Auth::id(),
-            'branch_id' => Auth::user()->branch_id ?? null,
-            'order_type' => $request->order_type ?? 'walk-in',
-            'subtotal' => $subtotal,
-            'discount' => $discount,
-            'total_amount' => $totalAmount,
-            'money_received' => $moneyReceived,
-            'change' => $change,
-            'is_suki' => $isSuki,
-        ]);
+        try {
+            $sale = DB::transaction(function () use ($items, $subtotal, $discount, $totalAmount, $moneyReceived, $change, $isSuki, $request, $branchId) {
+                $sale = Sale::create([
+                    'user_id' => Auth::id(),
+                    'branch_id' => $branchId,
+                    'order_type' => $request->input('order_type', 'walk-in'),
+                    'subtotal' => $subtotal,
+                    'discount' => $discount,
+                    'total_amount' => $totalAmount,
+                    'money_received' => $moneyReceived,
+                    'change' => $change,
+                    'is_suki' => $isSuki,
+                ]);
 
-        // Pagkatapos ma-save, direktang dadalhin sa sales history page na may success message
-        return redirect()->route('staff.sales.history')->with('success', 'Transaction successfully recorded!');
+                // I-save ang sale items at bawasan ang stock sa inventory
+                foreach ($items as $item) {
+                    $sale->items()->create($item);
+
+                    if ($branchId) {
+                        $inventory = Inventory::where('product_id', $item['product_id'])
+                            ->where('branch_id', $branchId)
+                            ->first();
+
+                        if ($inventory) {
+                            $inventory->current_stock = max(0, $inventory->current_stock - $item['quantity']);
+                            $inventory->save();
+                        }
+                    }
+                }
+
+                return $sale;
+            });
+        } catch (\Exception $e) {
+            return back()->withErrors(['cart_data' => $e->getMessage()]);
+        }
+
+        return redirect()->route('staff.sales.history')
+            ->with('success', 'Transaction #' . $sale->id . ' successfully recorded and stocks updated!');
     }
 }

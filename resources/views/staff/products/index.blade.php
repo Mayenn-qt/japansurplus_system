@@ -71,13 +71,17 @@
                     <tbody>
                         @forelse($products as $product)
                             @php
-                                $stockRecord = $product->inventories->where('branch_id', $user->branch_id)->first();
+                                $stockRecord = $product->inventories->first();
                                 $branchStock = $stockRecord ? $stockRecord->current_stock : 0;
                             @endphp
                             <tr style="border-color: #f0ece1;">
                                 <td class="py-3 px-4">
                                     <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #f7f5f0;">
-                                        <img src="{{ $product->image ? asset('images/products/'.$product->image) : asset('images/products/default.jpg') }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @if($product->image)
+                                            <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <i class="fa-solid fa-image text-muted" aria-hidden="true" style="font-size: 18px;"></i>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="py-3">
@@ -115,11 +119,11 @@
         <div class="mobile-square-container row g-2">
             @forelse($products as $product)
                 @php
-                    $stockRecord = $product->inventories->where('branch_id', $user->branch_id)->first();
+                    $stockRecord = $product->inventories->first();
                     $branchStock = $stockRecord ? $stockRecord->current_stock : 0;
                 @endphp
                 <div class="col-6">
-                    <div class="card border-0 shadow-sm p-2.5 bg-white h-100 position-relative d-flex flex-column justify-content-between" style="aspect-ratio: 1 / 1; border-radius: 16px !important; border: 1px solid #f0ece1 !important;">
+                    <div class="card border-0 shadow-sm p-2 bg-white h-100 position-relative d-flex flex-column justify-content-between" style="border-radius: 16px !important; border: 1px solid #f0ece1 !important;">
                         
                         <!-- Badge -->
                         <div class="position-absolute top-0 end-0 m-2 z-2">
@@ -133,20 +137,24 @@
                         </div>
 
                         <!-- Image Box -->
-                        <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center mb-1" style="height: 55px; background-color: #f7f5f0;">
-                            <img src="{{ $product->image ? asset('images/products/'.$product->image) : asset('images/products/default.jpg') }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center mb-2" style="height: 100px; background-color: #f7f5f0;">
+                            @if($product->image)
+                                <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <i class="fa-solid fa-image text-muted" aria-hidden="true" style="font-size: 20px;"></i>
+                            @endif
                         </div>
 
                         <!-- Details -->
-                        <div>
-                            <h6 class="fw-bold mb-0 text-truncate" style="font-size: 11.5px; color: #2c2925;">{{ $product->name }}</h6>
-                            <span class="d-block text-truncate" style="font-size: 9.5px; color: #8c857b;">SKU: {{ $product->sku }}</span>
+                        <div class="mb-2">
+                            <h6 class="fw-bold mb-1 text-truncate" style="font-size: 12px; color: #2c2925;">{{ $product->name }}</h6>
+                            <span class="d-block text-truncate" style="font-size: 10px; color: #8c857b;">SKU: {{ $product->sku }}</span>
                         </div>
 
                         <!-- Price & Button -->
-                        <div class="d-flex justify-content-between align-items-center pt-1 border-top" style="border-color: #f7f5f0 !important;">
-                            <span class="fw-bold" style="font-size: 11.5px; color: #e2062c;">₱{{ number_format($product->price, 2) }}</span>
-                            <a href="{{ route('staff.products.show', $product->id) }}" class="btn btn-sm text-white px-2 py-0.5 fw-semibold shadow-sm border-0 text-decoration-none" style="border-radius: 6px; font-size: 10px; background-color: #e2062c;">
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top" style="border-color: #f7f5f0 !important;">
+                            <span class="fw-bold" style="font-size: 12px; color: #e2062c;">₱{{ number_format($product->price, 2) }}</span>
+                            <a href="{{ route('staff.products.show', $product->id) }}" class="btn btn-sm text-white px-2.5 py-1 fw-semibold shadow-sm border-0 text-decoration-none" style="border-radius: 8px; font-size: 10.5px; background-color: #e2062c;">
                                 View
                             </a>
                         </div>
