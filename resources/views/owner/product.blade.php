@@ -154,7 +154,7 @@
                             <tr>
                                 <td class="ps-4 py-3">
                                     <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center border" style="width: 48px; height: 48px;">
-                                        <img src="{{ asset('images/products/' . ($product->image ?? 'default.png')) }}" 
+                                        <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}">
                                             alt="{{ $product->name }}" 
                                             style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
