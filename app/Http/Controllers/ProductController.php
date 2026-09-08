@@ -101,7 +101,8 @@ class ProductController extends Controller
     public function stockManagement(Request $request)
     {
         $user = Auth::user();
-        $query = Inventory::with(['product', 'branch']);
+        $query = Inventory::with(['product', 'branch'])
+                          ->whereHas('product');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -128,7 +129,7 @@ class ProductController extends Controller
 
         $stocks = $query->orderBy('branch_id')->latest()->take(10)->get();
         
-        $allInventories = Inventory::all();
+        $allInventories = Inventory::whereHas('product')->get();
         $totalItems = $allInventories->sum('current_stock');
         $lowStockCount = $allInventories->where('current_stock', '>', 0)->where('current_stock', '<=', 5)->count();
         $outOfStockCount = $allInventories->where('current_stock', '<=', 0)->count();
@@ -143,7 +144,8 @@ class ProductController extends Controller
     public function allStocks(Request $request)
     {
         $user = Auth::user();
-        $query = Inventory::with(['product', 'branch']);
+        $query = Inventory::with(['product', 'branch'])
+                          ->whereHas('product');
 
         if ($request->filled('search')) {
             $search = $request->search;

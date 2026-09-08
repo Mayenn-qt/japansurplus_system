@@ -40,7 +40,7 @@
                 </h1>
 
                 <h3 class="h4 fw-normal text-light opacity-85 mb-4">
-                    Sales Recording and Stock Management System
+                    Sales Recording and Inventory Management System
                 </h3>
 
                 <div class="d-flex gap-4 text-light opacity-75 small">

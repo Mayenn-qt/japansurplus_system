@@ -29,8 +29,8 @@
                 <p class="small m-0 text-muted">Monitor and track previous branch transactions.</p>
             </div>
             <a href="{{ route('staff.pos', ['clear_cart' => 'true']) }}" class="btn btn-danger btn-sm px-3 rounded-pill">
-    <i class="fa-solid fa-cash-register me-1"></i> New Sale
-</a>
+                <i class="fa-solid fa-cash-register me-1"></i> New Sale
+            </a>
         </div>
 
         @if(session('success'))
@@ -48,6 +48,7 @@
                         <tr>
                             <th class="py-3">Transaction ID</th>
                             <th class="py-3">Order Type</th>
+                            <th class="py-3">Products Purchased</th>
                             <th class="py-3">Suki Discount</th>
                             <th class="py-3">Total Amount</th>
                             <th class="py-3">Cash / Change</th>
@@ -62,6 +63,18 @@
                                     <span class="badge bg-light text-dark border px-2 py-1 text-uppercase" style="font-size: 10.5px;">
                                         {{ $sale->order_type }}
                                     </span>
+                                </td>
+                                <!-- Products list (Name, SKU, Qty) -->
+                                <td style="min-width: 200px;">
+                                    <ul class="list-unstyled mb-0" style="font-size: 12px;">
+                                        @foreach($sale->items as $item)
+                                            <li class="mb-1">
+                                                <span class="fw-semibold text-dark">{{ $item->product->name ?? 'Unknown Product' }}</span>
+                                                <br>
+                                                <span class="text-muted" style="font-size: 11px;">SKU: {{ $item->product->sku ?? 'N/A' }} | Qty: {{ $item->quantity }}</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </td>
                                 <td>
                                     @if($sale->is_suki)
@@ -79,7 +92,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-5 text-muted">
+                                <td colspan="7" class="text-center py-5 text-muted">
                                     <i class="fa-solid fa-folder-open fs-3 mb-2 d-block opacity-50"></i>
                                     No sales history recorded yet.
                                 </td>
@@ -102,6 +115,19 @@
                             <span class="badge bg-light text-dark border px-2 py-1 text-uppercase" style="font-size: 9.5px;">
                                 {{ $sale->order_type }}
                             </span>
+                        </div>
+
+                        <!-- Products List Section for Mobile -->
+                        <div class="mb-2 pb-2 border-bottom" style="border-color: #f7f5f0 !important;">
+                            <span class="text-muted d-block mb-1" style="font-size: 11px; text-transform: uppercase; font-weight: 600;">Items Bought:</span>
+                            <ul class="list-unstyled mb-0" style="font-size: 12px;">
+                                @foreach($sale->items as $item)
+                                    <li class="mb-1 bg-light p-2 rounded-2">
+                                        <div class="fw-semibold text-dark">{{ $item->product->name ?? 'Unknown Product' }}</div>
+                                        <div class="text-muted" style="font-size: 11px;">SKU: {{ $item->product->sku ?? 'N/A' }} | Qty: {{ $item->quantity }}</div>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
 
                         <!-- Details Body -->

@@ -31,8 +31,12 @@
             <div class="col-lg-5">
                 <div class="card border-0 shadow-sm rounded-3 p-4 bg-white text-center">
                     <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center text-muted mb-4 mx-auto shadow-inner" style="width: 100%; height: 240px;">
-                        <img src="{{ $product->image ? asset('images/products/'.$product->image) : asset('images/products/default.jpg') }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
+    @if($product->image)
+        <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+    @else
+        <img src="{{ asset('images/products/default.jpg') }}" alt="Default Image" style="width: 100%; height: 100%; object-fit: cover;">
+    @endif
+</div>
                     <span class="badge bg-light text-secondary border border-secondary border-opacity-25 px-3 py-1 mb-2 align-self-center" style="font-size: 12px;">{{ $product->sku }}</span>
                     <h5 class="fw-bold text-dark mb-1">{{ $product->name }}</h5>
                     <span class="text-muted small">{{ $product->category->name ?? 'Uncategorized' }} Category</span>
@@ -64,16 +68,20 @@
                         <div class="col-6">
                             <label class="form-label text-muted small fw-semibold">Availability</label>
                             <div>
-                                @if($branchStock > 0)
-                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
-                                        <i class="fa-solid fa-check-circle me-1"></i> In Stock
-                                    </span>
-                                @else
-                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
-                                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Out of Stock
-                                    </span>
-                                @endif
-                            </div>
+    @if($branchStock > 5)
+        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
+            <i class="fa-solid fa-check-circle me-1"></i> In Stock
+        </span>
+    @elseif($branchStock > 0 && $branchStock <= 5)
+        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> Low Stock
+        </span>
+    @else
+        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> Out of Stock
+        </span>
+    @endif
+</div>
                         </div>
                     </div>
                 </div>
