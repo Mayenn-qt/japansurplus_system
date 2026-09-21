@@ -96,7 +96,7 @@
                                         </div>
                                     </td>
                                     <td><span class="text-dark fw-medium" style="font-size: 13.5px;">Cashier</span></td>
-                                    <td><span class="badge rounded-pill bg-light text-dark border px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Magallanes</span></td>
+                                    <td><span class="badge rounded-pill bg-light text-dark border px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Masbate</span></td>
                                     <td><span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span></td>
                                     <td class="pe-4 text-end">
                                         <button class="btn btn-sm btn-light border px-2 py-1 me-1 shadow-sm text-secondary" title="Edit User" style="border-radius: 6px;"><i class="fa-solid fa-pen" style="font-size: 12px;"></i></button>

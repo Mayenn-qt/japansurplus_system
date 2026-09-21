@@ -24,6 +24,23 @@ function addToCart(id, name, price, stock) {
     updateCartUI();
 }
 
+function addFreeItem(id, name, stock) {
+    let existingItem = cart.find(item => item.id === id && item.is_free);
+
+    if (existingItem) {
+        if (existingItem.quantity < stock) {
+            existingItem.quantity++;
+        } else {
+            alert('Naabot na ang limitasyon ng stock.');
+            return;
+        }
+    } else {
+        cart.push({ id: id, name: name, price: 0, quantity: 1, stock: stock, is_free: true });
+    }
+
+    updateCartUI();
+}
+
 // 2. Pag-update ng UI sa My Order panel sa POS terminal
 function updateCartUI() {
     let cartContainer = document.querySelector('.cart-items');
@@ -111,9 +128,47 @@ function proceedToCheckout() {
         return;
     }
 
-    // Siguraduhing nakasave bago lumipat ng page
     sessionStorage.setItem('pos_cart', JSON.stringify(cart));
-    window.location.href = "/staff/sales/checkout";
+    renderCheckoutModal();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('checkoutModal')).show();
+}
+
+function renderCheckoutModal() {
+    const container = document.getElementById('checkoutModalItems');
+    if (!container) return;
+
+    container.innerHTML = cart.map(item => `
+        <div class="d-flex justify-content-between border-bottom py-2">
+            <span>${item.name} <small class="text-muted">x${item.quantity}</small></span>
+            <strong>${item.is_free ? 'FREE' : '₱' + (item.price * item.quantity).toLocaleString('en-US', {minimumFractionDigits: 2})}</strong>
+        </div>
+    `).join('');
+    updateCheckoutTotals();
+}
+
+function updateCheckoutTotals() {
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const discount = Math.min(parseFloat(document.getElementById('manualDiscount')?.value) || 0, subtotal);
+    const due = Math.max(0, subtotal - discount);
+    const cash = parseFloat(document.getElementById('cashTendered')?.value) || 0;
+    const change = cash - due;
+
+    document.getElementById('checkoutTotal').innerText = '₱' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('checkoutDue').innerText = '₱' + due.toLocaleString('en-US', {minimumFractionDigits: 2});
+    document.getElementById('checkoutChange').innerText = change >= 0 ? '₱' + change.toLocaleString('en-US', {minimumFractionDigits: 2}) : 'Insufficient Cash';
+    document.getElementById('checkoutChange').className = change >= 0 ? 'text-success' : 'text-danger';
+}
+
+function prepareCheckoutData() {
+    document.getElementById('cartDataInput').value = JSON.stringify(cart);
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const discount = parseFloat(document.getElementById('manualDiscount').value) || 0;
+    const cash = parseFloat(document.getElementById('cashTendered').value) || 0;
+    if (discount > subtotal || cash < subtotal - discount) {
+        alert('Please check the discount and cash tendered amount.');
+        return false;
+    }
+    return cart.length > 0;
 }
 
 // Auto-load ang cart pagbukas ng POS page at i-check kung dapat i-clear

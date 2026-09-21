@@ -27,9 +27,9 @@ class BranchSeeder extends Seeder
         ]);
 
         Branch::create([
-            'branch_name' => 'Magallanes Branch',
-            'address' => 'Magallanes',
-            'email' => 'magallanes@ohaiyojapan.com',
+            'branch_name' => 'Masbate Branch',
+            'address' => 'Masbate',
+            'email' => 'masbate@ohaiyojapan.com',
         ]);
     }
 }

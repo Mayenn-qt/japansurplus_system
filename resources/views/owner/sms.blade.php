@@ -30,7 +30,7 @@
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white">
                         <span class="text-muted text-uppercase fw-semibold d-block" style="font-size: 11px;">Total Branch Customers</span>
-                        <h4 class="fw-bold text-dark mt-1 mb-0">50 <span class="text-primary fs-6 fw-normal"><i class="fa-solid fa-users ms-1"></i></span></h4>
+                        <h4 class="fw-bold text-dark mt-1 mb-0">{{ $customers->count() }} <span class="text-primary fs-6 fw-normal"><i class="fa-solid fa-users ms-1"></i></span></h4>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -64,9 +64,9 @@
                                 </div>
                                 <select class="form-select form-select-sm text-dark fw-medium" style="width: 140px; font-size: 12px;">
                                     <option value="all">All Branches</option>
-                                    <option value="main" selected>Main Branch</option>
-                                    <option value="juban">Juban Branch</option>
-                                    <option value="magallanes">Magallanes</option>
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -85,25 +85,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="ps-3"><input class="form-check-input" type="checkbox" checked></td>
-                                        <td class="fw-medium text-dark">Aling Susan</td>
-                                        <td class="text-muted">0917-123-4567</td>
-                                        <td class="pe-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1" style="font-size: 11px;">Main</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="ps-3"><input class="form-check-input" type="checkbox" checked></td>
-                                        <td class="fw-medium text-dark">Mr. King</td>
-                                        <td class="text-muted">0917-987-6543</td>
-                                        <td class="pe-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1" style="font-size: 11px;">Magallanesphp</span></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="ps-3"><input class="form-check-input" type="checkbox" checked></td>
-                                        <td class="fw-medium text-dark">Don Juan</td>
-                                        <td class="text-muted">0913-235-7643</td>
-                                        <td class="pe-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1" style="font-size: 11px;">Juban</span></td>
-                                    </tr>
+                                    @forelse($customers as $customer)
+                                        <tr>
+                                            <td class="ps-3"><input class="form-check-input" type="checkbox" name="customer_ids[]" value="{{ $customer->id }}"></td>
+                                            <td class="fw-medium text-dark">{{ $customer->name }}</td>
+                                            <td class="text-muted">{{ $customer->phone }}</td>
+                                            <td class="pe-3"><span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-2 py-1" style="font-size: 11px;">{{ $customer->branch->branch_name ?? 'All Branches' }}</span></td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="4" class="text-center py-4 text-muted">No customer contacts available. Add contacts from the Customers page.</td></tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -122,7 +113,7 @@
                                 <select class="form-select form-select-sm" style="border-radius: 8px;">
                                     <option value="main" selected>Main Branch Only</option>
                                     <option value="juban">Juban Branch Only</option>
-                                    <option value="magallanes">Magallanes Branch Only</option>
+                                    <option value="masbate">Masbate Branch Only</option>
                                     <option value="all">All Branches (Global Broadcast)</option>
                                 </select>
                             </div>

@@ -39,9 +39,9 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Magallanes Staff',
-            'email' => 'staffmagallanes@ohaiyojapan.com', // Inayos ang domain
-            'password' => Hash::make('magallanes_ohaiyojapan'),
+            'name' => 'Masbate Staff',
+            'email' => 'staffmasbate@ohaiyojapan.com',
+            'password' => Hash::make('masbate_ohaiyojapan'),
             'role' => 'staff',
             'branch_id' => 3,
         ]);

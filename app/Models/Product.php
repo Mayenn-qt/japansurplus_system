@@ -14,9 +14,18 @@ class Product extends Model
         'sku',
         'category_id',
         'price',
+        'supplier_price',
+        'sale_price',
         'image',
         'reorder_level',
-    
+        'condition',
+        'location',
+        'remarks',
+        'date_last_sold',
+    ];
+
+    protected $casts = [
+        'date_last_sold' => 'datetime',
     ];
 
     public function category()
@@ -27,5 +36,10 @@ class Product extends Model
     public function inventories()
     {
         return $this->hasMany(Inventory::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->oldest();
     }
 }

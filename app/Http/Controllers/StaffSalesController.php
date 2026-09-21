@@ -56,30 +56,13 @@ class StaffSalesController extends Controller
         return view('staff.sales.checkout');
     }
 
-    public function history(Request $request)
-    {
-        $user = Auth::user();
-        $branchId = $user->branch_id ?? null;
-
-        $query = Sale::with(['items.product', 'user'])
-            ->orderBy('created_at', 'desc');
-
-        if ($branchId) {
-            $query->where('branch_id', $branchId);
-        }
-
-        $sales = $query->paginate(10);
-
-        return view('staff.sales.history', compact('sales'));
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
             'cart_data' => 'required|json',
             'money_received' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
             'is_suki' => 'nullable|boolean',
-            'order_type' => 'nullable|string|in:walk-in,pickup,delivery',
         ]);
 
         $cart = json_decode($validated['cart_data'], true);
@@ -115,7 +98,8 @@ class StaffSalesController extends Controller
                 }
             }
 
-            $price = (float) $products[$productId]->price;
+            $isFree = filter_var($item['is_free'] ?? false, FILTER_VALIDATE_BOOLEAN);
+            $price = $isFree ? 0 : (float) $products[$productId]->price;
             return [
                 'product_id' => $productId,
                 'quantity' => $quantity,
@@ -130,7 +114,11 @@ class StaffSalesController extends Controller
 
         $subtotal = $items->sum('total');
         $isSuki = $request->boolean('is_suki');
-        $discount = $isSuki ? $subtotal * 0.10 : 0;
+        $discount = (float) ($validated['discount'] ?? 0);
+        if ($isSuki && $discount === 0.0) {
+            $discount = $subtotal * 0.10;
+        }
+        $discount = min($discount, $subtotal);
         $totalAmount = $subtotal - $discount;
         $moneyReceived = (float) $validated['money_received'];
         
@@ -141,11 +129,11 @@ class StaffSalesController extends Controller
         $change = $moneyReceived - $totalAmount;
 
         try {
-            $sale = DB::transaction(function () use ($items, $subtotal, $discount, $totalAmount, $moneyReceived, $change, $isSuki, $request, $branchId) {
+            $sale = DB::transaction(function () use ($items, $subtotal, $discount, $totalAmount, $moneyReceived, $change, $isSuki, $branchId) {
                 $sale = Sale::create([
                     'user_id' => Auth::id(),
                     'branch_id' => $branchId,
-                    'order_type' => $request->input('order_type', 'walk-in'),
+                    'order_type' => 'walk-in',
                     'subtotal' => $subtotal,
                     'discount' => $discount,
                     'total_amount' => $totalAmount,
@@ -176,7 +164,7 @@ class StaffSalesController extends Controller
             return back()->withErrors(['cart_data' => $e->getMessage()]);
         }
 
-        return redirect()->route('staff.sales.history')
-            ->with('success', 'Transaction #' . $sale->id . ' successfully recorded and stocks updated!');
+        return redirect()->route('staff.sales.pos', ['clear_cart' => 'true'])
+            ->with('success', 'Sale completed successfully.');
     }
 }

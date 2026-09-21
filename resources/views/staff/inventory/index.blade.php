@@ -85,13 +85,13 @@
         <!-- 2. Search & Filter Bar -->
         <div class="card border-0 shadow-sm rounded-3 p-3 bg-white mb-4">
             <form method="GET" action="{{ url()->current() }}" class="row g-2 align-items-center">
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0 text-muted" style="border-radius: 8px 0 0 8px;"><i class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="text" name="search" value="{{ request('search') }}" class="form-control bg-light border-start-0 shadow-none" placeholder="Search by product name or SKU..." style="font-size: 13px; border-radius: 0 8px 8px 0;">
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <select name="branch" class="form-select bg-light border-0 text-dark fw-semibold" style="font-size: 13px; border-radius: 8px;">
                         <option value="">All Branches</option>
                         @foreach($branches ?? [] as $branch)
@@ -109,6 +109,12 @@
                         <option value="out" {{ request('stock_level') == 'out' ? 'selected' : '' }}>🔴 Out of Stock</option>
                     </select>
                 </div>
+                <div class="col-md-2">
+                    <select name="sort" class="form-select bg-light border-0 text-dark fw-semibold" style="font-size: 13px; border-radius: 8px;">
+                        <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Newest Arrival</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest Arrival</option>
+                    </select>
+                </div>
                 <div class="col-md-2 d-flex gap-2">
                     <button type="submit" class="btn btn-dark w-100 fw-semibold shadow-sm" style="font-size: 13px; border-radius: 8px;"><i class="fa-solid fa-filter me-1"></i> Filter</button>
                     <a href="{{ url()->current() }}" class="btn btn-light w-100 text-muted fw-semibold border" style="font-size: 13px; border-radius: 8px;">Reset</a>
@@ -123,9 +129,9 @@
                     <thead class="bg-light text-muted" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
                         <tr>
                             <th class="py-3 px-4">Product Image</th>
-                            <th class="py-3 px-4">Product Name & SKU</th>
-                            <th class="py-3 text-center">Current Stock</th>
-                            <th class="py-3 px-4">Status</th>
+                            <th class="py-3 px-4">Info</th>
+                            <th class="py-3 px-4">Item Location</th>
+                            <th class="py-3 px-4">Condition</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,11 +151,7 @@
                                 <td class="py-3 px-4">
                                     <span class="fw-bold text-dark d-block">{{ $stock->product->name ?? 'Unknown Product' }}</span>
                                     <span class="text-muted small"><code class="text-danger bg-light px-1 py-0.5 rounded">{{ $stock->product->sku ?? 'N/A' }}</code></span>
-                                </td>
-                                <td class="py-3 text-center fw-bold text-dark">
-                                    <span class="fs-6">{{ number_format($stock->current_stock) }}</span> <span class="text-muted small fw-normal">pcs</span>
-                                </td>
-                                <td class="py-3 px-4">
+                                    <span class="text-muted small d-block mt-1">{{ number_format($stock->current_stock) }} pcs</span>
                                     @if($stock->current_stock > 5)
                                         <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1.5" style="font-size: 11px;">
                                             <i class="fa-solid fa-circle-check me-1"></i> In Stock
@@ -163,6 +165,14 @@
                                             <i class="fa-solid fa-circle-xmark me-1"></i> Out of Stock
                                         </span>
                                     @endif
+                                </td>
+                                <td class="py-3 px-4 text-secondary">
+                                    {{ $stock->product->location ?? 'Not specified' }}
+                                    <span class="text-muted small d-block">{{ $stock->branch->branch_name ?? 'Unassigned' }}</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="text-dark">{{ $stock->product->condition ?? 'Not specified' }}</span>
+                                    <span class="text-muted small d-block">Arrived {{ optional($stock->product->created_at)->format('M d, Y') }}</span>
                                 </td>
                             </tr>
                         @empty

@@ -19,14 +19,9 @@
         
         @php
             $user = Auth::user();
-            // Kunin ang pangalan ng branch kung may relasyon ito, o gumawa ng logic base sa branch_id
             $branchName = 'Counter Terminal #1';
             if (isset($user->branch) && $user->branch) {
-                $branchName = $user->branch->name; 
-            } elseif ($user->branch_id == 1) {
-                $branchName = 'Juban Branch';
-            } elseif ($user->branch_id == 2) {
-                $branchName = 'Magallanes Branch';
+                $branchName = $user->branch->branch_name;
             }
 
             // Pagkuha ng Initials para sa Avatar

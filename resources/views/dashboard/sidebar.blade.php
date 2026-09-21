@@ -70,6 +70,14 @@
                     </a>
 
                 </li>
+
+                <li class="nav-item">
+                    <a class="{{ request()->routeIs('owner.customers*') ? 'sidebar-link-active' : 'sidebar-link' }}"
+                        href="{{ route('owner.customers') }}">
+                        <i class="fa-solid fa-address-book sidebar-icon text-muted"></i>
+                        Customers
+                    </a>
+                </li>
             </ul>
 
             <!-- Reports -->

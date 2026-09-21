@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Inventory & Stock Management - Ohaiyo Japan Surplus')
+@section('title', 'Inventory Management - Ohaiyo Japan Surplus')
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -13,7 +13,6 @@
     <div class="content-wrapper">
         <div id="content">
 
-            <!-- Success/Error Alerts -->
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                     {{ session('success') }}
@@ -33,143 +32,120 @@
             @endif
 
             <div class="page-section active-page" id="page-stock">
-                
-                <!-- Header & Action Buttons -->
                 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                     <h4 class="fw-bold mb-1 text-dark">Inventory Management</h4>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalStockOut">
-                            <i class="fa-solid fa-truck-fast text-danger"></i> Stock Out
-                        </button>
-                        <button class="btn btn-dark px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalStockIn">
-                            <i class="fa-solid fa-truck-ramp-box text-white"></i> Stock In
-                        </button>
-                    </div>
                 </div>
 
-                <!-- Quick Stats Cards -->
-                <div class="row g-3 mb-4">
-                    <div class="col-md-4">
-                        <div class="card border-0 shadow-sm p-3 rounded-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center icon-box">
-                                    <i class="fa-solid fa-boxes-stacked"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted d-block fs-7 fw-medium">TOTAL ITEMS</span>
-                                    <h4 class="fw-bold mb-0 text-dark">{{ $totalItems ?? 0 }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card border-0 shadow-sm p-3 rounded-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center icon-box">
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted d-block fs-7 fw-medium">LOW STOCK ITEMS</span>
-                                    <h4 class="fw-bold mb-0 text-dark">{{ $lowStockCount ?? 0 }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card border-0 shadow-sm p-3 rounded-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-3 bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center icon-box">
-                                    <i class="fa-solid fa-ban"></i>
-                                </div>
-                                <div>
-                                    <span class="text-muted d-block fs-7 fw-medium">OUT OF STOCK</span>
-                                    <h4 class="fw-bold mb-0 text-dark">{{ $outOfStockCount ?? 0 }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filters & Search Toolbar -->
                 <div class="card mb-4 border-0 shadow-sm rounded-3">
-                    <form method="GET" action="{{ route('owner.stock.all') }}" class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
-                        <div class="d-flex align-items-center gap-2 flex-grow-1 search-toolbar-container">
-                            <div class="input-group bg-light rounded-2 border flex-grow-1">
-                                <span class="input-group-text bg-transparent border-0 text-danger ps-3">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </span>
-                                <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm border-0 bg-transparent shadow-none" placeholder="Search product or SKU...">
+                    <form method="GET" action="{{ route('owner.stock') }}" class="p-3">
+                        <div class="row g-2">
+                            <div class="col-12 col-lg-4">
+                                <div class="input-group bg-light rounded-2 border">
+                                    <span class="input-group-text bg-transparent border-0 text-danger ps-3">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                    <input type="text" name="search" value="{{ request('search') }}" class="form-control form-control-sm border-0 bg-transparent shadow-none" placeholder="Search product name..." aria-label="Search by product name" onkeydown="if (event.key === 'Enter') this.form.submit();">
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-light border px-3 py-2 d-flex align-items-center gap-2 shadow-sm text-secondary">
-                                <i class="fa-solid fa-filter text-danger"></i> Filter
-                            </button>
-                        </div>
-
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="input-group input-group-sm bg-light rounded-2 border branch-select-container">
-                                <span class="input-group-text bg-transparent border-0 text-danger ps-2 pe-1">
-                                    <i class="fa-solid fa-store"></i>
-                                </span>
-                                <select name="branch_id" class="form-select form-select-sm border-0 bg-transparent shadow-none px-1 fw-medium" onchange="this.form.submit()">
-                                    <option value="">All Branches</option>
-                                    @foreach($branches ?? [] as $branch)
-                                        <option value="{{ $branch->id }}" {{ request('branch_id') == $branch->id ? 'selected' : '' }}>
-                                            {{ $branch->branch_name }}
-                                        </option>
+                            <div class="col-6 col-lg-2">
+                                <select name="category_id" class="form-select form-select-sm bg-light border" aria-label="Filter by category">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ (string) request('category_id') === (string) $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <select name="branch_id" class="form-select form-select-sm bg-light border" aria-label="Filter by branch">
+                                    <option value="">All Branches</option>
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}" {{ (string) request('branch_id', 1) === (string) $branch->id ? 'selected' : '' }}>{{ $branch->branch_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <select name="condition" class="form-select form-select-sm bg-light border" aria-label="Filter by condition">
+                                    <option value="">All Conditions</option>
+                                    @foreach($conditions as $condition)
+                                        <option value="{{ $condition }}" {{ request('condition') === $condition ? 'selected' : '' }}>{{ $condition }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-6 col-lg-2">
+                                <select name="sort" class="form-select form-select-sm bg-light border" aria-label="Sort by date arrived" onchange="this.form.submit()">
+                                    <option value="latest" {{ request('sort', 'latest') === 'latest' ? 'selected' : '' }}>Date Arrived: Newest</option>
+                                    <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Date Arrived: Oldest</option>
                                 </select>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <!-- Stock Monitoring Table -->
                 <div class="card border-0 shadow-sm rounded-3 overflow-hidden mb-4">
-                    <div class="p-3 border-bottom bg-light d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold mb-0 text-dark">Stock Monitoring</h6>
-                        <a href="{{ route('owner.stock.all') }}" class="btn btn-sm btn-outline-secondary px-3 rounded-2">
-                            View All <i class="fa-solid fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+                    
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light text-uppercase text-muted fs-8 tracking-wide">
                                 <tr>
-                                    <th class="py-3 ps-4">Branch</th>
-                                    <th class="py-3">Product Name</th>
-                                    <th class="py-3">SKU</th>
-                                    <th class="py-3">Current Stock</th>
-                                    <th class="py-3 pe-4">Status</th>
+                                    <th class="py-3 ps-4">Product</th>
+                                    <th class="py-3">Branch</th>
+                                    <th class="py-3">Item Location</th>
+                                    <th class="py-3">Condition</th>
+                                    <th class="py-3">Date Arrived</th>
+                                    <th class="py-3 pe-4">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($stocks ?? [] as $item)
+                                    @php
+                                        $product = $item->product;
+                                        $primaryImage = $product?->image ?? $product?->images?->first()?->image;
+                                        $condition = strtolower(trim($product?->condition ?? ''));
+                                        $conditionClass = match (true) {
+                                            str_contains($condition, 'damaged') => 'bg-danger bg-opacity-10 text-danger border-danger-subtle',
+                                            str_contains($condition, 'repair') => 'bg-warning bg-opacity-25 text-dark border-warning',
+                                            str_contains($condition, 'minor defect'), str_contains($condition, 'fair') => 'bg-warning bg-opacity-10 text-warning-emphasis border-warning-subtle',
+                                            str_contains($condition, 'good'), str_contains($condition, 'new') => 'bg-success bg-opacity-10 text-success border-success-subtle',
+                                            default => 'bg-light text-dark border',
+                                        };
+                                        $statusAvailable = (int) ($item->current_stock ?? 0) > 0;
+                                    @endphp
                                     <tr>
-                                        <td class="ps-4 py-3 fw-semibold text-secondary">
-                                            {{ str_replace(' Branch', '', $item->branch->branch_name ?? 'Main') }}
+                                        <td class="ps-4 py-3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center border flex-shrink-0" style="width: 56px; height: 56px;">
+                                                @if($primaryImage)
+                                                    <img src="{{ asset('images/products/' . basename($primaryImage)) }}" alt="{{ $product?->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                @else
+                                                    <i class="fa-solid fa-image text-muted" aria-hidden="true"></i>
+                                                @endif
+                                                </div>
+                                                <div class="fw-semibold text-dark">
+                                                    {{ $product?->name ?? 'N/A' }}
+                                                    <span class="text-muted fs-8 d-block">{{ $product?->category?->name ?? 'Uncategorized' }}</span>
+                                                </div>
+                                            </div>
                                         </td>
-                                        <td class="fw-semibold text-dark">{{ $item->product->name ?? 'N/A' }}</td>
-                                        <td><span class="text-muted fs-8">{{ $item->product->sku ?? 'N/A' }}</span></td>
-                                        <td class="fw-semibold text-dark">{{ $item->current_stock }} units</td>
+                                        <td class="text-secondary">{{ $item->branch?->branch_name ?? 'Unassigned' }}</td>
+                                        <td class="text-secondary">{{ $product?->location ?? 'Not specified' }}</td>
+                                        <td>
+                                            <span class="badge {{ $conditionClass }} fw-medium">{{ $product?->condition ?? 'Not specified' }}</span>
+                                        </td>
+                                        <td class="text-secondary">{{ $product?->created_at?->format('F j, Y') ?? 'Not specified' }}</td>
+                                        <td>
+                                            <span class="badge {{ $statusAvailable ? 'bg-success bg-opacity-10 text-success border-success-subtle' : 'bg-danger bg-opacity-10 text-danger border-danger-subtle' }} fw-medium">
+                                                {{ $statusAvailable ? 'Available' : 'Sold Out' }}
+                                            </span>
+                                        </td>
                                         <td class="pe-4">
-                                            @php
-                                                $textColor = 'text-success';
-                                                $statusText = 'In Stock';
-                                                
-                                                if($item->current_stock <= 0) {
-                                                    $textColor = 'text-danger';
-                                                    $statusText = 'Out of Stock';
-                                                } elseif($item->current_stock <= 5) {
-                                                    $textColor = 'text-warning';
-                                                    $statusText = 'Low Stock';
-                                                }
-                                            @endphp
-                                            <span class="fw-semibold {{ $textColor }} fs-7">{{ $statusText }}</span>
+                                            <button type="button" class="btn btn-sm btn-light border px-3 rounded-2" data-bs-toggle="modal" data-bs-target="#inventoryDetails{{ $item->id }}">
+                                                View
+                                            </button>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">No stock inventory records found.</td>
+                                        <td colspan="7" class="text-center py-4 text-muted">No products found in inventory.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -177,57 +153,73 @@
                     </div>
                 </div>
 
-                <!-- Stock Movement History Table -->
-                <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                    <div class="p-3 border-bottom bg-light">
-                        <h6 class="fw-bold mb-0 text-dark">Stock Activity Log</h6>
+                @foreach($stocks ?? [] as $item)
+                    @php
+                        $product = $item->product;
+                        $images = collect();
+                        if ($product?->image) {
+                            $images->push($product->image);
+                        }
+                        $images = $images->merge($product?->images?->pluck('image') ?? collect())->unique();
+                    @endphp
+                    <div class="modal fade" id="inventoryDetails{{ $item->id }}" tabindex="-1" aria-labelledby="inventoryDetailsLabel{{ $item->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                                <div class="modal-header bg-light border-bottom px-4 py-3">
+                                    <h5 class="modal-title fw-bold text-dark" id="inventoryDetailsLabel{{ $item->id }}">Inventory Details</h5>
+                                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <div class="row g-4">
+                                        <div class="col-md-5">
+                                            <div class="bg-light rounded-3 border d-flex align-items-center justify-content-center overflow-hidden" style="height: 220px;">
+                                                @if($images->first())
+                                                    <img src="{{ asset('images/products/' . basename($images->first())) }}" alt="{{ $product?->name }}" class="w-100 h-100" style="object-fit: contain;">
+                                                @else
+                                                    <i class="fa-solid fa-image text-muted fa-2x"></i>
+                                                @endif
+                                            </div>
+                                            @if($images->count() > 1)
+                                                <div class="d-flex gap-2 mt-2 flex-wrap">
+                                                    @foreach($images as $image)
+                                                        <img src="{{ asset('images/products/' . basename($image)) }}" alt="{{ $product?->name }}" class="rounded border" style="width: 52px; height: 52px; object-fit: cover;">
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-7">
+                                            <h5 class="fw-bold text-dark mb-1">{{ $product?->name ?? 'N/A' }}</h5>
+                                            <p class="text-muted mb-4">{{ $product?->category?->name ?? 'Uncategorized' }}</p>
+                                            <dl class="row mb-0 small">
+                                                <dt class="col-5 text-muted">Branch</dt>
+                                                <dd class="col-7 text-dark">{{ $item->branch?->branch_name ?? 'Unassigned' }}</dd>
+                                                <dt class="col-5 text-muted">Item Location</dt>
+                                                <dd class="col-7 text-dark">{{ $product?->location ?? 'Not specified' }}</dd>
+                                                <dt class="col-5 text-muted">Condition</dt>
+                                                <dd class="col-7 text-dark">{{ $product?->condition ?? 'Not specified' }}</dd>
+                                                <dt class="col-5 text-muted">Date Arrived</dt>
+                                                <dd class="col-7 text-dark">{{ $product?->created_at?->format('F j, Y') ?? 'Not specified' }}</dd>
+                                                @if($product?->remarks)
+                                                    <dt class="col-5 text-muted">Remarks</dt>
+                                                    <dd class="col-7 text-dark">{{ $product->remarks }}</dd>
+                                                @endif
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-light text-uppercase text-muted fs-8 tracking-wide">
-                                <tr>
-                                    <th class="py-3 ps-4">Date / Time</th>
-                                    <th class="py-3">Branch</th>
-                                    <th class="py-3">Product SKU</th>
-                                    <th class="py-3">Quantity</th>
-                                    <th class="py-3">Type</th>
-                                    <th class="py-3">Authorized By</th>
-                                    <th class="py-3 pe-4">Notes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($activities ?? [] as $activity)
-                                    <tr>
-                                        <td class="ps-4 py-3 text-muted fs-7">{{ $activity->created_at->format('M d, Y h:i A') }}</td>
-                                        <td class="fw-semibold text-secondary">{{ $activity->branch ?? 'Main Branch' }}</td>
-                                        <td><span class="text-muted">{{ $activity->product->sku ?? 'N/A' }}</span></td>
-                                        <td class="fw-semibold text-dark">{{ $activity->quantity }} units</td>
-                                        <td>
-                                            @php
-                                                $typeBg = $activity->type == 'Stock In' ? 'bg-success text-success' : 'bg-primary text-primary';
-                                            @endphp
-                                            <span class="badge border {{ $typeBg }} bg-opacity-10 px-2 py-1 fw-medium fs-8">
-                                                {{ $activity->type }}
-                                            </span>
-                                        </td>
-                                        <td>{{ $activity->user->name ?? 'System' }}</td>
-                                        <td class="pe-4 text-muted fs-7">{{ $activity->remarks ?? $activity->reason ?? '-' }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center py-4 text-muted">No recent stock movement logs found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                @endforeach
+
+                @if($stocks instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
+                    <div class="d-flex justify-content-center mt-3">
+                        {{ $stocks->links() }}
                     </div>
-                </div>
+                @endif
 
             </div>
         </div>
     </div>
 
-    <!-- Modals -->
-    @include('owner.stocks.stockin')
-    @include('owner.stocks.stockout')
 @endsection

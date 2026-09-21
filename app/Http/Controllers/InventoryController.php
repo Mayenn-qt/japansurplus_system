@@ -9,6 +9,23 @@ use App\Models\Branch;
 
 class InventoryController extends Controller
 {
+    public function inventoryReport()
+    {
+        $inventory = Inventory::with(['product.category', 'branch'])
+            ->whereHas('product')
+            ->where('current_stock', '<=', 5)
+            ->latest()
+            ->get();
+
+        return view('owner.reports.inventory', [
+            'totalProducts' => Product::count(),
+            'inStockItems' => Inventory::where('current_stock', '>', 0)->count(),
+            'lowStockItems' => Inventory::where('current_stock', '>', 0)->where('current_stock', '<=', 5)->count(),
+            'outOfStockItems' => Inventory::where('current_stock', '<=', 0)->count(),
+            'inventory' => $inventory,
+        ]);
+    }
+
     public function index(Request $request)
     {
         $user = auth()->user();
@@ -43,7 +60,14 @@ class InventoryController extends Controller
             };
         }
 
-        $stocks = $query->orderBy('branch_id')->orderBy('id')->paginate(10)->withQueryString();
+        $sortDirection = $request->input('sort') === 'oldest' ? 'asc' : 'desc';
+        $stocks = $query
+            ->join('products', 'inventories.product_id', '=', 'products.id')
+            ->select('inventories.*')
+            ->orderBy('products.created_at', $sortDirection)
+            ->orderBy('inventories.id', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         $baseCountQuery = Inventory::whereHas('product');
         if ($userBranchId) {

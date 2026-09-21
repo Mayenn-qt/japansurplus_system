@@ -72,7 +72,7 @@
 
                         <div>
                             <h2 class="h4 fw-bold text-white mb-0">
-                                Welcome Back
+                                Welcome
                             </h2>
 
                             <p class="text-light opacity-75 small mb-0">

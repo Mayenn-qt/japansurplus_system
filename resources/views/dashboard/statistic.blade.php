@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium text-black"><span class="badge rounded-circle me-1" style="width: 8px; height: 8px; display: inline-block; background-color: #64748b;"></span> Magallanes Branch</span>
+                    <span class="fw-medium text-black"><span class="badge rounded-circle me-1" style="width: 8px; height: 8px; display: inline-block; background-color: #64748b;"></span> Masbate Branch</span>
                     <div class="d-flex align-items-center gap-2">
                         <span class="text-black-50">₱200</span>
                         <span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.65rem;">44.4%</span>

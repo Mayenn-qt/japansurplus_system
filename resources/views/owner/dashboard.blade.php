@@ -6,183 +6,137 @@
 
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-    <!--Sidebar-->
+    <!-- Sidebar -->
     @include('dashboard.sidebar')
 
-        <!-- Top NavBar -->
-        @include('dashboard.topnavbar')
-
-        <div class="main-content-wrapper"> 
-               
-        <div class="page-selection active-page" id="page-dashboard">
-        <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
-            <div>
-                <h4 class="text-black mb-1 ">
-                    Welcome back,
-                    <span id="dashName">{{ $user->name }}</span>  
-                </h4>
-                <p class="text-black-50">
-                    Here's an overview of your store's performance today.
-                </p>
+    <!-- Top NavBar -->
+    @include('dashboard.topnavbar')
+     <div class="page-selection active-page" id="page-dashboard">
+            
+            <!-- Header & Quick Actions -->
+            <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+                <div>
+                    <h4 class="text-black mb-1 fw-bold">
+                        Welcome back, <span id="dashName">{{ $user->name ?? 'Admin' }}</span>!
+                    </h4>
+                    <p class="text-black-50 mb-0" style="font-size: 13.5px;">
+                        Store sales performance and customer reach overview.
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('owner.customers') }}" class="btn btn-outline-dark btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;">
+                        <i class="fa-solid fa-address-book"></i> Contacts
+                    </a>
+                    <a href="{{ route('owner.sms') }}" class="btn btn-dark btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px; background-color: #0f172a; border-color: #0f172a;">
+                        <i class="fa-solid fa-paper-plane"></i> Send SMS Update
+                    </a>
+                </div>
             </div>
-            <div class="d-flex gap-2">
-            <button class="btn btn-danger btn-sm px-3" onClick="showPage('pos', document.querySelector('[data-page=pos]'))">
-               <i class="fa-solid fa-plus me-1">
-               </i> 
-               New Sale
-            </button>
-            <button class="btn btn-soft btn-sm px-3" onClick="showPage('stock', document.querySelector('[data-page=stock]'))">
-                <i class="fa-solid fa-truck-ramp-box me-1"></i>
-            Restock
-            </button>
-            </div>
-        </div>
-        
-       
-       <!-- TOP ROW CARDS (4 Stats Cards) -->
+            
+            <!-- SALES METRICS ROW -->
             <div class="row g-3 mb-4">
-                <!-- Card 1: Total Sales -->
+                <!-- Today Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('reports', document.querySelector('[data-page=reports]'))">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
-                            <i class="fa-solid fa-sack-dollar"></i>
-                            </div>
-                            <span class="badge bg-success bg-opacity-10 text-success fw-semibold" style="font-size: 0.7rem;">Sales</span>
-                        </div>
-                        <span class="text-black small fw-medium d-block mb-1">Total Sales</span>
-                        <h3 class="fw-bold mb-1 text-black">₱ 0.00</h3>
-                        </div>
-                </div>
-
-                <!-- Card 2: Monthly Revenue -->
-                <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('analytics', document.querySelector('[data-page=analytics]'))">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-                            <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold" style="font-size: 0.7rem;">Revenue</span>
-                        </div>
-                        <span class="text-black small fw-medium d-block mb-1">Monthly Revenue</span>
-                        <h3 class="fw-bold mb-1 text-black">0</h3>
-                        
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #dc3545 !important;">
+                        <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Today's Sales</span>
+                        <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($todaySales ?? 0, 2) }}</h3>
                     </div>
                 </div>
 
-                <!-- Card 3: Total Products -->
+                <!-- This Week Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('customers', document.querySelector('[data-page=customers]'))">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="bg-info bg-opacity-10 text-info rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
-                                <i class="fa-solid fa-users"></i>
-                            </div>
-                            <span class="badge bg-info bg-opacity-10 text-info fw-semibold" style="font-size: 0.7rem;">3 Branches</span>
-                        </div>
-                        <span class="text-black small fw-medium d-block mb-1">Total Products</span>
-                        <h3 class="fw-bold mb-1 text-black">0</h3>
-                        
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #f59e0b !important;">
+                        <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Week</span>
+                        <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($weekSales ?? 0, 2) }}</h3>
                     </div>
                 </div>
 
-                <!-- Card 4: Low Stock -->
+                <!-- This Month Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm simple-card" onclick="showPage('stock', document.querySelector('[data-page=stock]'))">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="bg-danger bg-opacity-10 text-danger rounded-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; font-size: 1.25rem;">
-                                <i class="fa-solid fa-boxes-stacked"></i>
-                            </div>
-                            <span class="badge bg-danger bg-opacity-10 text-danger fw-semibold" style="font-size: 0.7rem;">Low Stock</span>
-                        </div>
-                        <span class="text-black small fw-medium d-block mb-1">Low Stock Items</span>
-                        <h3 class="fw-bold mb-1 text-black">0</h3>
-                        
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #10b981 !important;">
+                        <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Month</span>
+                        <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($monthSales ?? 0, 2) }}</h3>
+                    </div>
+                </div>
+
+                <!-- This Year Sales -->
+                <div class="col-xl-3 col-md-6">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #6366f1 !important;">
+                        <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Year</span>
+                        <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($yearSales ?? 0, 2) }}</h3>
                     </div>
                 </div>
             </div>
 
-        <!-- MIDDLE SECTION: Monthly Sale Total Transactions Card -->
-        @include('dashboard.statistic')
-
-        <!-- recent sales and low stock products -->
-        @include('dashboard.branch')
-
-        
-        <div class="row g-4">
-    <!-- Recent Activities and sms stsatus -->
-    <div class="col-lg-7">
-        <div class="dashboard-card h-100 p-4 d-flex flex-column justify-content-between">
-            <div>
-                <div class="fw-bold h6 mb-4 text-black">Recent Activities</div>
-                
-                <div class="d-flex flex-column gap-3">
-                    <!-- Activity 1 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(37, 99, 235, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2);">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Sale <b class="text-black">INV-10231</b> recorded at <b class="text-black">Juban Branch</b></div>
-                            <div class="text-black-50" style="font-size: 11.5px;">2 minutes ago</div>
+            <!-- TOTAL PRODUCTS & TOTAL CUSTOMERS ROW -->
+            <div class="row g-3 mb-4">
+                <div class="col-xl-6 col-md-6">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #0f172a !important;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-black-50 small fw-medium d-block text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Total Products</span>
+                                <h3 class="fw-bold mb-0 text-black">{{ number_format($totalProducts ?? 0) }}</h3>
+                            </div>
+                            <span class="badge bg-light text-dark border px-2.5 py-1" style="font-size: 0.75rem;">Surplus Items</span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Activity 2 -->
-                   
-                    <!-- Activity 3 -->
-                    <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-sm" style="width: 34px; height: 34px; font-size: 13px; background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2);">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="text-black" style="font-size: 13px;">Low stock alert: <b class="text-black">Japanese Hard-Case Travel Luggage</b> — Main Branch</div>
-                            <div class="text-black-50" style="font-size: 11.5px;">1 hour ago</div>
+                <div class="col-xl-6 col-md-6">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #0ea5e9 !important;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-black-50 small fw-medium d-block text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Total Customers</span>
+                                <h3 class="fw-bold mb-0 text-black">{{ number_format($totalCustomers ?? 0) }}</h3>
+                            </div>
+                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.75rem;">Profiles Database</span>
                         </div>
                     </div>
-
-                    <!-- Activity 4 -->
-                    
                 </div>
             </div>
+
+            <!-- RECENT SALES TABLE SECTION -->
+            <div class="dashboard-card p-4 shadow-sm mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-bold text-black m-0">Recent Sales</h6>
+                    <span class="text-muted small">Latest transactions log</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0 table-hover" style="font-size: 13px;">
+                        <thead class="table-light text-muted" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <tr>
+                                <th class="py-3 px-3">Customer Name</th>
+                                <th class="py-3 px-3">Items Summary</th>
+                                <th class="py-3 px-3 text-center">Total Amount</th>
+                                <th class="py-3 px-3">Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentSales ?? [] as $sale)
+                                <tr>
+                                    <td class="py-3 px-3 fw-semibold text-dark">{{ $sale->user?->name ?? 'Walk-in Customer' }}</td>
+                                    <td class="py-3 px-3 text-muted">
+                                        @forelse($sale->items as $item)
+                                            <span class="d-block">{{ $item->product?->name ?? 'Product removed' }} x{{ $item->quantity }}</span>
+                                        @empty
+                                            <span>Items unavailable</span>
+                                        @endforelse
+                                    </td>
+                                    <td class="py-3 px-3 text-center fw-bold text-dark">₱ {{ number_format($sale->total_amount, 2) }}</td>
+                                    <td class="py-3 px-3 text-muted small">{{ $sale->created_at?->format('M d, Y h:i A') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-muted">
+                                        No recent sales recorded yet.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
-
-    <!-- SMS Notification Status Component -->
-    <div class="col-lg-5">
-        <div class="dashboard-card h-100 p-4 d-flex flex-column justify-content-between">
-            <div>
-                <div class="fw-bold h6 mb-4 text-black">SMS Notification Status</div>
-                
-                <div class="d-flex flex-column gap-3">
-                    <div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <span class="text-black" style="font-size: 13px;">Gateway status</span>
-                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2.5 py-1 rounded-pill" style="font-size: 0.7rem;">Online</span>
-                    </div>
-
-                    <div class="p-3 rounded-3 d-flex flex-column gap-2.5" style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
-                        <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-black-50">Sent today</span>
-                            <b class="text-black">142</b>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-black-50">Delivered</span>
-                            <b class="text-black">139</b>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center" style="font-size: 13px;">
-                            <span class="text-black-50">Failed</span>
-                            <b class="text-danger">3</b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <button class="btn btn-light w-100 btn-sm py-2 border border-secondary border-opacity-25 text-black shadow-sm rounded-pill fw-medium" style="font-size: 0.8rem;" onclick="showPage('sms', document.querySelector('[data-page=sms]'))">
-                    <i class="fa-solid fa-paper-plane me-2 text-primary"></i> Compose Broadcast
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-    </div>
+@endsection

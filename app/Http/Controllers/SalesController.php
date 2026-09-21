@@ -4,11 +4,35 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sale;
+use App\Models\SaleItem;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
     // ... iba pang methods tulad ng sales, cart, checkout, history ...
+    public function salesReport()
+    {
+        $now = Carbon::now();
+        $sales = Sale::query();
+
+        $todaySales = (clone $sales)->whereDate('created_at', $now->toDateString())->sum('total_amount');
+        $weekSales = (clone $sales)->whereBetween('created_at', [$now->copy()->startOfWeek(), $now->copy()->endOfWeek()])->sum('total_amount');
+        $monthSales = (clone $sales)->whereBetween('created_at', [$now->copy()->startOfMonth(), $now->copy()->endOfMonth()])->sum('total_amount');
+        $transactionCount = (clone $sales)->count();
+        $bestSellingProducts = SaleItem::with('product')
+            ->select('product_id', DB::raw('SUM(quantity) as quantity_sold'), DB::raw('SUM(total) as revenue'))
+            ->groupBy('product_id')
+            ->orderByDesc('quantity_sold')
+            ->take(10)
+            ->get();
+        $recentSales = Sale::with(['branch', 'user'])->latest()->take(10)->get();
+
+        return view('owner.reports.sales', compact(
+            'todaySales', 'weekSales', 'monthSales', 'transactionCount',
+            'bestSellingProducts', 'recentSales'
+        ));
+    }
 
     public function history()
     {

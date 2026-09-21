@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\BranchReportController;
 use App\Http\Controllers\SmsController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffSalesController;
 use App\Http\Controllers\Staff\StaffProductController;
@@ -52,7 +53,12 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     Route::get('/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all');
 
     Route::get('/branches', [BranchController::class, 'branch'])->name('owner.branch'); 
+    Route::get('/branches/{branch}/operations', [BranchController::class, 'operations'])->name('owner.branch.operations');
     Route::get('/users', [UserController::class, 'user'])->name('owner.user');
+    Route::get('/customers', [CustomerController::class, 'index'])->name('owner.customers');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('owner.customers.store');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('owner.customers.update');
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('owner.customers.destroy');
 
     // Reports (Sales, Inventory, Branch Reports)
     Route::get('/reports/sales', [SalesController::class, 'salesReport'])->name('owner.reports.sales');
@@ -77,9 +83,6 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('staff')->group(function () {
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
-
     // POS Terminal
     Route::get('/pos', [PosController::class, 'index'])->name('staff.pos');
 
@@ -88,7 +91,6 @@ Route::middleware(['auth'])->prefix('staff')->group(function () {
     Route::get('/sales/cart', [StaffSalesController::class, 'cart'])->name('staff.sales.cart');
     Route::get('/sales/checkout', [StaffSalesController::class, 'checkout'])->name('staff.sales.checkout');
     Route::post('/sales/store', [StaffSalesController::class, 'store'])->name('staff.sales.store'); // <--- Idinagdag para sa pag-record ng sale/checkout
-    Route::get('/sales/history', [StaffSalesController::class, 'history'])->name('staff.sales.history');
     // Products
     Route::get('/products', [StaffProductController::class, 'index'])->name('staff.products.index');
     Route::get('/products/{id}', [StaffProductController::class, 'show'])->name('staff.products.show');

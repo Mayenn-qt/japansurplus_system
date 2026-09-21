@@ -12,6 +12,20 @@
     <!-- Japanese Warm Neutral Minimalist Background -->
     <div style="background-color: #ffffff; min-height: calc(100vh - 70px); padding: 16px; font-family: 'Inter', sans-serif;">
 
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                {{ $errors->first() }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <form method="GET" action="{{ route('staff.pos') }}" id="posFilterForm">
             <div class="row g-3">
                 <!-- KALIWA: Product Catalog, Search & Categories -->
@@ -67,9 +81,14 @@
                                     <span class="text-muted small mb-2 d-block text-truncate" style="font-size: 11px; color: #8c857b !important;">{{ $product->sku }}</span>
                                     <div class="d-flex justify-content-between align-items-center mt-auto pt-1">
                                         <span class="fw-bold" style="font-size: 13.5px; color: #e2062c;">₱{{ number_format($product->price, 2) }}</span>
-                                        <button type="button" onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $branchStock }})" class="btn btn-sm text-white px-2.5 py-1 fw-semibold shadow-sm border-0" style="border-radius: 10px; font-size: 12px; background-color: #e2062c;" {{ $branchStock <= 0 ? 'disabled' : '' }}>
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
+                                        <div class="d-flex gap-1">
+                                            <button type="button" onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, {{ $branchStock }})" class="btn btn-sm text-white px-2.5 py-1 fw-semibold shadow-sm border-0" style="border-radius: 10px; font-size: 12px; background-color: #e2062c;" {{ $branchStock <= 0 ? 'disabled' : '' }} title="Add paid item">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                            <button type="button" onclick="addFreeItem({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $branchStock }})" class="btn btn-sm btn-outline-success px-2 py-1 fw-semibold shadow-sm" style="border-radius: 10px; font-size: 12px;" {{ $branchStock <= 0 ? 'disabled' : '' }} title="Add free item">
+                                                <i class="fa-solid fa-gift"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -99,18 +118,6 @@
                             </button>
                         </div>
 
-                        <!-- Order Type Tabs -->
-                        <div class="d-flex p-1 rounded-pill mb-3" style="gap: 4px; background-color: #f7f5f0;">
-                            <input type="radio" class="btn-check" name="order_type" id="walkIn" value="walk-in" checked>
-                            <label class="flex-fill btn btn-sm fw-semibold text-white shadow-sm border-0 py-2 text-center rounded-pill" for="walkIn" style="font-size: 12px; background-color: #2c2925; cursor: pointer;">Walk-in</label>
-
-                            <input type="radio" class="btn-check" name="order_type" id="pickUp" value="pickup">
-                            <label class="flex-fill btn btn-sm fw-semibold border-0 py-2 text-center rounded-pill" for="pickUp" style="font-size: 12px; color: #8c857b; cursor: pointer;">Pick Up</label>
-
-                            <input type="radio" class="btn-check" name="order_type" id="delivery" value="delivery">
-                            <label class="flex-fill btn btn-sm fw-semibold border-0 py-2 text-center rounded-pill" for="delivery" style="font-size: 12px; color: #8c857b; cursor: pointer;">Delivery</label>
-                        </div>
-
                         <!-- Cart Items List Container -->
                         <div class="cart-items mb-3 border-bottom pb-3" style="max-height: 220px; overflow-y: auto; border-color: #f0ece1 !important;">
                             <div class="py-4 text-center d-flex flex-column justify-content-center align-items-center">
@@ -133,7 +140,7 @@
 
                         <!-- Proceed Button -->
                         <button type="button" onclick="proceedToCheckout()" class="btn w-100 py-3 fw-bold text-white shadow-sm d-flex align-items-center justify-content-center gap-2 border-0" style="border-radius: 16px; font-size: 14px; background-color: #e2062c;">
-                            <span>Proceed to Checkout</span> <i class="fa-solid fa-arrow-right" style="font-size: 14px;"></i>
+                            <span>Checkout</span> <i class="fa-solid fa-arrow-right" style="font-size: 14px;"></i>
                         </button>
                     </div>
                 </div>
@@ -141,6 +148,43 @@
             </div>
         </form>
 
+    </div>
+
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
+                <form action="{{ route('staff.sales.store') }}" method="POST" onsubmit="return prepareCheckoutData();">
+                    @csrf
+                    <input type="hidden" name="cart_data" id="cartDataInput">
+                    <div class="modal-header bg-light border-bottom">
+                        <h5 class="modal-title fw-bold"><i class="fa-solid fa-cash-register text-danger me-2"></i>Checkout</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-7">
+                                <h6 class="fw-bold mb-3">Order Summary</h6>
+                                <div id="checkoutModalItems" class="border rounded-3 p-3" style="max-height: 260px; overflow-y: auto;"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="d-flex justify-content-between mb-2"><span class="text-muted">Total</span><strong id="checkoutTotal">₱0.00</strong></div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Discount</label>
+                                    <div class="input-group"><span class="input-group-text">₱</span><input type="number" min="0" step="0.01" name="discount" id="manualDiscount" class="form-control" value="0" oninput="updateCheckoutTotals()"></div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3"><span class="text-muted">Amount Due</span><strong class="text-danger" id="checkoutDue">₱0.00</strong></div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Cash Tendered</label>
+                                    <div class="input-group"><span class="input-group-text">₱</span><input type="number" min="0" step="0.01" name="money_received" id="cashTendered" class="form-control" required oninput="updateCheckoutTotals()"></div>
+                                </div>
+                                <div class="d-flex justify-content-between border-top pt-3"><span class="fw-bold">Change</span><strong class="text-success" id="checkoutChange">₱0.00</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light"><button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button><button type="submit" class="btn btn-danger px-4">Complete Sale</button></div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="{{ asset('js/pos.js') }}"></script>

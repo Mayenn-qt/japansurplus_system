@@ -22,7 +22,7 @@ class LoginController extends Controller
                 return redirect('/owner/dashboard');
             }
 
-            return redirect('/staff/dashboard');
+            return redirect()->route('staff.sales.pos');
         }
 
         return back()->with('error','Invalid email or password.');

@@ -24,7 +24,7 @@
                             <tr style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
                                 <td class="ps-3 py-2 fw-semibold text-black rounded-start" style="border-top-left-radius: 6px; border-bottom-left-radius: 6px;">INV-10231</td>
                                 <td class="py-2 text-black-50">Walk-in</td>
-                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Magallanes </span></td>
+                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Masbate </span></td>
                                 <td class="py-2 fw-medium text-black">₱1,850</td>
                                 <td class="pe-3 py-2 text-black-50 text-end rounded-end" style="border-top-right-radius: 6px; border-bottom-right-radius: 6px;">10:42 AM</td>
                             </tr>
@@ -40,7 +40,7 @@
                             <tr style="background-color: #f8fafc; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
                                 <td class="ps-3 py-2 fw-semibold text-black rounded-start" style="border-top-left-radius: 6px; border-bottom-left-radius: 6px;">INV-10229</td>
                                 <td class="py-2 text-black-50">Walk-in</td>
-                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Magallanes </span></td>
+                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Masbate </span></td>
                                 <td class="py-2 fw-medium text-black">₱650</td>
                                 <td class="pe-3 py-2 text-black-50 text-end rounded-end" style="border-top-right-radius: 6px; border-bottom-right-radius: 6px;">9:58 AM</td>
                             </tr>
@@ -107,7 +107,7 @@
                             <!-- Row 4:  -->
                             <tr style="background-color: #f1f5f9; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);">
                                 <td class="ps-3 py-2 text-black fw-medium rounded-start" style="border-top-left-radius: 6px; border-bottom-left-radius: 6px;">Denyo Gasoline Generator Set</td>
-                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Magallanes</span></td>
+                                <td class="py-2"><span class="badge bg-white border border-secondary border-opacity-50 text-black px-2 py-1 rounded-pill" style="font-size: 0.65rem;">Masbate</span></td>
                                 <td class="pe-3 py-2 text-end rounded-end" style="border-top-right-radius: 6px; border-bottom-right-radius: 6px;"><span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 px-2.5 py-1 rounded-pill" style="font-size: 0.65rem;">1 left</span></td>
                             </tr>
                             <!-- Row 5 -->

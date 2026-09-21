@@ -35,28 +35,28 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Total Products</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalProducts ?? 0 }}</h3>
                         <span class="text-muted small mt-1">Across all categories</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">In Stock Items</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $inStockItems ?? 0 }}</h3>
                         <span class="text-success small mt-1"><i class="fa-solid fa-check"></i> Ready for sale</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Low Stock Alerts</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
-                        <span class="text-warning small mt-1"><i class="fa-solid fa-triangle-exclamation"></i> Needs reorder</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $lowStockItems ?? 0 }}</h3>
+                        <span class="text-muted small mt-1"><i class="fa-solid fa-circle-check"></i> No alerts</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-danger h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Out of Stock</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $outOfStockItems ?? 0 }}</h3>
                         <span class="text-danger small mt-1"><i class="fa-solid fa-ban"></i> Action required</span>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <option selected>All Branches</option>
                             <option>Main Branch</option>
                             <option>Juban</option>
-                            <option>Magallanes</option>
+                            <option>Masbate</option>
                         </select>
                     </div>
                     <div class="col-xl-4 col-md-3">
@@ -108,26 +108,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-3 fw-medium">Shindaiwa Gasoline Engine Chainsaw</td>
-                                <td>Tools & Equipment</td>
-                                <td>Main</td>
-                                <td><span class="fw-bold text-danger">2</span></td>
-                                <td><span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Low Stock</span></td>
-                                <td class="pe-3 text-end">
-                                    <button class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 11px; border-radius: 6px;">Reorder</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3 fw-medium">Japanese Wooden Wardrobe Cabinet</td>
-                                <td>Furniture</td>
-                                <td>Juban</td>
-                                <td><span class="fw-bold text-danger">0</span></td>
-                                <td><span class="badge bg-dark text-white px-2 py-1">Out of Stock</span></td>
-                                <td class="pe-3 text-end">
-                                    <button class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 11px; border-radius: 6px;">Reorder</button>
-                                </td>
-                            </tr>
+                            @forelse($inventory ?? [] as $item)
+                                <tr>
+                                    <td class="ps-3 fw-medium">{{ $item->product?->name ?? 'Product removed' }}</td>
+                                    <td>{{ $item->product?->category?->name ?? 'Uncategorized' }}</td>
+                                    <td>{{ $item->branch?->branch_name ?? 'Unassigned' }}</td>
+                                    <td><span class="fw-bold text-danger">{{ $item->current_stock }}</span></td>
+                                    <td><span class="badge bg-light text-dark border px-2 py-1">{{ $item->current_stock > 0 ? 'Available' : 'Sold Out' }}</span></td>
+                                    <td class="pe-3 text-end">&mdash;</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="6" class="text-center py-4 text-muted">No inventory records found.</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

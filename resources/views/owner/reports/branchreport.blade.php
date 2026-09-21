@@ -35,21 +35,21 @@
                 <div class="col-xl-4 col-md-4">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Top Performing Branch</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">Main Branch</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> ₱180,450 total sales</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $topBranch?->branch_name ?? 'No sales yet' }}</h3>
+                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> ₱{{ number_format($topBranch?->sales_sum_total_amount ?? 0, 2) }} total sales</span>
                     </div>
                 </div>
                 <div class="col-xl-4 col-md-4">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Active Branches</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">3 Branches</h3>
-                        <span class="text-muted small mt-1">Main, Juban, Magallanes</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $branches->count() }} Branches</h3>
+                        <span class="text-muted small mt-1">Main, Juban, Masbate</span>
                     </div>
                 </div>
                 <div class="col-xl-4 col-md-4">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                         <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Combined Monthly Sales</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱320,450</h3>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($branches->sum('sales_sum_total_amount'), 2) }}</h3>
                         <span class="text-info small mt-1"><i class="fa-solid fa-chart-line"></i> Across all locations</span>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                             <option selected>All Branches Comparison</option>
                             <option>Main Branch</option>
                             <option>Juban</option>
-                            <option>Magallanes</option>
+                            <option>Masbate</option>
                         </select>
                     </div>
                     <div class="col-xl-4 col-md-3">
@@ -96,36 +96,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="ps-3 fw-medium">Main Branch</td>
-                                <td class="text-muted">Pangpang</td>
-                                <td><span class="badge bg-light text-dark border">120</span></td>
-                                <td class="fw-bold text-success">₱180,450</td>
-                                <td><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Top Performer</span></td>
-                                <td class="pe-3 text-end">
-                                    <button class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 11px; border-radius: 6px;">View Details</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3 fw-medium">Juban</td>
-                                <td class="text-muted">Juban Proper</td>
-                                <td><span class="badge bg-light text-dark border">65</span></td>
-                                <td class="fw-bold text-dark">₱95,200</td>
-                                <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">Stable</span></td>
-                                <td class="pe-3 text-end">
-                                    <button class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 11px; border-radius: 6px;">View Details</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="ps-3 fw-medium">Magallanes</td>
-                                <td class="text-muted">Coastal Area</td>
-                                <td><span class="badge bg-light text-dark border">30</span></td>
-                                <td class="fw-bold text-dark">₱44,800</td>
-                                <td><span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1">Growing</span></td>
-                                <td class="pe-3 text-end">
-                                    <button class="btn btn-sm btn-outline-dark py-0 px-2" style="font-size: 11px; border-radius: 6px;">View Details</button>
-                                </td>
-                            </tr>
+                            @forelse($branches as $branch)
+                                <tr>
+                                    <td class="ps-3 fw-medium">{{ $branch->branch_name }}</td>
+                                    <td class="text-muted">{{ $branch->address ?: 'Not specified' }}</td>
+                                    <td><span class="badge bg-light text-dark border">{{ $branch->sales_count }}</span></td>
+                                    <td class="fw-bold text-success">₱{{ number_format($branch->sales_sum_total_amount ?? 0, 2) }}</td>
+                                    <td><span class="badge bg-light text-dark border px-2 py-1">{{ $branch->sales_count ? 'Active' : 'No sales yet' }}</span></td>
+                                    <td class="pe-3 text-end">&mdash;</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="6" class="text-center py-4 text-muted">No branch data available.</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
