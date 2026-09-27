@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libsqlite3-dev \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_sqlite pdo_pgsql \
+    default-libmysqlclient-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
@@ -17,10 +18,6 @@ WORKDIR /var/www/html
 
 # Copy Laravel project
 COPY . .
-
-# Make sure SQLite database file exists
-RUN mkdir -p database \
-    && touch database/database.sqlite
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
@@ -37,11 +34,8 @@ RUN mkdir -p \
 # Clear Laravel configuration
 RUN php artisan config:clear
 
-# Run migrations
-RUN php artisan migrate:fresh --seed --force
-
 # Render provides the PORT environment variable
 EXPOSE 10000
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
 

@@ -13,15 +13,15 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with(['product.category', 'branch'])
             ->whereHas('product')
-            ->where('current_stock', '<=', 5)
+            ->where('current_stock', 0)
             ->latest()
             ->get();
 
         return view('owner.reports.inventory', [
             'totalProducts' => Product::count(),
-            'inStockItems' => Inventory::where('current_stock', '>', 0)->count(),
-            'lowStockItems' => Inventory::where('current_stock', '>', 0)->where('current_stock', '<=', 5)->count(),
-            'outOfStockItems' => Inventory::where('current_stock', '<=', 0)->count(),
+            'inStockItems' => Inventory::sum('current_stock'),
+            'outOfStockItems' => Inventory::where('current_stock', 0)->count(),
+            'totalInventoryRecords' => Inventory::count(),
             'inventory' => $inventory,
         ]);
     }
@@ -52,10 +52,8 @@ class InventoryController extends Controller
 
         if ($request->filled('stock_level')) {
             match ($request->stock_level) {
-                'in' => $query->where('current_stock', '>', 5),
-                'low' => $query->where('current_stock', '>', 0)
-                    ->where('current_stock', '<=', 5),
-                'out' => $query->where('current_stock', '<=', 0),
+                'in_stock' => $query->where('current_stock', '>', 0),
+                'out_of_stock' => $query->where('current_stock', 0),
                 default => null,
             };
         }
@@ -74,14 +72,9 @@ class InventoryController extends Controller
             $baseCountQuery->where('branch_id', $userBranchId);
         }
 
-        $totalItems = (clone $baseCountQuery)->sum('current_stock');
-        $lowStockCount = (clone $baseCountQuery)
-            ->where('current_stock', '>', 0)
-            ->where('current_stock', '<=', 5)
-            ->count();
-        $outOfStockCount = (clone $baseCountQuery)
-            ->where('current_stock', '<=', 0)
-            ->count();
+        $unitsInStock = (clone $baseCountQuery)->sum('current_stock');
+        $soldOutCount = (clone $baseCountQuery)->where('current_stock', 0)->count();
+        $trackedProducts = (clone $baseCountQuery)->count();
 
         $branches = $userBranchId
             ? Branch::whereKey($userBranchId)->get()
@@ -100,18 +93,34 @@ class InventoryController extends Controller
         return view('staff.inventory.index', compact(
             'stocks',
             'activities',
-            'totalItems',
-            'lowStockCount',
-            'outOfStockCount',
+            'unitsInStock',
+            'soldOutCount',
+            'trackedProducts',
             'branches',
             'products'
         ));
     }
 
-    public function lowStock(Request $request)
+    public function outOfStock(Request $request)
     {
-        $request->merge(['stock_level' => 'low']);
+        $request->merge(['stock_level' => 'out_of_stock']);
 
         return $this->index($request);
+    }
+
+    public function updateStock(Request $request, Inventory $inventory)
+    {
+        $validated = $request->validate([
+            'current_stock' => 'required|integer|min:0',
+        ]);
+
+        $user = $request->user();
+        if ($user->role === 'staff' && (int) $user->branch_id !== (int) $inventory->branch_id) {
+            abort(403);
+        }
+
+        $inventory->update($validated);
+
+        return back()->with('success', 'Stock quantity updated.');
     }
 }

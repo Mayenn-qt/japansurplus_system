@@ -12,7 +12,6 @@ class Inventory extends Model
     'branch_id',
     'product_id',
     'current_stock',
-    'status',
   ];
 
   public function branch()

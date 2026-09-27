@@ -48,8 +48,7 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     
     // Stock Management & Backend Actions
     Route::get('/stock', [ProductController::class, 'stockManagement'])->name('owner.stock');
-    Route::post('/stock/in', [ProductController::class, 'storeStockIn'])->name('owner.stock.in');
-    Route::post('/stock/out', [ProductController::class, 'storeStockOut'])->name('owner.stock.out');
+    Route::put('/inventory/{inventory}/stock', [InventoryController::class, 'updateStock'])->name('owner.inventory.stock');
     Route::get('/stock/all', [ProductController::class, 'allStocks'])->name('owner.stock.all');
 
     Route::get('/branches', [BranchController::class, 'branch'])->name('owner.branch'); 
@@ -97,7 +96,7 @@ Route::middleware(['auth'])->prefix('staff')->group(function () {
 
     // Inventory
     Route::get('/inventory', [InventoryController::class, 'index'])->name('staff.inventory.index');
-    Route::get('/inventory/low-stock', [InventoryController::class, 'lowStock'])->name('staff.inventory.low-stock');
+    Route::get('/inventory/out-of-stock', [InventoryController::class, 'outOfStock'])->name('staff.inventory.out-of-stock');
 
     // Profile
     Route::get('/profile', [UserController::class, 'profile'])->name('staff.profile.index');

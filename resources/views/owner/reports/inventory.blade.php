@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold mb-1" style="color: #0f172a; letter-spacing: -0.5px;">Inventory Reports</h4>
-                    <p class="text-muted mb-0" style="font-size:13.5px;">Monitor stock levels, track item movements, and manage low-stock alerts</p>
+                    <p class="text-muted mb-0" style="font-size:13.5px;">Review item availability across branches</p>
                 </div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-file-pdf text-danger"></i> Export PDF</button>
@@ -41,23 +41,23 @@
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">In Stock Items</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Units in Stock</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">{{ $inStockItems ?? 0 }}</h3>
                         <span class="text-success small mt-1"><i class="fa-solid fa-check"></i> Ready for sale</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Low Stock Alerts</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $lowStockItems ?? 0 }}</h3>
-                        <span class="text-muted small mt-1"><i class="fa-solid fa-circle-check"></i> No alerts</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Inventory Records</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalInventoryRecords ?? 0 }}</h3>
+                        <span class="text-muted small mt-1"><i class="fa-solid fa-box"></i> Unique items by branch</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-danger h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Out of Stock</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Products with Zero Stock</span>
                         <h3 class="fw-bold text-dark mt-1 mb-0">{{ $outOfStockItems ?? 0 }}</h3>
-                        <span class="text-danger small mt-1"><i class="fa-solid fa-ban"></i> Action required</span>
+                        <span class="text-danger small mt-1"><i class="fa-solid fa-ban"></i> No units remaining</span>
                     </div>
                 </div>
             </div>
@@ -92,18 +92,17 @@
             <!-- 3. Stock Status Table Section -->
             <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
                 <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark m-0">Critical Stock Status & Items</h6>
-                    <span class="badge bg-light text-dark border" style="font-size: 11px;">Showing low & out of stock items</span>
+                    <h6 class="fw-bold text-dark m-0">Zero Stock Items</h6>
+                            <span class="badge bg-light text-dark border" style="font-size: 11px;">Zero stock by branch</span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
                         <thead class="bg-light text-muted text-uppercase" style="font-size: 10px;">
                             <tr>
                                 <th class="ps-3 py-2">Product Name</th>
-                                <th class="py-2">Category</th>filter
+                                <th class="py-2">Category</th>
                                 <th class="py-2">Branch</th>
-                                <th class="py-2">Current Stock</th>
-                                <th class="py-2">Status</th>
+                                <th class="py-2">Stock</th>
                                 <th class="pe-3 py-2 text-end">Action</th>
                             </tr>
                         </thead>
@@ -113,12 +112,11 @@
                                     <td class="ps-3 fw-medium">{{ $item->product?->name ?? 'Product removed' }}</td>
                                     <td>{{ $item->product?->category?->name ?? 'Uncategorized' }}</td>
                                     <td>{{ $item->branch?->branch_name ?? 'Unassigned' }}</td>
-                                    <td><span class="fw-bold text-danger">{{ $item->current_stock }}</span></td>
-                                    <td><span class="badge bg-light text-dark border px-2 py-1">{{ $item->current_stock > 0 ? 'Available' : 'Sold Out' }}</span></td>
+                                    <td>{{ $item->current_stock }} units</td>
                                     <td class="pe-3 text-end">&mdash;</td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center py-4 text-muted">No inventory records found.</td></tr>
+                                <tr><td colspan="5" class="text-center py-4 text-muted">No inventory records found.</td></tr>
                             @endforelse
                         </tbody>
                     </table>

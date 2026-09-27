@@ -41,7 +41,7 @@ class PosController extends Controller
         if ($branchId) {
             $query->whereHas('inventories', function($q) use ($branchId) {
                 $q->where('branch_id', $branchId)
-                  ->where('current_stock', '>', 0); // Opsyonal: kung gusto mong itago ang out-of-stock
+                ->where('current_stock', '>', 0);
             });
         }
 

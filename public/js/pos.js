@@ -1,44 +1,49 @@
-let cart = JSON.parse(sessionStorage.getItem('pos_cart')) || [];
+let cart = (JSON.parse(sessionStorage.getItem('pos_cart')) || []).map(item => {
+    const stock = Math.max(1, parseInt(item.stock, 10) || 1);
+    return {
+        ...item,
+        quantity: Math.min(stock, Math.max(1, parseInt(item.quantity, 10) || 1)),
+        stock,
+        is_free: Boolean(item.is_free)
+    };
+});
 
-// 1. Kapag pinindot ang 'Add' button sa produkto
-function addToCart(id, name, price, stock) {
-    let existingItem = cart.find(item => item.id === id);
-    
+function addCartItem(id, name, price, stock, isFree) {
+    stock = Number(stock) || 0;
+    if (stock <= 0) return;
+
+    const productQuantity = cart
+        .filter(item => Number(item.id) === Number(id))
+        .reduce((quantity, item) => quantity + item.quantity, 0);
+    if (productQuantity >= stock) {
+        alert(`Only ${stock} unit${stock === 1 ? '' : 's'} in stock.`);
+        return;
+    }
+
+    const existingItem = cart.find(item => Number(item.id) === Number(id) && Boolean(item.is_free) === isFree);
     if (existingItem) {
-        if (existingItem.quantity < stock) {
-            existingItem.quantity++;
-        } else {
-            alert('Naabot na ang limitasyon ng stock.');
-            return;
-        }
+        existingItem.quantity += 1;
+        existingItem.stock = stock;
     } else {
         cart.push({
             id: id,
             name: name,
-            price: price,
+            price: isFree ? 0 : price,
             quantity: 1,
-            stock: stock
+            stock: stock,
+            is_free: isFree
         });
     }
 
     updateCartUI();
 }
 
+function addToCart(id, name, price, stock) {
+    addCartItem(id, name, price, stock, false);
+}
+
 function addFreeItem(id, name, stock) {
-    let existingItem = cart.find(item => item.id === id && item.is_free);
-
-    if (existingItem) {
-        if (existingItem.quantity < stock) {
-            existingItem.quantity++;
-        } else {
-            alert('Naabot na ang limitasyon ng stock.');
-            return;
-        }
-    } else {
-        cart.push({ id: id, name: name, price: 0, quantity: 1, stock: stock, is_free: true });
-    }
-
-    updateCartUI();
+    addCartItem(id, name, 0, stock, true);
 }
 
 // 2. Pag-update ng UI sa My Order panel sa POS terminal
@@ -58,6 +63,9 @@ function updateCartUI() {
                 <span class="text-muted small">No items added yet.</span>
             </div>
         `;
+        document.getElementById('posSubtotal')?.replaceChildren('₱0.00');
+        document.getElementById('posGrandTotal')?.replaceChildren('₱0.00');
+        document.getElementById('posCartCount')?.replaceChildren('0 items');
         document.querySelectorAll('.fs-4, .text-danger.fs-4').forEach(el => el.innerText = '₱0.00');
         return;
     }
@@ -70,48 +78,56 @@ function updateCartUI() {
         subtotal += itemTotal;
 
         html += `
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+            <div class="pos-line-item">
                 <div>
-                    <span class="fw-bold text-dark d-block" style="font-size: 13px;">${item.name}</span>
-                    <span class="text-danger small fw-semibold">₱${item.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                    <span class="pos-line-item-name">${item.name}</span>
+                    <span class="pos-line-item-price">${item.is_free ? 'FREE ITEM' : '₱' + item.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <button type="button" onclick="decreaseQty(${index})" class="btn btn-sm btn-light border px-2 py-0">-</button>
-                    <span class="fw-bold small">${item.quantity}</span>
-                    <button type="button" onclick="increaseQty(${index})" class="btn btn-sm btn-light border px-2 py-0">+</button>
-                    <button type="button" onclick="removeItem(${index})" class="btn btn-sm text-danger border-0"><i class="fa-solid fa-xmark"></i></button>
+                <div class="pos-line-controls">
+                    <button type="button" onclick="changeItemQuantity(${index}, -1)" aria-label="Decrease ${item.name} quantity"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                    <span class="pos-line-quantity">${item.quantity}</span>
+                    <button type="button" onclick="changeItemQuantity(${index}, 1)" aria-label="Increase ${item.name} quantity"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    <button type="button" onclick="removeItem(${index})" class="pos-line-remove" aria-label="Remove ${item.name}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
                 </div>
             </div>
         `;
     });
 
     cartContainer.innerHTML = html;
-    
-    // I-update ang Subtotal at Total Amount sa POS screen
+
+    const itemCount = cart.reduce((count, item) => count + item.quantity, 0);
+    document.getElementById('posSubtotal')?.replaceChildren('₱' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2}));
+    document.getElementById('posGrandTotal')?.replaceChildren('₱' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2}));
+    document.getElementById('posCartCount')?.replaceChildren(`${itemCount} ${itemCount === 1 ? 'item' : 'items'}`);
+
     document.querySelectorAll('.text-danger.fs-4, .fs-4').forEach(el => {
         el.innerText = '₱' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2});
     });
 }
 
-function increaseQty(index) {
-    if (cart[index].quantity < cart[index].stock) {
-        cart[index].quantity++;
-        updateCartUI();
-    } else {
-        alert('Naabot na ang maximum stock.');
-    }
-}
-
-function decreaseQty(index) {
-    cart[index].quantity--;
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
-    }
+function removeItem(index) {
+    cart.splice(index, 1);
     updateCartUI();
 }
 
-function removeItem(index) {
-    cart.splice(index, 1);
+function changeItemQuantity(index, change) {
+    if (!cart[index]) return;
+
+    if (change > 0) {
+        const productQuantity = cart
+            .filter(item => Number(item.id) === Number(cart[index].id))
+            .reduce((quantity, item) => quantity + item.quantity, 0);
+        if (productQuantity >= cart[index].stock) {
+            alert(`Only ${cart[index].stock} unit${cart[index].stock === 1 ? '' : 's'} in stock.`);
+            return;
+        }
+    }
+
+    cart[index].quantity += change;
+    if (cart[index].quantity <= 0) {
+        removeItem(index);
+        return;
+    }
     updateCartUI();
 }
 

@@ -9,6 +9,7 @@ use App\Models\Branch;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\Sale;
+use App\Models\Inventory;
 use Carbon\Carbon;
 
 
@@ -56,6 +57,15 @@ class DashboardController extends Controller
         }
 
         
-        return view('staff.dashboard', compact('user'));
+        $unitsInStock = Inventory::where('branch_id', $user->branch_id)
+            ->sum('current_stock');
+        $soldOutItems = Inventory::with('product')
+            ->where('branch_id', $user->branch_id)
+            ->where('current_stock', 0)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('staff.dashboard', compact('user', 'unitsInStock', 'soldOutItems'));
     }
 }

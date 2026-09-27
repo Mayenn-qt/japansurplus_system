@@ -63,18 +63,15 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock (Main)</label>
-                                        <input type="number" name="stock_main" class="form-control bg-light border-0 py-2" value="0" min="0" required style="border-radius: 10px;">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock (Juban)</label>
-                                        <input type="number" name="stock_juban" class="form-control bg-light border-0 py-2" value="0" min="0" required style="border-radius: 10px;">
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock (Masbate)</label>
-                                        <input type="number" name="stock_magallanes" class="form-control bg-light border-0 py-2" value="0" min="0" required style="border-radius: 10px;">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock by Branch</label>
+                                    <div class="row">
+                                        @foreach($branches as $branch)
+                                            <div class="col-md-4 mb-3">
+                                                <label class="form-label text-secondary" style="font-size: 12px;">{{ $branch->branch_name }}</label>
+                                                <input type="number" name="stock[{{ $branch->id }}]" min="0" step="1" value="0" class="form-control bg-light border-0 py-2" required aria-label="Stock quantity for {{ $branch->branch_name }}">
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             
@@ -166,8 +163,8 @@
                         <tbody>
                             @forelse($products ?? [] as $product)
                             @php 
-                                $stock = $product->total_stock ?? 0; 
-                                $isSoldOut = ($stock <= 0);
+                                $totalStock = $product->inventories->sum('current_stock');
+                                $isSoldOut = ($totalStock === 0);
                             @endphp
                             <tr class="{{ $isSoldOut ? 'table-danger bg-opacity-10' : '' }}">
                                 
@@ -195,7 +192,7 @@
                                             {{ $product->category->name ?? 'Uncategorized' }}
                                         </span>
                                         <span class="text-success fw-semibold">
-                                            {{ $stock }} {{ $stock === 1 ? 'unit' : 'units' }}
+                                            {{ $totalStock }} units in stock
                                         </span>
                                     </div>
                                 </td>
@@ -272,14 +269,17 @@
                                                         <input type="number" step="0.01" min="0" name="sale_price" value="{{ $product->sale_price ?? $product->price }}" class="form-control bg-light border-0 py-2" required style="border-radius: 10px;">
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    @foreach([1 => 'Main', 2 => 'Juban', 3 => 'Masbate'] as $branchId => $branchName)
-                                                        @php $branchInventory = $product->inventories->firstWhere('branch_id', $branchId); @endphp
-                                                        <div class="col-md-4 mb-3">
-                                                            <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock ({{ $branchName }})</label>
-                                                            <input type="number" name="{{ $branchId === 1 ? 'stock_main' : ($branchId === 2 ? 'stock_juban' : 'stock_magallanes') }}" value="{{ $branchInventory?->current_stock ?? 0 }}" min="0" class="form-control bg-light border-0 py-2" required style="border-radius: 10px;">
-                                                        </div>
-                                                    @endforeach
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Stock by Branch</label>
+                                                    <div class="row">
+                                                        @foreach($branches as $branch)
+                                                            @php $branchInventory = $product->inventories->firstWhere('branch_id', $branch->id); @endphp
+                                                            <div class="col-md-4 mb-3">
+                                                                <label class="form-label text-secondary" style="font-size: 12px;">{{ $branch->branch_name }}</label>
+                                                                <input type="number" name="stock[{{ $branch->id }}]" min="0" step="1" value="{{ $branchInventory?->current_stock ?? 0 }}" class="form-control bg-light border-0 py-2" required aria-label="Stock quantity for {{ $branch->branch_name }}">
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Add Product Photos</label>
@@ -331,7 +331,10 @@
                         @forelse($products ?? [] as $product)
                         <div class="col-6">
                             <div class="card border-0 shadow-xs rounded-3 p-2.5 bg-white h-100 position-relative d-flex flex-column" style="border-radius: 12px;">
-                                @php $stock = $product->total_stock ?? 0; @endphp
+                                @php
+                                    $totalStock = $product->inventories->sum('current_stock');
+                                    $isSoldOut = $totalStock === 0;
+                                @endphp
                                 
                                 <!-- Image Container -->
                                 <div class="bg-light rounded-3 overflow-hidden mb-2 d-flex align-items-center justify-content-center" style="height: 140px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}">
@@ -348,7 +351,7 @@
                                 <h6 class="fw-bold text-dark mb-0 text-truncate" style="font-size: 12.5px;">{{ $product->name }}</h6>
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <span class="text-muted" style="font-size: 10.5px;">{{ $product->category->name ?? 'Uncategorized' }}</span>
-                                    <span class="text-success fw-semibold" style="font-size: 10.5px;">{{ $stock }} {{ $stock === 1 ? 'unit' : 'units' }}</span>
+                                    <span class="text-muted fw-semibold" style="font-size: 10.5px;">{{ $totalStock }} units</span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
                                     <span class="fw-bold text-danger" style="font-size: 13px;">₱{{ number_format($product->sale_price ?? $product->price, 2) }}</span>
@@ -453,13 +456,8 @@
                                             <span class="fw-semibold text-dark">{{ $product->condition ?? 'Not specified' }}</span>
                                         </div>
                                         <div class="col-6">
-                                            <span class="text-muted d-block">Status</span>
-                                            @php $stock = $product->total_stock ?? 0; @endphp
-                                            @if($stock > 0)
-                                                <span class="text-success fw-bold">IN STOCK</span>
-                                            @else
-                                                <span class="text-danger fw-bold">SOLD OUT</span>
-                                            @endif
+                                            <span class="text-muted d-block">Total Stock</span>
+                                            <span class="fw-semibold text-dark">{{ $totalStock }} units</span>
                                         </div>
                                         <div class="col-12 mt-2">
                                             <span class="text-muted d-block">Remarks</span>
@@ -477,14 +475,14 @@
                             <!-- Stock Per Branch Section -->
                             <div class="mt-4 bg-light p-3 rounded-3 border">
                                 <h6 class="fw-bold mb-2 text-dark d-flex align-items-center gap-2" style="font-size: 13px;">
-                                    <i class="fa-solid fa-store text-danger"></i> Stock Distribution per Branch:
+                                    <i class="fa-solid fa-store text-danger"></i> Stock per Branch:
                                 </h6>
                                 <div class="row g-2 text-secondary" style="font-size: 12.5px;">
                                     @forelse($product->inventories ?? [] as $inv)
                                         <div class="col-md-4">
                                             <div class="bg-white p-2 rounded border shadow-xs d-flex justify-content-between align-items-center">
                                                 <span>{{ $inv->branch->branch_name ?? 'Branch' }}:</span> 
-                                                <b class="text-dark">{{ $inv->current_stock }} units</b>
+                                                <b class="badge bg-light text-dark border">{{ $inv->current_stock }} units</b>
                                             </div>
                                         </div>
                                     @empty

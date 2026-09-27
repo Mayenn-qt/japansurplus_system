@@ -40,14 +40,9 @@ class ProductController extends Controller
                 $q->where('branch_id', $branchId);
             });
 
-            $query->withSum(['inventories as total_stock' => function ($q) use ($branchId) {
-                $q->where('branch_id', $branchId);
-            }], 'current_stock');
-        } else {
-            $query->withSum('inventories as total_stock', 'current_stock');
         }
 
-        $products = $query->oldest()->paginate(10)->appends($request->query());
+        $products = $query->latest('created_at')->paginate(10)->appends($request->query());
         $categories = Category::all();
         $branches = Branch::all();
 
@@ -84,11 +79,10 @@ class ProductController extends Controller
             });
         }
 
-        $sortDirection = $request->input('sort') === 'oldest' ? 'asc' : 'desc';
         $stocks = $query
             ->join('products', 'inventories.product_id', '=', 'products.id')
             ->select('inventories.*')
-            ->orderBy('products.created_at', $sortDirection)
+            ->orderBy('products.created_at', 'desc')
             ->orderBy('inventories.id', 'desc')
             ->paginate(10)
             ->withQueryString();
@@ -130,15 +124,12 @@ class ProductController extends Controller
             $query->where('branch_id', $request->branch_id);
         }
 
-        if ($request->filled('status')) {
-            $status = $request->status;
-            if ($status == 'in_stock') {
-                $query->where('current_stock', '>', 5);
-            } elseif ($status == 'low_stock') {
-                $query->where('current_stock', '>', 0)->where('current_stock', '<=', 5);
-            } elseif ($status == 'out_of_stock') {
-                $query->where('current_stock', '<=', 0);
-            }
+        if ($request->filled('stock_level')) {
+            match ($request->stock_level) {
+                'in_stock' => $query->where('current_stock', '>', 0),
+                'out_of_stock' => $query->where('current_stock', 0),
+                default => null,
+            };
         }
 
         $stocks = $query->orderBy('branch_id')->latest()->paginate(15)->appends($request->query());
@@ -158,9 +149,8 @@ class ProductController extends Controller
         'condition' => 'nullable|string|max:255',
         'location' => 'nullable|string|max:255',
         'remarks' => 'nullable|string',
-        'stock_main' => 'required|integer|min:0',
-        'stock_juban' => 'required|integer|min:0',
-        'stock_magallanes' => 'required|integer|min:0',
+        'stock' => 'required|array',
+        'stock.*' => 'required|integer|min:0',
         'images' => 'nullable|array|max:10',
         'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
     ]);
@@ -175,7 +165,6 @@ class ProductController extends Controller
             $uploadedImages[0]->move(public_path('images/products'), $imageName);
         }
 
-        // 3. I-save ang Product (Siguraduhing 'image' lang ang kasama sa fillable, huwag ang stock_main/etc. kung wala sa products table)
         $product = Product::create([
             'name' => $request->name,
             'sku' => 'PRD-' . Str::upper(Str::random(10)),
@@ -203,22 +192,12 @@ class ProductController extends Controller
         }
 
 
-        // 4. I-save ang stocks sa Inventory table para lumabas sa search, filters, at branches
-        // Branch IDs: 1 = Main, 2 = Juban, 3 = Masbate.
-        $branchesData = [
-            1 => $request->stock_main,       // Main Branch ID
-            2 => $request->stock_juban,      // Juban Branch ID
-            3 => $request->stock_magallanes, // Masbate Branch ID
-        ];
-
-        foreach ($branchesData as $branchId => $stockValue) {
-            if ($stockValue !== null) {
-                Inventory::create([
-                    'product_id' => $product->id,
-                    'branch_id' => $branchId,
-                    'current_stock' => $stockValue,
-                ]);
-            }
+        foreach ($request->input('stock', []) as $branchId => $currentStock) {
+            Inventory::create([
+                'product_id' => $product->id,
+                'branch_id' => $branchId,
+                'current_stock' => $currentStock,
+            ]);
         }
 
         DB::commit();
@@ -230,66 +209,6 @@ class ProductController extends Controller
         return redirect()->back()->withErrors(['error' => 'Error saving product: ' . $e->getMessage()])->withInput();
     }
 }
-    public function storeStockIn(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'branch_id' => 'required|exists:branches,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            $inventory = Inventory::firstOrCreate(
-                [
-                    'product_id' => $request->product_id,
-                    'branch_id' => $request->branch_id,
-                ],
-                ['current_stock' => 0]
-            );
-
-            $inventory->increment('current_stock', $request->quantity);
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Stock added successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Error in stock-in: ' . $e->getMessage()])->withInput();
-        }
-    }
-
-    public function storeStockOut(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'branch_id' => 'required|exists:branches,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            $inventory = Inventory::where('product_id', $request->product_id)
-                                    ->where('branch_id', $request->branch_id)
-                                    ->first();
-
-            if (!$inventory || $inventory->current_stock < $request->quantity) {
-                return redirect()->back()->withErrors(['error' => 'Insufficient stock for this branch!'])->withInput();
-            }
-
-            $inventory->decrement('current_stock', $request->quantity);
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Stock deducted successfully!');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Error in stock-out: ' . $e->getMessage()])->withInput();
-        }
-    }
-
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -303,9 +222,8 @@ class ProductController extends Controller
             'condition' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:255',
             'remarks' => 'nullable|string',
-            'stock_main' => 'required|integer|min:0',
-            'stock_juban' => 'required|integer|min:0',
-            'stock_magallanes' => 'required|integer|min:0',
+            'stock' => 'required|array',
+            'stock.*' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'images' => 'nullable|array|max:10',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
@@ -348,14 +266,10 @@ class ProductController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
-            foreach ([
-                1 => $request->stock_main,
-                2 => $request->stock_juban,
-                3 => $request->stock_magallanes,
-            ] as $branchId => $stock) {
+            foreach ($request->input('stock', []) as $branchId => $currentStock) {
                 Inventory::updateOrCreate(
                     ['product_id' => $product->id, 'branch_id' => $branchId],
-                    ['current_stock' => $stock]
+                    ['current_stock' => $currentStock]
                 );
             }
 

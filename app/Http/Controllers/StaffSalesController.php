@@ -70,11 +70,43 @@ class StaffSalesController extends Controller
             return back()->withErrors(['cart_data' => 'The cart is empty.']);
         }
 
+        $normalizedCart = collect($cart)->map(function ($item) {
+            if (!is_array($item)) {
+                return null;
+            }
+
+            $productId = filter_var($item['id'] ?? null, FILTER_VALIDATE_INT);
+            $quantity = filter_var($item['quantity'] ?? null, FILTER_VALIDATE_INT);
+            if ($productId === false || $productId < 1 || $quantity === false || $quantity < 1 || $quantity > 999) {
+                return null;
+            }
+
+            return [
+                'id' => $productId,
+                'quantity' => $quantity,
+                'is_free' => filter_var($item['is_free'] ?? false, FILTER_VALIDATE_BOOLEAN),
+            ];
+        });
+
+        if ($normalizedCart->contains(null)) {
+            return back()->withErrors(['cart_data' => 'The cart contains an invalid product quantity.']);
+        }
+
+        $cart = $normalizedCart
+            ->groupBy(fn ($item) => $item['id'] . ':' . (int) $item['is_free'])
+            ->map(function ($group) {
+                $item = $group->first();
+                $item['quantity'] = $group->sum('quantity');
+
+                return $item;
+            })
+            ->values();
+
         $productIds = collect($cart)->pluck('id')->filter()->unique();
         $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
         if ($products->count() !== $productIds->count()) {
-            return back()->withErrors(['cart_data' => 'One or more products are no longer available.']);
+            return back()->withErrors(['cart_data' => 'One or more products no longer exist.']);
         }
 
         $branchId = Auth::user()->branch_id ?? null;
@@ -85,17 +117,6 @@ class StaffSalesController extends Controller
 
             if ($quantity < 1 || !$products->has($productId)) {
                 return null;
-            }
-
-            // I-check kung sapat ang stock bago ituloy ang checkout
-            if ($branchId) {
-                $inventory = Inventory::where('product_id', $productId)
-                    ->where('branch_id', $branchId)
-                    ->first();
-
-                if (!$inventory || $inventory->current_stock < $quantity) {
-                    throw new \Exception("Insufficient stock for product: " . $products[$productId]->name);
-                }
             }
 
             $isFree = filter_var($item['is_free'] ?? false, FILTER_VALIDATE_BOOLEAN);
@@ -111,6 +132,10 @@ class StaffSalesController extends Controller
         if ($items->isEmpty()) {
             return back()->withErrors(['cart_data' => 'The cart contains no valid products.']);
         }
+
+        $requestedQuantities = $items
+            ->groupBy('product_id')
+            ->map(fn ($productItems) => $productItems->sum('quantity'));
 
         $subtotal = $items->sum('total');
         $isSuki = $request->boolean('is_suki');
@@ -129,7 +154,24 @@ class StaffSalesController extends Controller
         $change = $moneyReceived - $totalAmount;
 
         try {
-            $sale = DB::transaction(function () use ($items, $subtotal, $discount, $totalAmount, $moneyReceived, $change, $isSuki, $branchId) {
+            $sale = DB::transaction(function () use ($items, $subtotal, $discount, $totalAmount, $moneyReceived, $change, $isSuki, $branchId, $productIds, $products, $requestedQuantities) {
+                $inventories = collect();
+                if ($branchId) {
+                    $inventories = Inventory::whereIn('product_id', $productIds)
+                        ->where('branch_id', $branchId)
+                        ->lockForUpdate()
+                        ->get()
+                        ->keyBy('product_id');
+
+                    foreach ($productIds as $productId) {
+                        $inventory = $inventories->get($productId);
+                        $requestedQuantity = $requestedQuantities->get($productId, 0);
+                        if (!$inventory || $inventory->current_stock < $requestedQuantity) {
+                            throw new \Exception("Insufficient stock for {$products[$productId]->name}. Current stock: " . ($inventory?->current_stock ?? 0));
+                        }
+                    }
+                }
+
                 $sale = Sale::create([
                     'user_id' => Auth::id(),
                     'branch_id' => $branchId,
@@ -145,17 +187,12 @@ class StaffSalesController extends Controller
                 // I-save ang sale items at bawasan ang stock sa inventory
                 foreach ($items as $item) {
                     $sale->items()->create($item);
+                }
 
-                    if ($branchId) {
-                        $inventory = Inventory::where('product_id', $item['product_id'])
-                            ->where('branch_id', $branchId)
-                            ->first();
-
-                        if ($inventory) {
-                            $inventory->current_stock = max(0, $inventory->current_stock - $item['quantity']);
-                            $inventory->save();
-                        }
-                    }
+                foreach ($inventories as $productId => $inventory) {
+                    $inventory->update([
+                        'current_stock' => $inventory->current_stock - $requestedQuantities->get($productId, 0),
+                    ]);
                 }
 
                 return $sale;

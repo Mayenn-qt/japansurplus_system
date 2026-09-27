@@ -72,7 +72,7 @@
                         @forelse($products as $product)
                             @php
                                 $stockRecord = $product->inventories->first();
-                                $branchStock = $stockRecord ? $stockRecord->current_stock : 0;
+                                $currentStock = (int) ($stockRecord?->current_stock ?? 0);
                             @endphp
                             <tr style="border-color: #f0ece1;">
                                 <td class="py-3 px-4">
@@ -91,13 +91,7 @@
                                 <td class="py-3" style="color: #8c857b;">{{ $product->category->name ?? 'Uncategorized' }}</td>
                                 <td class="py-3 fw-semibold" style="color: #e2062c;">₱{{ number_format($product->price, 2) }}</td>
                                 <td class="py-3 text-center">
-                                    @if($branchStock <= 0)
-                                        <span class="badge px-2.5 py-1" style="font-size: 11px; background-color: #fef2f2; color: #e2062c; border: 1px solid rgba(200, 90, 83, 0.2);">Out of Stock</span>
-                                    @elseif($branchStock <= 5)
-                                        <span class="badge px-2.5 py-1" style="font-size: 11px; background-color: #fffbeb; color: #d97706; border: 1px solid rgba(217, 119, 6, 0.2);">{{ $branchStock }} low stock</span>
-                                    @else
-                                        <span class="badge px-2.5 py-1" style="font-size: 11px; background-color: #f0fdf4; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">{{ $branchStock }} in stock</span>
-                                    @endif
+                                    <span class="badge bg-light text-dark border px-2.5 py-1">{{ $currentStock }} units</span>
                                 </td>
                                 <td class="py-3 text-end px-4">
                                     <a href="{{ route('staff.products.show', $product->id) }}" class="btn btn-sm text-white px-3 py-1.5 fw-semibold shadow-sm text-decoration-none d-inline-flex align-items-center gap-1 border-0" style="border-radius: 10px; font-size: 12px; background-color: #e2062c;">
@@ -120,20 +114,14 @@
             @forelse($products as $product)
                 @php
                     $stockRecord = $product->inventories->first();
-                    $branchStock = $stockRecord ? $stockRecord->current_stock : 0;
+                    $currentStock = (int) ($stockRecord?->current_stock ?? 0);
                 @endphp
                 <div class="col-6">
                     <div class="card border-0 shadow-sm p-2 bg-white h-100 position-relative d-flex flex-column justify-content-between" style="border-radius: 16px !important; border: 1px solid #f0ece1 !important;">
                         
                         <!-- Badge -->
                         <div class="position-absolute top-0 end-0 m-2 z-2">
-                            @if($branchStock <= 0)
-                                <span class="badge px-1.5 py-0.5" style="font-size: 8.5px; background-color: #fef2f2; color: #e2062c; border: 1px solid rgba(200, 90, 83, 0.2);">Out</span>
-                            @elseif($branchStock <= 5)
-                                <span class="badge px-1.5 py-0.5" style="font-size: 8.5px; background-color: #fffbeb; color: #d97706; border: 1px solid rgba(217, 119, 6, 0.2);">{{ $branchStock }} low</span>
-                            @else
-                                <span class="badge px-1.5 py-0.5" style="font-size: 8.5px; background-color: #f0fdf4; color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2);">{{ $branchStock }} stock</span>
-                            @endif
+                            <span class="badge bg-light text-dark border px-1.5 py-0.5" style="font-size: 8.5px;">{{ $currentStock }} in stock</span>
                         </div>
 
                         <!-- Image Box -->

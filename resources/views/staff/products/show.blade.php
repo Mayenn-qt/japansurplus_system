@@ -21,9 +21,8 @@
         </div>
 
         @php
-            // Kunin ang branch stock ng kasalukuyang staff para sa produktong ito
             $stockRecord = $product->inventories->where('branch_id', $user->branch_id)->first();
-            $branchStock = $stockRecord ? $stockRecord->current_stock : 0;
+            $currentStock = (int) ($stockRecord?->current_stock ?? 0);
         @endphp
 
         <div class="row g-4">
@@ -46,7 +45,7 @@
             <!-- KANAN: Complete Details -->
             <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100 d-flex flex-column">
-                    <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom"><i class="fa-solid fa-circle-info me-2 text-danger"></i> Specifications & Stock Status</h6>
+                    <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom"><i class="fa-solid fa-circle-info me-2 text-danger"></i> Specifications & Stock</h6>
                     
                     <div class="mb-3">
                         <label class="form-label text-muted small fw-semibold">Price</label>
@@ -60,29 +59,9 @@
                         </p>
                     </div>
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-semibold">Current Stock (Branch)</label>
-                            <input type="text" class="form-control fw-bold bg-light border-0" value="{{ $branchStock }} pcs" readonly>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label text-muted small fw-semibold">Availability</label>
-                            <div>
-    @if($branchStock > 5)
-        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
-            <i class="fa-solid fa-check-circle me-1"></i> In Stock
-        </span>
-    @elseif($branchStock > 0 && $branchStock <= 5)
-        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
-            <i class="fa-solid fa-triangle-exclamation me-1"></i> Low Stock
-        </span>
-    @else
-        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 mt-1" style="font-size: 12px;">
-            <i class="fa-solid fa-triangle-exclamation me-1"></i> Out of Stock
-        </span>
-    @endif
-</div>
-                        </div>
+                    <div class="mb-4">
+                        <label class="form-label text-muted small fw-semibold">Branch Stock</label>
+                        <div class="fw-bold text-dark fs-4">{{ $currentStock }} units</div>
                     </div>
                 </div>
             </div>

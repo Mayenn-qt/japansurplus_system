@@ -56,7 +56,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
                     <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Products Sold</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">0 pc</h3>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
                     <span class="text-muted small mt-1"><i class="fa-solid fa-boxes-stacked"></i> Items checked out</span>
                 </div>
             </div>
@@ -64,14 +64,14 @@
             <!-- Current Inventory (Branch) -->
             <div class="col-xl-3 col-sm-6">
                 <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                    <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Current Inventory</span>
-                    <h3 class="fw-bold text-dark mt-1 mb-0">0</h3>
-                    <span class="text-success small mt-1"><i class="fa-solid fa-warehouse"></i> Total active stock</span>
+                    <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.5px;">Units in Stock</span>
+                    <h3 class="fw-bold text-dark mt-1 mb-0">{{ $unitsInStock ?? 0 }}</h3>
+                    <span class="text-success small mt-1"><i class="fa-solid fa-warehouse"></i> Units across this branch</span>
                 </div>
             </div>
         </div>
 
-        <!-- Row Grid for Chart and Low Stock Alert -->
+        <!-- Row Grid for Chart and Out-of-stock Items -->
         <div class="row g-4 mb-4">
             <!-- Sales Chart: Today's Sales Trend -->
             <div class="col-lg-8">
@@ -87,34 +87,30 @@
                 </div>
             </div>
 
-            <!-- Low Stock Alert Small Table -->
+            <!-- Sold Out Items -->
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm rounded-3 p-4 bg-white h-100">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="fw-bold text-dark m-0"><i class="fa-solid fa-triangle-exclamation text-warning me-2"></i> Low Stock Alert</h6>
-                        <a href="{{ route('staff.inventory.low-stock') }}" class="text-decoration-none text-danger fw-semibold" style="font-size: 12px;">View All</a>
+                        <h6 class="fw-bold text-dark m-0"><i class="fa-solid fa-circle-xmark text-danger me-2"></i> Out-of-stock Items</h6>
+                        <a href="{{ route('staff.inventory.out-of-stock') }}" class="text-decoration-none text-danger fw-semibold" style="font-size: 12px;">View All</a>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-borderless align-middle mb-0" style="font-size: 12.5px;">
                             <thead class="text-muted bg-light">
                                 <tr>
                                     <th class="py-2 rounded-start">Item Name</th>
-                                    <th class="py-2 text-end rounded-end">Stock Left</th>
+                                    <th class="py-2 text-end rounded-end">Stock</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-bottom border-light">
-                                    <td class="py-2 fw-medium text-dark">Japanese Ceramic Bowl</td>
-                                    <td class="py-2 text-end text-danger fw-bold">2 pcs</td>
-                                </tr>
-                                <tr class="border-bottom border-light">
-                                    <td class="py-2 fw-medium text-dark">Vintage Desk Lamp</td>
-                                    <td class="py-2 text-end text-danger fw-bold">3 pcs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-2 fw-medium text-dark">Minimalist Wooden Stool</td>
-                                    <td class="py-2 text-end text-danger fw-bold">1 pc</td>
-                                </tr>
+                                @forelse($soldOutItems ?? [] as $item)
+                                    <tr class="border-bottom border-light">
+                                        <td class="py-2 fw-medium text-dark">{{ $item->product?->name ?? 'Product removed' }}</td>
+                                        <td class="py-2 text-end"><span class="badge bg-light text-dark border">{{ $item->current_stock }} units</span></td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="2" class="py-3 text-center text-muted">No out-of-stock items at this branch.</td></tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

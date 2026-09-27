@@ -17,7 +17,7 @@
                 <h4 class="fw-bold text-dark m-0">
                     <i class="fa-solid fa-boxes-stacked me-2 text-danger"></i>Current Inventory
                 </h4>
-                <p class="text-muted small m-0 mt-1">Real-time stock monitoring and item availability across your branch.</p>
+                <p class="text-muted small m-0 mt-1">Real-time stock quantities at your branch.</p>
             </div>
             <div class="badge bg-dark bg-opacity-10 text-dark px-3 py-2 rounded-pill fw-semibold" style="font-size: 12px;">
                 <i class="fa-solid fa-store me-1 text-secondary"></i>
@@ -48,8 +48,8 @@
                             <i class="fa-solid fa-cubes"></i>
                         </div>
                         <div>
-                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Total Quantity</span>
-                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($totalItems ?? 0) }}</h3>
+                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Units in Stock</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($unitsInStock ?? 0) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -61,8 +61,8 @@
                             <i class="fa-solid fa-triangle-exclamation"></i>
                         </div>
                         <div>
-                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Low Stock (≤ 5)</span>
-                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($lowStockCount ?? 0) }}</h3>
+                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Out-of-stock products</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($soldOutCount ?? 0) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -74,8 +74,8 @@
                             <i class="fa-solid fa-ban"></i>
                         </div>
                         <div>
-                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Out of Stock</span>
-                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($outOfStockCount ?? 0) }}</h3>
+                            <span class="text-muted small fw-bold text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Tracked Products</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1">{{ number_format($trackedProducts ?? 0) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -103,10 +103,9 @@
                 </div>
                 <div class="col-md-2">
                     <select name="stock_level" class="form-select bg-light border-0 text-dark fw-semibold" style="font-size: 13px; border-radius: 8px;">
-                        <option value="">All Status</option>
-                        <option value="in" {{ request('stock_level') == 'in' ? 'selected' : '' }}>🟢 In Stock</option>
-                        <option value="low" {{ request('stock_level') == 'low' ? 'selected' : '' }}>🟡 Low Stock</option>
-                        <option value="out" {{ request('stock_level') == 'out' ? 'selected' : '' }}>🔴 Out of Stock</option>
+                        <option value="">All Stock</option>
+                        <option value="in_stock" {{ request('stock_level') == 'in_stock' ? 'selected' : '' }}>In Stock</option>
+                        <option value="out_of_stock" {{ request('stock_level') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -151,20 +150,9 @@
                                 <td class="py-3 px-4">
                                     <span class="fw-bold text-dark d-block">{{ $stock->product->name ?? 'Unknown Product' }}</span>
                                     <span class="text-muted small"><code class="text-danger bg-light px-1 py-0.5 rounded">{{ $stock->product->sku ?? 'N/A' }}</code></span>
-                                    <span class="text-muted small d-block mt-1">{{ number_format($stock->current_stock) }} pcs</span>
-                                    @if($stock->current_stock > 5)
-                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1.5" style="font-size: 11px;">
-                                            <i class="fa-solid fa-circle-check me-1"></i> In Stock
-                                        </span>
-                                    @elseif($stock->current_stock > 0 && $stock->current_stock <= 5)
-                                        <span class="badge bg-warning bg-opacity-10 text-warning text-dark border border-warning border-opacity-25 px-2.5 py-1.5" style="font-size: 11px;">
-                                            <i class="fa-solid fa-triangle-exclamation me-1"></i> Low Stock
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2.5 py-1.5" style="font-size: 11px;">
-                                            <i class="fa-solid fa-circle-xmark me-1"></i> Out of Stock
-                                        </span>
-                                    @endif
+                                    <span class="badge bg-light text-dark border mt-2 px-2.5 py-1.5" style="font-size: 11px;">
+                                        {{ $stock->current_stock }} units in stock
+                                    </span>
                                 </td>
                                 <td class="py-3 px-4 text-secondary">
                                     {{ $stock->product->location ?? 'Not specified' }}

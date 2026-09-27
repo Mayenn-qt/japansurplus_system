@@ -30,7 +30,7 @@
                         <th class="py-3">Info</th>
                         <th class="py-3">Item Location</th>
                         <th class="py-3">Condition</th>
-                        <th class="py-3 pe-4">Stock / Status</th>
+                        <th class="py-3 pe-4">Stock</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,21 +51,7 @@
                                 <span class="text-muted small d-block">{{ $stock->branch->branch_name ?? 'Unassigned' }}</span>
                             </td>
                             <td class="text-secondary">{{ $stock->product->condition ?? 'Not specified' }}</td>
-                            <td class="fw-semibold">
-                                <span class="d-block">{{ $stock->current_stock }} units</span>
-                                @php
-                                    if($stock->current_stock <= 0) {
-                                        $badge = 'bg-danger text-danger'; $text = 'Sold';
-                                    } elseif($stock->current_stock <= 5) {
-                                        $badge = 'bg-warning text-warning'; $text = 'Low Stock';
-                                    } else {
-                                        $badge = 'bg-success text-success'; $text = 'In Stock';
-                                    }
-                                @endphp
-                                <span class="badge border {{ $badge }} bg-opacity-10 px-2 py-1" style="font-size: 11px;">
-                                    {{ $text }}
-                                </span>
-                            </td>
+                            <td class="fw-semibold">{{ $stock->current_stock }} units</td>
                         </tr>
                     @empty
                         <tr>

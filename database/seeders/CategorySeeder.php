@@ -19,5 +19,7 @@ class CategorySeeder extends Seeder
         Category::firstOrCreate(['name' => 'Heavy Equipment & Machinery']);
         Category::firstOrCreate(['name' => 'Bags & Luggage']);
         Category::firstOrCreate(['name' => 'Tools & Equipment']);
+        Category::firstOrCreate(['name' => 'Sports and Outdoors']);
+        Category::firstOrCreate(['name' => 'Musical Instrument']);
     }
 }

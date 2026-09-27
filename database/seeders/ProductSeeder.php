@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-001',
                 'category_id' => $furniture->id ?? null,
                 'price' => 10000.00,
-                'stock_main' => 10, 'stock_juban' => 5, 'stock_magallanes' => 0,
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 0,
             ], 
             [
                 'image' => 'images/products/plateandbowl.jpg',
@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-002',
                 'category_id' => $kitchenware->id ?? null,
                 'price' => 450.00,
-                'stock_main' => 5, 'stock_juban' => 10, 'stock_magallanes' => 3,
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1,
             ],
             [
                 'image' => 'images/products/chair.jpg',
@@ -45,7 +45,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-003',
                 'category_id' => $furniture->id ?? null,
                 'price' => 1200.00,
-                'stock_main' => 15, 'stock_juban' => 5, 'stock_magallanes' => 4,
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1,
             ],
             [
                 'image' => 'images/products/luggage.jpg',      
@@ -53,7 +53,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-004',
                 'category_id' => $bags->id ?? null,
                 'price' => 1450.00,
-                'stock_main' => 0, 'stock_juban' => 2, 'stock_magallanes' => 1,
+                'stock_main' => 0, 'stock_juban' => 1, 'stock_magallanes' => 1,
             ],
             [
                 'image' => 'images/products/chainsaw.jpg',
@@ -61,7 +61,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-005',
                 'category_id' => $tools->id ?? null,
                 'price' => 4200.00,
-                'stock_main' => 5, 'stock_juban' => 3, 'stock_magallanes' => 1,
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1,
             ],
             [
                 'image' => 'images/products/teapot.jpg',    
@@ -69,7 +69,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-006',
                 'category_id' => $kitchenware->id ?? null,
                 'price' => 850.00,
-                'stock_main' => 8, 'stock_juban' => 6, 'stock_magallanes' => 4    
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1
             ],
             [
                 'image' => 'images/products/clock.jpg',
@@ -77,7 +77,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-007',
                 'category_id' => $furniture->id ?? null,
                 'price' => 1500.00,
-                'stock_main' => 10, 'stock_juban' => 3, 'stock_magallanes' => 7    
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1
             ],
             [
                 'image' => 'images/products/planer.jpg',
@@ -85,7 +85,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-008',
                 'category_id' => $tools->id ?? null,
                 'price' => 2800.00,
-                'stock_main' => 5, 'stock_juban' => 3, 'stock_magallanes' => 1    
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1
             ],
             [
                 'image' => 'images/products/travel.jpg',
@@ -93,7 +93,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-009',
                 'category_id' => $bags->id ?? null,
                 'price' => 2100.00,
-                'stock_main' => 7, 'stock_juban' => 3, 'stock_magallanes' => 5
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1
             ],
             [
                 'image' => 'images/products/ramen.jpg',
@@ -101,7 +101,7 @@ class ProductSeeder extends Seeder
                 'sku' => 'SKU-HS-010',
                 'category_id' => $kitchenware->id ?? null,
                 'price' => 650.00,
-                'stock_main' => 12, 'stock_juban' => 8, 'stock_magallanes' => 5
+                'stock_main' => 1, 'stock_juban' => 1, 'stock_magallanes' => 1
             ]
         ];
 
@@ -115,28 +115,23 @@ class ProductSeeder extends Seeder
                 'reorder_level' => 3,
             ]);
 
-            // Branch 1 (Main)
+            // Branch stock
             Inventory::create([
-                'branch_id' => 1, 
-                'product_id' => $product->id, 
-                'current_stock' => $data['stock_main'], 
-                'status' => $data['stock_main'] == 0 ? 'Out of Stock' : ($data['stock_main'] <= 5 ? 'Low Stock' : 'In Stock')
+                'branch_id' => 1,
+                'product_id' => $product->id,
+                'current_stock' => $data['stock_main'],
             ]);
 
-            // Branch 2 (Juban)
             Inventory::create([
-                'branch_id' => 2, 
-                'product_id' => $product->id, 
-                'current_stock' => $data['stock_juban'], 
-                'status' => $data['stock_juban'] == 0 ? 'Out of Stock' : ($data['stock_juban'] <= 5 ? 'Low Stock' : 'In Stock')
+                'branch_id' => 2,
+                'product_id' => $product->id,
+                'current_stock' => $data['stock_juban'],
             ]);
 
-            // Branch 3 (Magallanes)
             Inventory::create([
-                'branch_id' => 3, 
-                'product_id' => $product->id, 
-                'current_stock' => $data['stock_magallanes'], 
-                'status' => $data['stock_magallanes'] == 0 ? 'Out of Stock' : ($data['stock_magallanes'] <= 5 ? 'Low Stock' : 'In Stock')
+                'branch_id' => 3,
+                'product_id' => $product->id,
+                'current_stock' => $data['stock_magallanes'],
             ]);
         }
     }
