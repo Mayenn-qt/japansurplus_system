@@ -170,14 +170,14 @@
                                 
                                 <!-- 1. Image -->
                                 <td class="ps-4 py-3">
-                                    <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center border shadow-xs" style="width: 90px; height: 90px;">
+                                    <div class="bg-light rounded-3 overflow-hidden d-flex align-items-center justify-content-center border shadow-xs" style="width: 104px; height: 104px;">
                                         @php
                                             $primaryImage = $product->image ?? collect($product->images)->first()?->image;
                                         @endphp
                                         @if($primaryImage)
                                             <img src="{{ asset('images/products/' . basename($primaryImage)) }}"
                                                  alt="{{ $product->name }}"
-                                                    style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
+                                                    style="width: 100%; height: 100%; object-fit: cover;">
                                         @else
                                             <i class="fa-solid fa-image fa-xl text-muted" aria-hidden="true"></i>
                                         @endif
@@ -337,12 +337,12 @@
                                 @endphp
                                 
                                 <!-- Image Container -->
-                                <div class="bg-light rounded-3 overflow-hidden mb-2 d-flex align-items-center justify-content-center" style="height: 140px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}">
+                                <div class="bg-light rounded-3 overflow-hidden mb-2 d-flex align-items-center justify-content-center" style="height: 160px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}">
                                     @php $mobileImg = $product->image ?? collect($product->images)->first()?->image; @endphp
                                     @if($mobileImg)
                                         <img src="{{ asset('images/products/' . basename($mobileImg)) }}"
                                              alt="{{ $product->name }}"
-                                            style="width: 100%; height: 100%; object-fit: contain; padding: 4px;">
+                                            style="width: 100%; height: 100%; object-fit: cover;">
                                     @else
                                         <i class="fa-solid fa-image fa-2x text-muted" aria-hidden="true"></i>
                                     @endif

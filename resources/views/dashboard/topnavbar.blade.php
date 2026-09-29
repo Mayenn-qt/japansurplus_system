@@ -42,6 +42,9 @@
 
         <!-- Quick Action Icons -->
         <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+                <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            </button>
             <a href="{{ route('owner.sms') }}" class="btn btn-light border-0 position-relative p-2" title="SMS Notifications" aria-label="SMS Notifications" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-bell" style="font-size: 13px;"></i>
                 <span class="position-absolute top-25 start-75 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 7px; height: 7px;"></span>

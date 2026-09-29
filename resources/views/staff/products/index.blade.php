@@ -76,7 +76,7 @@
                             @endphp
                             <tr style="border-color: #f0ece1;">
                                 <td class="py-3 px-4">
-                                    <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center" style="width: 45px; height: 45px; background-color: #f7f5f0;">
+                                    <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center" style="width: 68px; height: 68px; background-color: #f7f5f0;">
                                         @if($product->image)
                                             <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                                         @else
@@ -125,7 +125,7 @@
                         </div>
 
                         <!-- Image Box -->
-                        <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center mb-2" style="height: 100px; background-color: #f7f5f0;">
+                        <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center mb-2" style="height: 135px; background-color: #f7f5f0;">
                             @if($product->image)
                                 <img src="{{ asset('images/products/' . basename($product->image)) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                             @else

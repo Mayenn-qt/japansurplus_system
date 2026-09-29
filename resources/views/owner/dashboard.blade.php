@@ -105,7 +105,7 @@
                     <table class="table align-middle mb-0 table-hover" style="font-size: 13px;">
                         <thead class="table-light text-muted" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">
                             <tr>
-                                <th class="py-3 px-3">Customer Name</th>
+                                <th class="py-3 px-3">Branch</th>
                                 <th class="py-3 px-3">Items Summary</th>
                                 <th class="py-3 px-3 text-center">Total Amount</th>
                                 <th class="py-3 px-3">Date & Time</th>
