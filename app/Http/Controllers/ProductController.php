@@ -19,7 +19,16 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $query = Product::with(['category', 'inventories', 'images']);
+        $query = Product::with(['category', 'inventories', 'images'])
+            ->addSelect([
+                'last_sold_at' => SaleItem::query()
+                    ->select('sales.created_at')
+                    ->join('sales', 'sales.id', '=', 'sale_items.sale_id')
+                    ->whereColumn('sale_items.product_id', 'products.id')
+                    ->orderByDesc('sales.created_at')
+                    ->orderByDesc('sale_items.id')
+                    ->limit(1),
+            ]);
 
         if ($request->filled('search')) {
             $search = $request->search;

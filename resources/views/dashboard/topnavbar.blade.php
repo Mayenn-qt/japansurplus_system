@@ -1,3 +1,7 @@
+@php
+    $branches = \App\Models\Branch::query()->orderBy('branch_name')->get();
+@endphp
+
 <div style="position: fixed; top: 0; left: 0; right: 0; height: 70px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; z-index: 1040; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.01);" class="app-topbar">
     
     <!-- Left: Mobile Toggle Button & Sleek Search Bar -->
@@ -9,10 +13,10 @@
         </button>
 
         <!-- Sleek Search Bar (Hidden on very small screens if needed, o pwedeng i-adjust ang width) -->
-        <div class="d-none d-md-flex" style="align-items: center; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 250px;">
+        <form method="GET" action="{{ route('owner.global-search') }}" class="d-none d-md-flex" style="align-items: center; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 250px;">
             <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; font-size: 13px; margin-right: 10px;"></i>
-            <input type="text" placeholder="Search..." style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
-        </div>
+            <input type="search" name="search" value="{{ request('search') }}" placeholder="Search..." aria-label="Search" style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
+        </form>
     </div>
 
     <!-- Right: Branch Selector, Utility Actions & Profile Dropdown -->
@@ -26,10 +30,10 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border border-light mt-2 py-2" aria-labelledby="branchDropdown" style="font-size: 13px; border-radius: 10px; min-width: 180px;">
                 <li><h6 class="dropdown-header text-uppercase text-muted" style="font-size: 10px; letter-spacing: 0.5px;">Filter by Branch</h6></li>
-                <li><a class="dropdown-item py-2 fw-medium text-dark active bg-light" href="#"><i class="fa-solid fa-globe me-2 text-secondary"></i> All Branches</a></li>
-                <li><a class="dropdown-item py-2 text-dark" href="#"><i class="fa-solid fa-location-dot me-2 text-danger"></i> Naga Branch</a></li>
-                <li><a class="dropdown-item py-2 text-dark" href="#"><i class="fa-solid fa-location-dot me-2 text-danger"></i> Legazpi Branch</a></li>
-                <li><a class="dropdown-item py-2 text-dark" href="#"><i class="fa-solid fa-location-dot me-2 text-danger"></i> Sorsogon Branch</a></li>
+                <li><a class="dropdown-item py-2 fw-medium text-dark active bg-light" href="{{ route('owner.branch') }}"><i class="fa-solid fa-globe me-2 text-secondary"></i> All Branches</a></li>
+                @foreach($branches as $branch)
+                    <li><a class="dropdown-item py-2 text-dark" href="{{ route('owner.branch.operations', $branch) }}"><i class="fa-solid fa-location-dot me-2 text-danger"></i> {{ $branch->branch_name }}</a></li>
+                @endforeach
             </ul>
         </div>
 
@@ -38,10 +42,10 @@
 
         <!-- Quick Action Icons -->
         <div style="display: flex; align-items: center; gap: 6px;">
-            <button class="btn btn-light border-0 position-relative p-2" title="Notifications" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+            <a href="{{ route('owner.sms') }}" class="btn btn-light border-0 position-relative p-2" title="SMS Notifications" aria-label="SMS Notifications" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-bell" style="font-size: 13px;"></i>
                 <span class="position-absolute top-25 start-75 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 7px; height: 7px;"></span>
-            </button>
+            </a>
         </div>
 
         <!-- Profile Dropdown -->
@@ -62,15 +66,18 @@
             <!-- Dropdown Menu -->
             <ul class="dropdown-menu dropdown-menu-end shadow-sm border border-light mt-2 py-2" aria-labelledby="profileDropdown" style="background-color: #ffffff; font-size: 13px; border-radius: 10px; min-width: 160px;">
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-dark" href="{{ route('owner.dashboard') }}">
+                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-dark" href="{{ route('owner.profile') }}">
                         <i class="fa-solid fa-user text-muted" style="width: 16px;"></i> Profile
                     </a>
                 </li>
                 <li><hr class="dropdown-divider border-light my-1"></li>
                 <li>
-                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="#" onclick="event.preventDefault(); logout();">
-                        <i class="fa-solid fa-arrow-right-from-bracket" style="width: 16px;"></i> Logout
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger bg-transparent border-0 w-100">
+                            <i class="fa-solid fa-arrow-right-from-bracket" style="width: 16px;"></i> Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>

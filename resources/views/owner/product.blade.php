@@ -467,7 +467,7 @@
 
                                     <div class="text-muted border-top pt-2 mb-3" style="font-size: 11px;">
                                         <div><b>Added Date:</b> {{ optional($product->created_at)->format('M d, Y') }}</div>
-                                        <div><b>Last Sold:</b> {{ isset($product->date_last_sold) && $product->date_last_sold ? \Carbon\Carbon::parse($product->date_last_sold)->format('M d, Y') : 'Not yet sold' }}</div>
+                                        <div><b>Last Sold:</b> {{ $product->last_sold_at ? \Carbon\Carbon::parse($product->last_sold_at)->format('M d, Y') : 'Not yet sold' }}</div>
                                     </div>
                                 </div>
                             </div>

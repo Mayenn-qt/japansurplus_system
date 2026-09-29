@@ -40,6 +40,7 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     
     // Overview / Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
+    Route::get('/search', [DashboardController::class, 'globalSearch'])->name('owner.global-search');
 
     // Management (Products, Stock, Branches, Users)
     Route::get('/product', [ProductController::class, 'index'])->name('owner.product');

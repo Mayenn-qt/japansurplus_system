@@ -68,4 +68,53 @@ class DashboardController extends Controller
 
         return view('staff.dashboard', compact('user', 'unitsInStock', 'soldOutItems'));
     }
+
+    public function globalSearch(Request $request)
+    {
+        $search = trim((string) $request->input('search'));
+
+        if ($search === '') {
+            return redirect()->route('owner.dashboard');
+        }
+
+        $term = strtolower($search);
+
+        if (preg_match('/\b(users?|staff|admin|administrator|account)\b/', $term)) {
+            return redirect()->route('owner.user');
+        }
+
+        if (User::where('name', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%")
+            ->orWhere('role', 'like', "%{$search}%")
+            ->exists()) {
+            return redirect()->route('owner.user', ['search' => $search]);
+        }
+
+        if (Product::where('name', 'like', "%{$search}%")
+            ->orWhere('sku', 'like', "%{$search}%")
+            ->exists()) {
+            return redirect()->route('owner.product', ['search' => $search]);
+        }
+
+        if (Customer::where('name', 'like', "%{$search}%")
+            ->orWhere('phone', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%")
+            ->exists()) {
+            return redirect()->route('owner.customers', ['search' => $search]);
+        }
+
+        if (Branch::where('branch_name', 'like', "%{$search}%")->exists()) {
+            return redirect()->route('owner.branch');
+        }
+
+        if (preg_match('/\b(inventory|stock|stocks)\b/', $term)) {
+            return redirect()->route('owner.stock');
+        }
+
+        if (preg_match('/\b(sales?|transactions?|reports?)\b/', $term)) {
+            return redirect()->route('owner.reports.sales');
+        }
+
+        return redirect()->route('owner.product', ['search' => $search]);
+    }
 }

@@ -8,10 +8,10 @@
         </button>
 
         <!-- Search Bar -->
-        <div class="d-none d-md-flex align-items-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 280px; transition: all 0.2s ease;">
+        <form method="GET" action="{{ route('staff.pos') }}" class="d-none d-md-flex align-items-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 280px; transition: all 0.2s ease;">
             <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; font-size: 13px; margin-right: 10px;"></i>
-            <input type="text" placeholder="Search products, transactions..." style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
-        </div>
+            <input type="search" name="search" value="{{ request('search') }}" placeholder="Search products, transactions..." aria-label="Search products" style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
+        </form>
     </div>
 
     <!-- Right: Branch Info, Utility Actions & Profile Dropdown -->
@@ -46,10 +46,10 @@
 
         <!-- Quick Action Icons (Notifications) -->
         <div style="display: flex; align-items: center; gap: 8px;">
-            <button class="btn btn-light border-0 position-relative p-2" title="Notifications" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+            <a href="{{ route('staff.inventory.out-of-stock') }}" class="btn btn-light border-0 position-relative p-2" title="Stock Alerts" aria-label="Stock Alerts" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-bell" style="font-size: 13px;"></i>
                 <span class="position-absolute top-25 start-75 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 7px; height: 7px;"></span>
-            </button>
+            </a>
         </div>
 
         <!-- Staff Profile Dropdown -->
