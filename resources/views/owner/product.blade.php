@@ -17,13 +17,13 @@
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold text-dark mb-1" style="letter-spacing: -0.5px;">Product Management</h4>
+                    <p class="text-muted small mb-0">Manage product catalog, details, categories, and pricing information across the system.</p>
                 </div>
                 
                 <button type="button" class="btn btn-danger btn-sm px-3 py-2 fw-semibold shadow-sm d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addProductModal" style="border-radius: 10px; transition: all 0.2s;">
                     <i class="fa-solid fa-plus"></i> Add Product
                 </button>
             </div>
-
             <!-- ADD PRODUCT MODAL -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
