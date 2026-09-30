@@ -14,6 +14,7 @@
         <div class="page-section active-page" id="page-products"> 
             
             <!-- Header Section -->
+            <!-- Header Section -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold text-dark mb-1" style="letter-spacing: -0.5px;">Product Management</h4>

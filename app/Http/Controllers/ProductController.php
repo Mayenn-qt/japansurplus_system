@@ -19,6 +19,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        
+        // Kinukuha natin ang total stock ng product sa lahat ng branches (o base sa napiling branch)
+        $branchId = $request->filled('branch_id') ? $request->branch_id : null;
+
         $query = Product::with(['category', 'inventories', 'images'])
             ->addSelect([
                 'last_sold_at' => SaleItem::query()
@@ -28,7 +32,13 @@ class ProductController extends Controller
                     ->orderByDesc('sales.created_at')
                     ->orderByDesc('sale_items.id')
                     ->limit(1),
-            ]);
+            ])
+            // Idinaragdag natin ito para ma-compute ang total stock ng product
+            ->withSum(['inventories' => function($q) use ($branchId) {
+                if ($branchId) {
+                    $q->where('branch_id', $branchId);
+                }
+            }], 'current_stock');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -42,22 +52,24 @@ class ProductController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
-        $branchId = $request->filled('branch_id') ? $request->branch_id : null;
-
         if ($branchId) {
             $query->whereHas('inventories', function ($q) use ($branchId) {
                 $q->where('branch_id', $branchId);
             });
-
         }
 
-        $products = $query->latest('created_at')->paginate(10)->appends($request->query());
+        // Pagsasaayos ng pag-sort: Mauuna ang may stock (> 0), at mapupunta sa dulo ang sold out (0 stock)
+        $products = $query
+            ->orderByRaw('(SELECT COALESCE(SUM(current_stock), 0) FROM inventories WHERE inventories.product_id = products.id' . ($branchId ? " AND branch_id = {$branchId}" : '') . ') DESC')
+            ->latest('created_at')
+            ->paginate(10)
+            ->appends($request->query());
+
         $categories = Category::all();
         $branches = Branch::all();
 
         return view('owner.product', compact('products', 'user', 'categories', 'branches'));
     }
-
     public function stockManagement(Request $request)
     {
         $user = Auth::user();
