@@ -83,7 +83,7 @@ class UniqueInventoryAvailabilityTest extends TestCase
 
     public function test_inventory_stock_can_be_manually_adjusted(): void
     {
-        [$user, , $inventory] = $this->makeAvailableProduct();
+        [$user, , $inventory] = $this->makeAvailableProduct(role: 'owner');
 
         $this->actingAs($user)->put(route('owner.inventory.stock', $inventory), [
             'current_stock' => 12,
@@ -92,10 +92,51 @@ class UniqueInventoryAvailabilityTest extends TestCase
         $this->assertSame(12, $inventory->fresh()->current_stock);
     }
 
-    private function makeAvailableProduct(int $stock = 5): array
+    public function test_product_listing_rejects_non_integer_branch_filters(): void
+    {
+        [$user] = $this->makeAvailableProduct(role: 'owner');
+
+        $this->actingAs($user)
+            ->from('/owner/product')
+            ->get(route('owner.product', ['branch_id' => '1 OR 1=1']))
+            ->assertRedirect('/owner/product')
+            ->assertSessionHasErrors('branch_id');
+    }
+
+    public function test_product_listing_sorts_branch_stock_before_zero_stock(): void
+    {
+        [$user, $stockedProduct, $inventory] = $this->makeAvailableProduct(role: 'owner');
+        $zeroStockProduct = Product::forceCreate([
+            'name' => 'Out of stock plate',
+            'sku' => 'EMPTY-' . uniqid(),
+            'category_id' => $stockedProduct->category_id,
+            'price' => 500,
+            'sale_price' => 500,
+        ]);
+        Inventory::create([
+            'branch_id' => $inventory->branch_id,
+            'product_id' => $zeroStockProduct->id,
+            'current_stock' => 0,
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('owner.product', ['branch_id' => $inventory->branch_id]))
+            ->assertOk()
+            ->assertViewHas('products', function ($products) use ($stockedProduct, $zeroStockProduct) {
+                return $products->pluck('id')->take(2)->all() === [
+                    $stockedProduct->id,
+                    $zeroStockProduct->id,
+                ];
+            });
+    }
+
+    private function makeAvailableProduct(int $stock = 5, string $role = 'staff'): array
     {
         $branch = Branch::forceCreate(['branch_name' => 'Main Branch']);
-        $user = User::factory()->create(['branch_id' => $branch->id]);
+        $user = User::factory()->create([
+            'branch_id' => $branch->id,
+            'role' => $role,
+        ]);
         $category = Category::forceCreate(['name' => 'Ceramics']);
         $product = Product::forceCreate([
             'name' => 'Japanese Ceramic Plate',

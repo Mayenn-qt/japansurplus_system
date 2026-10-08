@@ -6,24 +6,88 @@ use Illuminate\Http\Request;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Branch;
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Builder;
 
 class InventoryController extends Controller
 {
-    public function inventoryReport()
+    public function inventoryReport(Request $request)
     {
-        $inventory = Inventory::with(['product.category', 'branch'])
-            ->whereHas('product')
-            ->where('current_stock', 0)
+        $filters = $this->validateInventoryReportFilters($request);
+        $baseQuery = $this->inventoryReportQuery($filters, false);
+        $inventory = $this->inventoryReportQuery($filters)
             ->latest()
-            ->get();
+            ->paginate(15)
+            ->withQueryString();
 
         return view('owner.reports.inventory', [
-            'totalProducts' => Product::count(),
-            'inStockItems' => Inventory::sum('current_stock'),
-            'outOfStockItems' => Inventory::where('current_stock', 0)->count(),
-            'totalInventoryRecords' => Inventory::count(),
+            'totalProducts' => (clone $baseQuery)->distinct('product_id')->count('product_id'),
+            'inStockItems' => (clone $baseQuery)->where('current_stock', '>', 0)->sum('current_stock'),
+            'outOfStockItems' => (clone $baseQuery)->where('current_stock', 0)->count(),
+            'totalInventoryRecords' => (clone $baseQuery)->count(),
             'inventory' => $inventory,
+            'branches' => Branch::orderBy('branch_name')->get(),
+            'categories' => Category::orderBy('name')->get(),
+            'filters' => $filters,
         ]);
+    }
+
+    public function exportInventoryReport(Request $request)
+    {
+        $filters = $this->validateInventoryReportFilters($request);
+
+        return response()->streamDownload(function () use ($filters) {
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['Product', 'SKU', 'Category', 'Branch', 'Current stock', 'Status']);
+
+            $this->inventoryReportQuery($filters)
+                ->chunkById(500, function ($inventories) use ($output) {
+                    foreach ($inventories as $inventory) {
+                        fputcsv($output, [
+                            $inventory->product?->name ?? 'Product removed',
+                            $inventory->product?->sku ?? '',
+                            $inventory->product?->category?->name ?? 'Uncategorized',
+                            $inventory->branch?->branch_name ?? 'Unassigned',
+                            $inventory->current_stock,
+                            $inventory->current_stock > 0 ? 'In stock' : 'Out of stock',
+                        ]);
+                    }
+                });
+
+            fclose($output);
+        }, 'inventory-report-' . now()->format('Ymd-His') . '.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    private function validateInventoryReportFilters(Request $request): array
+    {
+        return $request->validate([
+            'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'stock_level' => ['nullable', 'in:all,in_stock,out_of_stock'],
+        ]);
+    }
+
+    private function inventoryReportQuery(array $filters, bool $applyStockLevel = true): Builder
+    {
+        $query = Inventory::with(['product.category', 'branch'])->whereHas('product');
+
+        if (!empty($filters['branch_id'])) {
+            $query->where('branch_id', $filters['branch_id']);
+        }
+        if (!empty($filters['category_id'])) {
+            $query->whereHas('product', fn (Builder $productQuery) => $productQuery->where('category_id', $filters['category_id']));
+        }
+        if ($applyStockLevel) {
+            match ($filters['stock_level'] ?? 'all') {
+                'in_stock' => $query->where('current_stock', '>', 0),
+                'out_of_stock' => $query->where('current_stock', 0),
+                default => null,
+            };
+        }
+
+        return $query;
     }
 
     public function index(Request $request)

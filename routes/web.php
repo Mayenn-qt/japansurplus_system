@@ -36,7 +36,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 | 1. Owner / Admin Routes (Executive Dashboard)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->prefix('owner')->group(function () {
+Route::middleware(['auth', 'role:owner'])->prefix('owner')->group(function () {
     
     // Overview / Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
@@ -61,8 +61,11 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('owner.customers.destroy');
 
     // Reports (Sales, Inventory, Branch Reports)
+    Route::get('/reports/sales/export', [SalesController::class, 'exportSalesReport'])->name('owner.reports.sales.export');
     Route::get('/reports/sales', [SalesController::class, 'salesReport'])->name('owner.reports.sales');
+    Route::get('/reports/inventory/export', [InventoryController::class, 'exportInventoryReport'])->name('owner.reports.inventory.export');
     Route::get('/reports/inventory', [InventoryController::class, 'inventoryReport'])->name('owner.reports.inventory');
+    Route::get('/reports/branch/export', [BranchReportController::class, 'exportBranchReport'])->name('owner.reports.branchreport.export');
     Route::get('/reports/branch', [BranchReportController::class, 'branchReport'])->name('owner.reports.branchreport');
 
     // Communication (SMS Notifications)
@@ -82,7 +85,7 @@ Route::middleware(['auth'])->prefix('owner')->group(function () {
 | 2. Staff Routes (Staff Side UI)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->prefix('staff')->group(function () {
+Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
     // POS Terminal
     Route::get('/pos', [PosController::class, 'index'])->name('staff.pos');
 

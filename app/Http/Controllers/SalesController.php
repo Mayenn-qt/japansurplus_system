@@ -5,33 +5,125 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sale;
 use App\Models\SaleItem;
+use App\Models\Branch;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class SalesController extends Controller
 {
     // ... iba pang methods tulad ng sales, cart, checkout, history ...
-    public function salesReport()
+    public function salesReport(Request $request)
     {
-        $now = Carbon::now();
-        $sales = Sale::query();
-
-        $todaySales = (clone $sales)->whereDate('created_at', $now->toDateString())->sum('total_amount');
-        $weekSales = (clone $sales)->whereBetween('created_at', [$now->copy()->startOfWeek(), $now->copy()->endOfWeek()])->sum('total_amount');
-        $monthSales = (clone $sales)->whereBetween('created_at', [$now->copy()->startOfMonth(), $now->copy()->endOfMonth()])->sum('total_amount');
+        $filters = $this->validateReportFilters($request);
+        $sales = $this->filteredSalesQuery($filters);
+        $totalSales = (clone $sales)->sum('total_amount');
         $transactionCount = (clone $sales)->count();
+        $unitsSold = SaleItem::query()
+            ->whereHas('sale', fn (Builder $query) => $this->applySalesFilters($query, $filters))
+            ->sum('quantity');
         $bestSellingProducts = SaleItem::with('product')
-            ->select('product_id', DB::raw('SUM(quantity) as quantity_sold'), DB::raw('SUM(total) as revenue'))
+            ->whereHas('sale', fn (Builder $query) => $this->applySalesFilters($query, $filters))
+            ->select('product_id')
+            ->selectRaw('SUM(quantity) as quantity_sold, SUM(total) as revenue')
             ->groupBy('product_id')
             ->orderByDesc('quantity_sold')
             ->take(10)
             ->get();
-        $recentSales = Sale::with(['branch', 'user'])->latest()->take(10)->get();
+        $recentSales = (clone $sales)
+            ->with(['branch', 'user'])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $trendEnd = isset($filters['end_date'])
+            ? Carbon::parse($filters['end_date'])
+            : Carbon::today();
+        $trendStart = isset($filters['start_date'])
+            ? Carbon::parse($filters['start_date'])
+            : $trendEnd->copy()->subDays(13);
+        if ($trendStart->diffInDays($trendEnd) > 29) {
+            $trendStart = $trendEnd->copy()->subDays(29);
+        }
+        $trendValues = (clone $sales)
+            ->whereDate('created_at', '>=', $trendStart->toDateString())
+            ->whereDate('created_at', '<=', $trendEnd->toDateString())
+            ->selectRaw('DATE(created_at) as sale_date, SUM(total_amount) as revenue')
+            ->groupBy('sale_date')
+            ->pluck('revenue', 'sale_date');
+        $trendLabels = [];
+        $trendData = [];
+        for ($date = $trendStart->copy(); $date->lte($trendEnd); $date->addDay()) {
+            $key = $date->toDateString();
+            $trendLabels[] = $date->format('M j');
+            $trendData[] = (float) ($trendValues[$key] ?? 0);
+        }
+        $branches = Branch::orderBy('branch_name')->get();
 
         return view('owner.reports.sales', compact(
-            'todaySales', 'weekSales', 'monthSales', 'transactionCount',
-            'bestSellingProducts', 'recentSales'
+            'totalSales', 'transactionCount', 'unitsSold', 'bestSellingProducts',
+            'recentSales', 'branches', 'filters', 'trendLabels', 'trendData'
         ));
+    }
+
+    public function exportSalesReport(Request $request)
+    {
+        $filters = $this->validateReportFilters($request);
+
+        return response()->streamDownload(function () use ($filters) {
+            $output = fopen('php://output', 'w');
+            fputcsv($output, ['Transaction', 'Date', 'Branch', 'Staff', 'Order type', 'Subtotal', 'Discount', 'Total']);
+
+            $this->filteredSalesQuery($filters)
+                ->with(['branch', 'user'])
+                ->chunkById(500, function ($sales) use ($output) {
+                    foreach ($sales as $sale) {
+                        fputcsv($output, [
+                            $sale->id,
+                            $sale->created_at?->format('Y-m-d H:i:s'),
+                            $sale->branch?->branch_name ?? 'Unassigned',
+                            $sale->user?->name ?? 'Unassigned',
+                            $sale->order_type,
+                            $sale->subtotal,
+                            $sale->discount,
+                            $sale->total_amount,
+                        ]);
+                    }
+                });
+
+            fclose($output);
+        }, 'sales-report-' . now()->format('Ymd-His') . '.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    private function validateReportFilters(Request $request): array
+    {
+        return $request->validate([
+            'start_date' => ['nullable', 'date_format:Y-m-d', 'before_or_equal:today'],
+            'end_date' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:start_date', 'before_or_equal:today'],
+            'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+        ]);
+    }
+
+    private function filteredSalesQuery(array $filters): Builder
+    {
+        return $this->applySalesFilters(Sale::query(), $filters);
+    }
+
+    private function applySalesFilters(Builder $query, array $filters): Builder
+    {
+        if (!empty($filters['branch_id'])) {
+            $query->where('branch_id', $filters['branch_id']);
+        }
+        if (!empty($filters['start_date'])) {
+            $query->whereDate('created_at', '>=', $filters['start_date']);
+        }
+        if (!empty($filters['end_date'])) {
+            $query->whereDate('created_at', '<=', $filters['end_date']);
+        }
+
+        return $query;
     }
 
     public function history()

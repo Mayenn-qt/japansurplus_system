@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/reports.css') }}">
 
     <!-- Sidebar -->
     @include('dashboard.sidebar')
@@ -24,9 +25,8 @@
                     <p class="text-muted mb-0" style="font-size:13.5px;">Review item availability across branches</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-file-pdf text-danger"></i> Export PDF</button>
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-file-excel text-success"></i> Export Excel</button>
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-print"></i> Print</button>
+                    <a href="{{ route('owner.reports.inventory.export', request()->query()) }}" class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1 report-action" style="border-radius: 8px;"><i class="fa-solid fa-file-csv text-success"></i> Export CSV</a>
+                    <button type="button" onclick="window.print()" class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1 report-action" style="border-radius: 8px;"><i class="fa-solid fa-file-pdf text-danger"></i> Print / Save PDF</button>
                 </div>
             </div>
 
@@ -63,28 +63,37 @@
             </div>
 
             <!-- 2. Simplified Filters Section -->
-            <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white">
-                <form class="row g-3 align-items-end">
-                    <div class="col-xl-4 col-md-5">
-                        <label class="form-label text-muted small fw-semibold">Category</label>
-                        <select class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option selected>All Categories</option>
-                            <option>Appliances</option>
-                            <option>Furniture</option>
-                            <option>Electronics</option>
+            <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
+                <form method="GET" action="{{ route('owner.reports.inventory') }}" class="row g-3 align-items-end">
+                    <div class="col-xl-3 col-md-4">
+                        <label for="inventoryCategory" class="form-label text-muted small fw-semibold">Category</label>
+                        <select id="inventoryCategory" name="category_id" class="form-select form-select-sm" style="border-radius: 8px;">
+                            <option value="">All categories</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" @selected((string) ($filters['category_id'] ?? '') === (string) $category->id)>{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-xl-4 col-md-4">
-                        <label class="form-label text-muted small fw-semibold">Branch</label>
-                        <select class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option selected>All Branches</option>
-                            <option>Main Branch</option>
-                            <option>Juban</option>
-                            <option>Masbate</option>
+                    <div class="col-xl-3 col-md-4">
+                        <label for="inventoryBranch" class="form-label text-muted small fw-semibold">Branch</label>
+                        <select id="inventoryBranch" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;">
+                            <option value="">All branches</option>
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-xl-4 col-md-3">
+                    <div class="col-xl-3 col-md-3">
+                        <label for="inventoryStockLevel" class="form-label text-muted small fw-semibold">Stock status</label>
+                        <select id="inventoryStockLevel" name="stock_level" class="form-select form-select-sm" style="border-radius: 8px;">
+                            <option value="all" @selected(($filters['stock_level'] ?? 'all') === 'all')>All stock</option>
+                            <option value="in_stock" @selected(($filters['stock_level'] ?? '') === 'in_stock')>In stock</option>
+                            <option value="out_of_stock" @selected(($filters['stock_level'] ?? '') === 'out_of_stock')>Out of stock</option>
+                        </select>
+                    </div>
+                    <div class="col-xl-3 col-md-1 d-flex gap-2">
                         <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                        <a href="{{ route('owner.reports.inventory') }}" class="btn btn-outline-secondary btn-sm" title="Clear filters" aria-label="Clear filters"><i class="fa-solid fa-rotate-left"></i></a>
                     </div>
                 </form>
             </div>
@@ -92,8 +101,8 @@
             <!-- 3. Stock Status Table Section -->
             <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">
                 <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold text-dark m-0">Zero Stock Items</h6>
-                            <span class="badge bg-light text-dark border" style="font-size: 11px;">Zero stock by branch</span>
+                        <h6 class="fw-bold text-dark m-0">Inventory by branch</h6>
+                        <span class="badge bg-light text-dark border" style="font-size: 11px;">{{ $inventory->total() }} records</span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
@@ -103,7 +112,7 @@
                                 <th class="py-2">Category</th>
                                 <th class="py-2">Branch</th>
                                 <th class="py-2">Stock</th>
-                                <th class="pe-3 py-2 text-end">Action</th>
+                                <th class="pe-3 py-2 text-end">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,14 +122,15 @@
                                     <td>{{ $item->product?->category?->name ?? 'Uncategorized' }}</td>
                                     <td>{{ $item->branch?->branch_name ?? 'Unassigned' }}</td>
                                     <td>{{ $item->current_stock }} units</td>
-                                    <td class="pe-3 text-end">&mdash;</td>
+                                    <td class="pe-3 text-end"><span class="badge {{ $item->current_stock > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">{{ $item->current_stock > 0 ? 'In stock' : 'Out of stock' }}</span></td>
                                 </tr>
                             @empty
-                                <tr><td colspan="5" class="text-center py-4 text-muted">No inventory records found.</td></tr>
+                                <tr><td colspan="5" class="text-center py-4 text-muted">No inventory records match these filters.</td></tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
+                <div class="px-3 py-2 report-pagination">{{ $inventory->links() }}</div>
             </div>
 
         </div>

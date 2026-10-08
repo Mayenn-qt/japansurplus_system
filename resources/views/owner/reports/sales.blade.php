@@ -5,7 +5,7 @@
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/reports.css') }}">
 
     <!-- Sidebar -->
     @include('dashboard.sidebar')
@@ -24,9 +24,8 @@
                     <p class="text-muted mb-0" style="font-size:13.5px;">Comprehensive sales analytics, revenue trends, and recent transaction insights</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-file-pdf text-danger"></i> Export PDF</button>
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-file-excel text-success"></i> Export Excel</button>
-                    <button class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1" style="border-radius: 8px;"><i class="fa-solid fa-print"></i> Print</button>
+                    <a href="{{ route('owner.reports.sales.export', request()->query()) }}" class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1 report-action" style="border-radius: 8px;"><i class="fa-solid fa-file-csv text-success"></i> Export CSV</a>
+                    <button type="button" onclick="window.print()" class="btn btn-outline-secondary btn-sm px-3 shadow-sm d-flex align-items-center gap-1 report-action" style="border-radius: 8px;"><i class="fa-solid fa-file-pdf text-danger"></i> Print / Save PDF</button>
                 </div>
             </div>
 
@@ -34,67 +33,75 @@
             <div class="row g-3 mb-4">
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Today's Sales</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($todaySales ?? 0, 2) }}</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> 0% from yesterday</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Sales in period</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($totalSales, 2) }}</h3>
+                        <span class="text-muted small mt-1">Based on selected filters</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">This Week</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($weekSales ?? 0, 2) }}</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> 0% vs last week</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Transactions</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($transactionCount) }}</h3>
+                        <span class="text-muted small mt-1">In selected period</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">This Month</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($monthSales ?? 0, 2) }}</h3>
-                        <span class="text-muted small mt-1">Updated just now</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Items sold</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($unitsSold) }}</h3>
+                        <span class="text-muted small mt-1">Units in selected period</span>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-info h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Transactions</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $transactionCount ?? 0 }}</h3>
-                        <span class="text-info small mt-1"><i class="fa-solid fa-receipt"></i> Across all branches</span>
+                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Average sale</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($transactionCount ? $totalSales / $transactionCount : 0, 2) }}</h3>
+                        <span class="text-info small mt-1"><i class="fa-solid fa-receipt"></i> Per transaction</span>
                     </div>
                 </div>
             </div>
 
             <!-- 2. Filters Section -->
-        <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white">
-                <form class="row g-3 align-items-end">
+        <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
+                <form method="GET" action="{{ route('owner.reports.sales') }}" class="row g-3 align-items-end">
                     <div class="col-xl-4 col-md-5">
-                        <label class="form-label text-muted small fw-semibold">Date Range</label>
-                        <input type="date" class="form-control form-control-sm" style="border-radius: 8px;">
+                        <label for="salesStartDate" class="form-label text-muted small fw-semibold">From</label>
+                        <input id="salesStartDate" type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;">
                     </div>
-                    <div class="col-xl-4 col-md-4">
-                        <label class="form-label text-muted small fw-semibold">Branch</label>
-                        <select class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option selected>All Branches</option>
-                            <option>Main Branch</option>
-                            <option>Juban</option>
-                            <option>Masbate</option>
+                    <div class="col-xl-3 col-md-3">
+                        <label for="salesEndDate" class="form-label text-muted small fw-semibold">To</label>
+                        <input id="salesEndDate" type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;">
+                    </div>
+                    <div class="col-xl-3 col-md-3">
+                        <label for="salesBranch" class="form-label text-muted small fw-semibold">Branch</label>
+                        <select id="salesBranch" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;">
+                            <option value="">All branches</option>
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="col-xl-4 col-md-3">
+                    <div class="col-xl-2 col-md-1 d-flex gap-2">
                         <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
+                        <a href="{{ route('owner.reports.sales') }}" class="btn btn-outline-secondary btn-sm" title="Clear filters" aria-label="Clear filters"><i class="fa-solid fa-rotate-left"></i></a>
                     </div>
                 </form>
             </div>
             <!-- 3. Chart Section -->
             <div class="card border-0 shadow-sm rounded-3 p-4 mb-4 bg-white">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h6 class="fw-bold text-dark m-0">Sales Trend Chart</h6>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-outline-dark active">Daily Sales</button>
-                        <button type="button" class="btn btn-outline-dark">Weekly Sales</button>
-                        <button type="button" class="btn btn-outline-dark">Monthly Sales</button>
-                    </div>
+                    <h6 class="fw-bold text-dark m-0">Daily sales trend</h6>
+                    <span class="text-muted small">Up to 30 days in the selected period</span>
                 </div>
-                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted" style="height: 250px; font-size: 14px;">
-                    [ Sales Trend Chart Area: Daily / Weekly / Monthly ]
+                @php($maxTrendValue = max($trendData ?: [0]))
+                <div class="report-chart" role="img" aria-label="Daily sales trend bar chart">
+                    @foreach($trendData as $index => $value)
+                        <div class="report-chart-column" title="{{ $trendLabels[$index] }}: ₱{{ number_format($value, 2) }}">
+                            <span class="report-chart-value">{{ $value > 0 ? number_format($value, 0) : '' }}</span>
+                            <div class="report-chart-bar" style="height: {{ $maxTrendValue > 0 ? max(2, ($value / $maxTrendValue) * 100) : 2 }}%;"></div>
+                            <span class="report-chart-label">{{ $trendLabels[$index] }}</span>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 
@@ -144,7 +151,7 @@
                                         <th class="ps-3 py-2">Invoice</th>
                                         <th class="py-2">Branch</th>
                                         <th class="py-2">Staff</th>
-                                        <th class="py-2">Customer</th>
+                                        <th class="py-2">Type</th>
                                         <th class="py-2">Total</th>
                                         <th class="pe-3 py-2">Date</th>
                                     </tr>
@@ -152,19 +159,21 @@
                                 <tbody>
                                     @forelse($recentSales ?? [] as $sale)
                                         <tr>
-                                            <td class="ps-3">{{ $sale->branch?->branch_name ?? 'Unassigned' }}</td>
+                                            <td class="ps-3">#{{ $sale->id }}</td>
+                                            <td>{{ $sale->branch?->branch_name ?? 'Unassigned' }}</td>
                                             <td>{{ $sale->user?->name ?? 'Unassigned' }}</td>
-                                            <td>Walk-in</td>
+                                            <td>{{ $sale->order_type ?: 'Walk-in' }}</td>
                                             <td class="fw-bold">₱{{ number_format($sale->total_amount, 2) }}</td>
                                             <td class="pe-3 text-muted" style="font-size: 11px;">{{ $sale->created_at?->format('M d, Y h:i A') }}</td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="5" class="text-center py-4 text-muted">No sales transactions recorded yet.</td></tr>
+                                        <tr><td colspan="6" class="text-center py-4 text-muted">No sales transactions recorded yet.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    <div class="px-3 py-2 report-pagination">{{ $recentSales->links() }}</div>
                 </div>
             </div>
 

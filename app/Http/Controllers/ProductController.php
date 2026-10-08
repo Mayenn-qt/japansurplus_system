@@ -21,7 +21,10 @@ class ProductController extends Controller
         $user = Auth::user();
         
         // Kinukuha natin ang total stock ng product sa lahat ng branches (o base sa napiling branch)
-        $branchId = $request->filled('branch_id') ? $request->branch_id : null;
+        $validated = $request->validate([
+            'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+        ]);
+        $branchId = $validated['branch_id'] ?? null;
 
         $query = Product::with(['category', 'inventories', 'images'])
             ->addSelect([
@@ -59,8 +62,18 @@ class ProductController extends Controller
         }
 
         // Pagsasaayos ng pag-sort: Mauuna ang may stock (> 0), at mapupunta sa dulo ang sold out (0 stock)
+        if ($branchId !== null) {
+            $query->orderByRaw(
+                '(SELECT COALESCE(SUM(current_stock), 0) FROM inventories WHERE inventories.product_id = products.id AND branch_id = ?) DESC',
+                [$branchId]
+            );
+        } else {
+            $query->orderByRaw(
+                '(SELECT COALESCE(SUM(current_stock), 0) FROM inventories WHERE inventories.product_id = products.id) DESC'
+            );
+        }
+
         $products = $query
-            ->orderByRaw('(SELECT COALESCE(SUM(current_stock), 0) FROM inventories WHERE inventories.product_id = products.id' . ($branchId ? " AND branch_id = {$branchId}" : '') . ') DESC')
             ->latest('created_at')
             ->paginate(10)
             ->appends($request->query());
@@ -70,6 +83,7 @@ class ProductController extends Controller
 
         return view('owner.product', compact('products', 'user', 'categories', 'branches'));
     }
+
     public function stockManagement(Request $request)
     {
         $user = Auth::user();

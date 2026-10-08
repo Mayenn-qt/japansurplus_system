@@ -1,0 +1,72 @@
+.report-chart {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    min-height: 230px;
+    overflow-x: auto;
+    padding: 12px 4px 0;
+    border-bottom: 1px solid var(--theme-border, #e2e8f0);
+}
+
+.report-chart-column {
+    display: grid;
+    flex: 1 0 28px;
+    grid-template-rows: 18px minmax(0, 1fr) 24px;
+    justify-items: center;
+    min-width: 28px;
+    color: var(--theme-muted, #64748b);
+    font-size: 10px;
+}
+
+.report-chart-value {
+    max-width: 100%;
+    overflow: hidden;
+    color: var(--theme-text, #0f172a);
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.report-chart-bar {
+    align-self: end;
+    width: min(28px, 85%);
+    min-height: 2px;
+    border-radius: 4px 4px 0 0;
+    background: #dc3545;
+}
+
+.report-chart-label {
+    align-self: end;
+    white-space: nowrap;
+}
+
+@media print {
+    .app-topbar,
+    .sidebar,
+    .sidebar-backdrop,
+    .report-action,
+    .report-filters,
+    .report-pagination {
+        display: none !important;
+    }
+
+    body,
+    .main-content-wrapper,
+    .content-wrapper {
+        width: 100% !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        color: #111 !important;
+    }
+
+    .card {
+        break-inside: avoid;
+        border: 1px solid #d5d5d5 !important;
+        box-shadow: none !important;
+    }
+
+    .report-chart {
+        overflow: visible;
+    }
+}
