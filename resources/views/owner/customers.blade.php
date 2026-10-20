@@ -40,7 +40,7 @@
                     <div class="col-md-7">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                            <input type="text" name="search" value="{{ request('search') }}" class="form-control bg-light border-start-0" placeholder="Search name, mobile number, or email...">
+                            <input type="text" name="search" value="{{ request('search') }}" class="form-control bg-light border-start-0" placeholder="Search customer name, number, or exact location...">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -63,11 +63,10 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light text-muted text-uppercase" style="font-size: 11px; letter-spacing: .4px;">
                             <tr>
-                                <th class="ps-4 py-3">Customer</th>
-                                <th class="py-3">Mobile Number</th>
-                                <th class="py-3">Email</th>
+                                <th class="ps-4 py-3">Customer Name</th>
+                                <th class="py-3">Number</th>
                                 <th class="py-3">Branch</th>
-                                <th class="py-3">Notes</th>
+                                <th class="py-3">Exact Location</th>
                                 <th class="pe-4 py-3 text-end">Actions</th>
                             </tr>
                         </thead>
@@ -76,9 +75,8 @@
                                 <tr>
                                     <td class="ps-4 fw-semibold text-dark">{{ $customer->name }}</td>
                                     <td class="text-secondary">{{ $customer->phone }}</td>
-                                    <td class="text-secondary">{{ $customer->email ?? 'Not provided' }}</td>
                                     <td><span class="badge bg-light text-dark border">{{ $customer->branch->branch_name ?? 'All Branches' }}</span></td>
-                                    <td class="text-muted small">{{ $customer->notes ?? '-' }}</td>
+                                    <td class="text-secondary">{{ $customer->exact_location }}</td>
                                     <td class="pe-4 text-end">
                                         <button type="button" class="btn btn-sm btn-light border text-primary" data-bs-toggle="modal" data-bs-target="#editCustomer{{ $customer->id }}" title="Edit customer">
                                             <i class="fa-solid fa-pen-to-square"></i>
@@ -90,7 +88,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="6" class="text-center py-5 text-muted">No customer contacts found.</td></tr>
+                                <tr><td colspan="5" class="text-center py-5 text-muted">No customer contacts found.</td></tr>
                             @endforelse
                         </tbody>
                     </table>

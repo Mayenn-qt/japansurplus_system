@@ -90,11 +90,11 @@
             <!-- 3. Chart Section -->
             <div class="card border-0 shadow-sm rounded-3 p-4 mb-4 bg-white">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h6 class="fw-bold text-dark m-0">Daily sales trend</h6>
-                    <span class="text-muted small">Up to 30 days in the selected period</span>
+                    <h6 class="fw-bold text-dark m-0">Monthly Sales Trend</h6>
+                    <span class="text-muted small">Monthly totals in the selected period</span>
                 </div>
                 @php($maxTrendValue = max($trendData ?: [0]))
-                <div class="report-chart" role="img" aria-label="Daily sales trend bar chart">
+                <div class="report-chart" role="img" aria-label="Monthly sales trend bar chart">
                     @foreach($trendData as $index => $value)
                         <div class="report-chart-column" title="{{ $trendLabels[$index] }}: ₱{{ number_format($value, 2) }}">
                             <span class="report-chart-value">{{ $value > 0 ? number_format($value, 0) : '' }}</span>
@@ -114,7 +114,7 @@
                             <h6 class="fw-bold text-dark m-0">Best Selling Products</h6>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
+                            <table class="table table-hover table-striped align-middle mb-0" style="font-size: 13px;">
                                 <thead class="bg-light text-muted text-uppercase" style="font-size: 10px;">
                                     <tr>
                                         <th class="ps-3 py-2">Product</th>
@@ -126,8 +126,8 @@
                                     @forelse($bestSellingProducts ?? [] as $item)
                                         <tr>
                                             <td class="ps-3 fw-medium">{{ $item->product?->name ?? 'Product removed' }}</td>
-                                            <td><span class="badge bg-light text-dark border">{{ $item->quantity_sold }}</span></td>
-                                            <td class="pe-3 text-end fw-semibold">₱{{ number_format($item->revenue, 2) }}</td>
+                                            <td><span class="badge border px-2 py-1" style="background-color: #eef4ff; color: #315b9a; border-color: #d7e3f7 !important;">{{ $item->quantity_sold }}</span></td>
+                                            <td class="pe-3 text-end fw-semibold" style="background-color: #f1f8f3; color: #276749;">₱{{ number_format($item->revenue, 2) }}</td>
                                         </tr>
                                     @empty
                                         <tr><td colspan="3" class="text-center py-4 text-muted">No product sales recorded yet.</td></tr>
@@ -148,10 +148,7 @@
                             <table class="table table-hover align-middle mb-0" style="font-size: 13px;">
                                 <thead class="bg-light text-muted text-uppercase" style="font-size: 10px;">
                                     <tr>
-                                        <th class="ps-3 py-2">Invoice</th>
                                         <th class="py-2">Branch</th>
-                                        <th class="py-2">Staff</th>
-                                        <th class="py-2">Type</th>
                                         <th class="py-2">Total</th>
                                         <th class="pe-3 py-2">Date</th>
                                     </tr>
@@ -159,15 +156,12 @@
                                 <tbody>
                                     @forelse($recentSales ?? [] as $sale)
                                         <tr>
-                                            <td class="ps-3">#{{ $sale->id }}</td>
                                             <td>{{ $sale->branch?->branch_name ?? 'Unassigned' }}</td>
-                                            <td>{{ $sale->user?->name ?? 'Unassigned' }}</td>
-                                            <td>{{ $sale->order_type ?: 'Walk-in' }}</td>
                                             <td class="fw-bold">₱{{ number_format($sale->total_amount, 2) }}</td>
                                             <td class="pe-3 text-muted" style="font-size: 11px;">{{ $sale->created_at?->format('M d, Y h:i A') }}</td>
                                         </tr>
                                     @empty
-                                        <tr><td colspan="6" class="text-center py-4 text-muted">No sales transactions recorded yet.</td></tr>
+                                        <tr><td colspan="3" class="text-center py-4 text-muted">No sales transactions recorded yet.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>

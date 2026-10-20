@@ -1,14 +1,10 @@
 <div class="mb-3">
-    <label class="form-label fw-semibold">Full Name</label>
+    <label class="form-label fw-semibold">Customer Name</label>
     <input type="text" name="name" class="form-control" value="{{ old('name', $customer?->name) }}" required>
 </div>
 <div class="mb-3">
-    <label class="form-label fw-semibold">Mobile Number</label>
+    <label class="form-label fw-semibold">Number</label>
     <input type="text" name="phone" class="form-control" value="{{ old('phone', $customer?->phone) }}" placeholder="09XX XXX XXXX" required>
-</div>
-<div class="mb-3">
-    <label class="form-label fw-semibold">Email <span class="text-muted fw-normal">(optional)</span></label>
-    <input type="email" name="email" class="form-control" value="{{ old('email', $customer?->email) }}">
 </div>
 <div class="mb-3">
     <label class="form-label fw-semibold">Branch</label>
@@ -19,7 +15,7 @@
         @endforeach
     </select>
 </div>
-<div>
-    <label class="form-label fw-semibold">Notes <span class="text-muted fw-normal">(optional)</span></label>
-    <textarea name="notes" class="form-control" rows="2">{{ old('notes', $customer?->notes) }}</textarea>
+<div class="mb-3">
+    <label class="form-label fw-semibold">Exact Location</label>
+    <input type="text" name="exact_location" class="form-control" value="{{ old('exact_location', $customer?->exact_location) }}" placeholder="House no., street, barangay, city" required>
 </div>

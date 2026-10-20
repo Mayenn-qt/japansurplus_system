@@ -17,7 +17,7 @@ class CustomerController extends Controller
             $query->where(function ($customerQuery) use ($search) {
                 $customerQuery->where('name', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('exact_location', 'like', "%{$search}%");
             });
         }
 
@@ -36,9 +36,8 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:30',
-            'email' => 'nullable|email|max:255',
             'branch_id' => 'nullable|exists:branches,id',
-            'notes' => 'nullable|string|max:1000',
+            'exact_location' => 'required|string|max:1000',
         ]);
 
         Customer::create($validated);
@@ -51,9 +50,8 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:30',
-            'email' => 'nullable|email|max:255',
             'branch_id' => 'nullable|exists:branches,id',
-            'notes' => 'nullable|string|max:1000',
+            'exact_location' => 'required|string|max:1000',
         ]);
 
         $customer->update($validated);

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -43,6 +44,57 @@ class ReportsFunctionalTest extends TestCase
         $this->assertStringContainsString('Main Branch', $csv);
         $this->assertStringNotContainsString('Juban Branch', $csv);
         $this->assertStringNotContainsString($excludedSale->id . ',', $csv);
+    }
+
+    public function test_sales_report_chart_groups_revenue_by_month(): void
+    {
+        $owner = User::factory()->create(['role' => 'owner']);
+        $staff = User::factory()->create(['role' => 'staff']);
+        $branch = $this->makeBranch('Main Branch');
+        $this->makeSale($staff, $branch, 100, now()->setDate(2026, 1, 10));
+        $this->makeSale($staff, $branch, 200, now()->setDate(2026, 2, 12));
+
+        $this->actingAs($owner)
+            ->get(route('owner.reports.sales', [
+                'start_date' => '2026-01-01',
+                'end_date' => '2026-03-31',
+            ]))
+            ->assertOk()
+            ->assertViewHas('trendLabels', ['Jan 2026', 'Feb 2026', 'Mar 2026'])
+            ->assertViewHas('trendData', [100.0, 200.0, 0.0]);
+    }
+
+    public function test_sales_report_best_sellers_exclude_free_items(): void
+    {
+        $owner = User::factory()->create(['role' => 'owner']);
+        $staff = User::factory()->create(['role' => 'staff']);
+        $branch = $this->makeBranch('Main Branch');
+        $category = Category::forceCreate(['name' => 'Kitchen']);
+        $paidProduct = $this->makeProduct($category, 'Paid kettle');
+        $freeProduct = $this->makeProduct($category, 'Free kettle');
+        $sale = $this->makeSale($staff, $branch, 200, now());
+        SaleItem::create([
+            'sale_id' => $sale->id,
+            'product_id' => $paidProduct->id,
+            'quantity' => 2,
+            'price' => 100,
+            'total' => 200,
+        ]);
+        SaleItem::create([
+            'sale_id' => $sale->id,
+            'product_id' => $freeProduct->id,
+            'quantity' => 1,
+            'price' => 0,
+            'total' => 0,
+        ]);
+
+        $this->actingAs($owner)
+            ->get(route('owner.reports.sales'))
+            ->assertOk()
+            ->assertViewHas('bestSellingProducts', fn ($products) => $products->count() === 1
+                && $products->sole()->product_id === $paidProduct->id
+                && (int) $products->sole()->quantity_sold === 2
+                && (float) $products->sole()->revenue === 200.0);
     }
 
     public function test_inventory_report_filters_by_branch_category_and_stock_level(): void

@@ -24,6 +24,7 @@ class SalesController extends Controller
             ->sum('quantity');
         $bestSellingProducts = SaleItem::with('product')
             ->whereHas('sale', fn (Builder $query) => $this->applySalesFilters($query, $filters))
+            ->where('total', '>', 0)
             ->select('product_id')
             ->selectRaw('SUM(quantity) as quantity_sold, SUM(total) as revenue')
             ->groupBy('product_id')
@@ -31,7 +32,7 @@ class SalesController extends Controller
             ->take(10)
             ->get();
         $recentSales = (clone $sales)
-            ->with(['branch', 'user'])
+            ->with('branch')
             ->latest()
             ->paginate(10)
             ->withQueryString();
@@ -41,21 +42,25 @@ class SalesController extends Controller
             : Carbon::today();
         $trendStart = isset($filters['start_date'])
             ? Carbon::parse($filters['start_date'])
-            : $trendEnd->copy()->subDays(13);
-        if ($trendStart->diffInDays($trendEnd) > 29) {
-            $trendStart = $trendEnd->copy()->subDays(29);
-        }
+            : $trendEnd->copy()->subMonths(11)->startOfMonth();
+        $trendMonthStart = $trendStart->copy()->startOfMonth();
+        $trendMonthEnd = $trendEnd->copy()->startOfMonth();
+        $monthExpression = match (DB::connection()->getDriverName()) {
+            'sqlite' => "strftime('%Y-%m', created_at)",
+            'pgsql' => "TO_CHAR(created_at, 'YYYY-MM')",
+            default => "DATE_FORMAT(created_at, '%Y-%m')",
+        };
         $trendValues = (clone $sales)
             ->whereDate('created_at', '>=', $trendStart->toDateString())
             ->whereDate('created_at', '<=', $trendEnd->toDateString())
-            ->selectRaw('DATE(created_at) as sale_date, SUM(total_amount) as revenue')
-            ->groupBy('sale_date')
-            ->pluck('revenue', 'sale_date');
+            ->selectRaw("{$monthExpression} as sale_month, SUM(total_amount) as revenue")
+            ->groupByRaw($monthExpression)
+            ->pluck('revenue', 'sale_month');
         $trendLabels = [];
         $trendData = [];
-        for ($date = $trendStart->copy(); $date->lte($trendEnd); $date->addDay()) {
-            $key = $date->toDateString();
-            $trendLabels[] = $date->format('M j');
+        for ($date = $trendMonthStart; $date->lte($trendMonthEnd); $date->addMonth()) {
+            $key = $date->format('Y-m');
+            $trendLabels[] = $date->format('M Y');
             $trendData[] = (float) ($trendValues[$key] ?? 0);
         }
         $branches = Branch::orderBy('branch_name')->get();

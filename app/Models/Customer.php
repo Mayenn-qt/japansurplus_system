@@ -10,9 +10,8 @@ class Customer extends Model
     protected $fillable = [
         'name',
         'phone',
-        'email',
         'branch_id',
-        'notes',
+        'exact_location',
     ];
 
     public function branch(): BelongsTo
