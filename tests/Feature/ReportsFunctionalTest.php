@@ -64,6 +64,27 @@ class ReportsFunctionalTest extends TestCase
             ->assertViewHas('trendData', [100.0, 200.0, 0.0]);
     }
 
+    public function test_sales_report_chart_groups_revenue_by_week(): void
+    {
+        $owner = User::factory()->create(['role' => 'owner']);
+        $staff = User::factory()->create(['role' => 'staff']);
+        $branch = $this->makeBranch('Main Branch');
+        $this->makeSale($staff, $branch, 50, now()->setDate(2026, 1, 6));
+        $this->makeSale($staff, $branch, 70, now()->setDate(2026, 1, 12));
+        $this->makeSale($staff, $branch, 20, now()->setDate(2026, 1, 18));
+
+        $this->actingAs($owner)
+            ->get(route('owner.reports.sales', [
+                'start_date' => '2026-01-05',
+                'end_date' => '2026-01-18',
+                'trend_period' => 'weekly',
+            ]))
+            ->assertOk()
+            ->assertViewHas('trendPeriod', 'weekly')
+            ->assertViewHas('trendLabels', ['Jan 5 - Jan 11', 'Jan 12 - Jan 18'])
+            ->assertViewHas('trendData', [50.0, 90.0]);
+    }
+
     public function test_sales_report_best_sellers_exclude_free_items(): void
     {
         $owner = User::factory()->create(['role' => 'owner']);

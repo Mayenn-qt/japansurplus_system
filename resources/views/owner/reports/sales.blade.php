@@ -64,6 +64,7 @@
             <!-- 2. Filters Section -->
         <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
                 <form method="GET" action="{{ route('owner.reports.sales') }}" class="row g-3 align-items-end">
+                    <input type="hidden" name="trend_period" value="{{ $trendPeriod }}">
                     <div class="col-xl-4 col-md-5">
                         <label for="salesStartDate" class="form-label text-muted small fw-semibold">From</label>
                         <input id="salesStartDate" type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;">
@@ -90,11 +91,21 @@
             <!-- 3. Chart Section -->
             <div class="card border-0 shadow-sm rounded-3 p-4 mb-4 bg-white">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h6 class="fw-bold text-dark m-0">Monthly Sales Trend</h6>
-                    <span class="text-muted small">Monthly totals in the selected period</span>
+                    <div>
+                        <h6 class="fw-bold text-dark m-0">{{ ucfirst($trendPeriod) }} Sales Trend</h6>
+                        <span class="text-muted small">{{ ucfirst($trendPeriod) }} totals in the selected period</span>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Sales trend interval">
+                        <a href="{{ route('owner.reports.sales', array_merge(request()->except('page'), ['trend_period' => 'monthly'])) }}"
+                           class="btn {{ $trendPeriod === 'monthly' ? 'btn-dark' : 'btn-outline-secondary' }}"
+                           aria-pressed="{{ $trendPeriod === 'monthly' ? 'true' : 'false' }}">Monthly</a>
+                        <a href="{{ route('owner.reports.sales', array_merge(request()->except('page'), ['trend_period' => 'weekly'])) }}"
+                           class="btn {{ $trendPeriod === 'weekly' ? 'btn-dark' : 'btn-outline-secondary' }}"
+                           aria-pressed="{{ $trendPeriod === 'weekly' ? 'true' : 'false' }}">Weekly</a>
+                    </div>
                 </div>
                 @php($maxTrendValue = max($trendData ?: [0]))
-                <div class="report-chart" role="img" aria-label="Monthly sales trend bar chart">
+                <div class="report-chart" role="img" aria-label="{{ ucfirst($trendPeriod) }} sales trend bar chart">
                     @foreach($trendData as $index => $value)
                         <div class="report-chart-column" title="{{ $trendLabels[$index] }}: ₱{{ number_format($value, 2) }}">
                             <span class="report-chart-value">{{ $value > 0 ? number_format($value, 0) : '' }}</span>

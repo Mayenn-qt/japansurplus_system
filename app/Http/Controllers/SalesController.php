@@ -37,37 +37,67 @@ class SalesController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $trendPeriod = $request->query('trend_period') === 'weekly' ? 'weekly' : 'monthly';
         $trendEnd = isset($filters['end_date'])
             ? Carbon::parse($filters['end_date'])
             : Carbon::today();
         $trendStart = isset($filters['start_date'])
             ? Carbon::parse($filters['start_date'])
-            : $trendEnd->copy()->subMonths(11)->startOfMonth();
-        $trendMonthStart = $trendStart->copy()->startOfMonth();
-        $trendMonthEnd = $trendEnd->copy()->startOfMonth();
-        $monthExpression = match (DB::connection()->getDriverName()) {
-            'sqlite' => "strftime('%Y-%m', created_at)",
-            'pgsql' => "TO_CHAR(created_at, 'YYYY-MM')",
-            default => "DATE_FORMAT(created_at, '%Y-%m')",
-        };
-        $trendValues = (clone $sales)
-            ->whereDate('created_at', '>=', $trendStart->toDateString())
-            ->whereDate('created_at', '<=', $trendEnd->toDateString())
-            ->selectRaw("{$monthExpression} as sale_month, SUM(total_amount) as revenue")
-            ->groupByRaw($monthExpression)
-            ->pluck('revenue', 'sale_month');
+            : ($trendPeriod === 'weekly'
+                ? $trendEnd->copy()->subWeeks(11)->startOfWeek(Carbon::MONDAY)
+                : $trendEnd->copy()->subMonths(11)->startOfMonth());
         $trendLabels = [];
         $trendData = [];
-        for ($date = $trendMonthStart; $date->lte($trendMonthEnd); $date->addMonth()) {
-            $key = $date->format('Y-m');
-            $trendLabels[] = $date->format('M Y');
-            $trendData[] = (float) ($trendValues[$key] ?? 0);
+
+        if ($trendPeriod === 'weekly') {
+            $dailyValues = (clone $sales)
+                ->whereDate('created_at', '>=', $trendStart->toDateString())
+                ->whereDate('created_at', '<=', $trendEnd->toDateString())
+                ->selectRaw('DATE(created_at) as sale_date, SUM(total_amount) as revenue')
+                ->groupBy('sale_date')
+                ->pluck('revenue', 'sale_date');
+            $weekStart = $trendStart->copy()->startOfWeek(Carbon::MONDAY);
+            $lastWeekStart = $trendEnd->copy()->startOfWeek(Carbon::MONDAY);
+
+            for ($week = $weekStart; $week->lte($lastWeekStart); $week->addWeek()) {
+                $bucketStart = $week->lt($trendStart) ? $trendStart->copy() : $week->copy();
+                $bucketEnd = $week->copy()->endOfWeek(Carbon::SUNDAY);
+                if ($bucketEnd->gt($trendEnd)) {
+                    $bucketEnd = $trendEnd->copy();
+                }
+
+                $revenue = 0;
+                for ($date = $bucketStart->copy(); $date->lte($bucketEnd); $date->addDay()) {
+                    $revenue += (float) ($dailyValues[$date->toDateString()] ?? 0);
+                }
+
+                $trendLabels[] = $bucketStart->format('M j') . ' - ' . $bucketEnd->format('M j');
+                $trendData[] = $revenue;
+            }
+        } else {
+            $monthExpression = match (DB::connection()->getDriverName()) {
+                'sqlite' => "strftime('%Y-%m', created_at)",
+                'pgsql' => "TO_CHAR(created_at, 'YYYY-MM')",
+                default => "DATE_FORMAT(created_at, '%Y-%m')",
+            };
+            $trendValues = (clone $sales)
+                ->whereDate('created_at', '>=', $trendStart->toDateString())
+                ->whereDate('created_at', '<=', $trendEnd->toDateString())
+                ->selectRaw("{$monthExpression} as sale_month, SUM(total_amount) as revenue")
+                ->groupByRaw($monthExpression)
+                ->pluck('revenue', 'sale_month');
+
+            for ($date = $trendStart->copy()->startOfMonth(); $date->lte($trendEnd); $date->addMonth()) {
+                $key = $date->format('Y-m');
+                $trendLabels[] = $date->format('M Y');
+                $trendData[] = (float) ($trendValues[$key] ?? 0);
+            }
         }
         $branches = Branch::orderBy('branch_name')->get();
 
         return view('owner.reports.sales', compact(
             'totalSales', 'transactionCount', 'unitsSold', 'bestSellingProducts',
-            'recentSales', 'branches', 'filters', 'trendLabels', 'trendData'
+            'recentSales', 'branches', 'filters', 'trendPeriod', 'trendLabels', 'trendData'
         ));
     }
 
