@@ -37,4 +37,4 @@ RUN php artisan config:clear
 # Render provides the PORT environment variable
 EXPOSE 10000
 
-CMD php artisan migrate --force --database=pgsql && php artisan db:seed --force --database=pgsql && php artisan config:clear && php artisan cache:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+CMD php artisan migrate --force --database=pgsql && php artisan config:clear && php artisan cache:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
