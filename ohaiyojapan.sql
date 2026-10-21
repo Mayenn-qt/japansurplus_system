@@ -14,15 +14,56 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table ohaiyo_japan_erp.branches
+CREATE TABLE IF NOT EXISTS `branches` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `branch_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `manager_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.branches: ~3 rows (approximately)
 INSERT INTO `branches` (`id`, `branch_name`, `address`, `phone`, `email`, `manager_name`, `created_at`, `updated_at`) VALUES
 	(1, 'Main Branch', 'Pangpang', NULL, 'main@ohaiyojapan.com', NULL, '2026-09-01 18:46:10', '2026-09-01 18:46:10'),
 	(2, 'Juban Branch', 'Juban', NULL, 'juban@ohaiyojapan.com', NULL, '2026-09-01 18:46:10', '2026-09-01 18:46:10'),
 	(3, 'Masbate Branch', 'Masbate', NULL, 'masbate@ohaiyojapan.com', NULL, '2026-09-01 18:46:10', '2026-09-01 18:46:10');
 
+-- Dumping structure for table ohaiyo_japan_erp.cache
+CREATE TABLE IF NOT EXISTS `cache` (
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` bigint NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.cache: ~0 rows (approximately)
 
+-- Dumping structure for table ohaiyo_japan_erp.cache_locks
+CREATE TABLE IF NOT EXISTS `cache_locks` (
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` bigint NOT NULL,
+  PRIMARY KEY (`key`),
+  KEY `cache_locks_expiration_index` (`expiration`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.cache_locks: ~0 rows (approximately)
+
+-- Dumping structure for table ohaiyo_japan_erp.categories
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.categories: ~8 rows (approximately)
 INSERT INTO `categories` (`id`, `name`, `description`, `created_at`, `updated_at`) VALUES
@@ -35,13 +76,59 @@ INSERT INTO `categories` (`id`, `name`, `description`, `created_at`, `updated_at
 	(7, 'Sports and Outdoors', NULL, '2026-09-26 21:15:41', '2026-09-26 21:15:41'),
 	(8, 'Musical Instrument', NULL, '2026-09-26 21:15:41', '2026-09-26 21:15:41');
 
+-- Dumping structure for table ohaiyo_japan_erp.customers
+CREATE TABLE IF NOT EXISTS `customers` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `branch_id` bigint unsigned DEFAULT NULL,
+  `exact_location` text COLLATE utf8mb4_unicode_ci,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customers_branch_id_foreign` (`branch_id`),
+  KEY `customers_phone_index` (`phone`),
+  CONSTRAINT `customers_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.customers: ~3 rows (approximately)
 INSERT INTO `customers` (`id`, `name`, `phone`, `email`, `branch_id`, `exact_location`, `notes`, `created_at`, `updated_at`) VALUES
 	(7, 'Marianne', '09123456789', NULL, 1, 'Brgy. Sirangan, Sorsogon City', NULL, '2026-10-19 19:39:08', '2026-10-19 19:39:08'),
 	(8, 'John Juan', '09987654321', NULL, 2, 'Brgy. Catanusan, Juban, Sorsogon', NULL, '2026-10-19 19:39:59', '2026-10-19 19:39:59'),
 	(9, 'Gennie Rose', '09098763564', NULL, 3, 'Brgy. Nursery, Masbate City', NULL, '2026-10-19 19:40:30', '2026-10-19 19:40:30');
 
+-- Dumping structure for table ohaiyo_japan_erp.failed_jobs
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`),
+  KEY `failed_jobs_connection_queue_failed_at_index` (`connection`,`queue`,`failed_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.failed_jobs: ~0 rows (approximately)
+
+-- Dumping structure for table ohaiyo_japan_erp.inventories
+CREATE TABLE IF NOT EXISTS `inventories` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `branch_id` bigint unsigned NOT NULL,
+  `product_id` bigint unsigned NOT NULL,
+  `current_stock` int unsigned NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `inventories_branch_id_foreign` (`branch_id`),
+  KEY `inventories_product_id_foreign` (`product_id`),
+  CONSTRAINT `inventories_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `inventories_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.inventories: ~51 rows (approximately)
 INSERT INTO `inventories` (`id`, `branch_id`, `product_id`, `current_stock`, `created_at`, `updated_at`) VALUES
@@ -97,9 +184,45 @@ INSERT INTO `inventories` (`id`, `branch_id`, `product_id`, `current_stock`, `cr
 	(134, 2, 45, 4, '2026-09-26 21:18:40', '2026-09-28 17:12:30'),
 	(135, 3, 45, 7, '2026-09-26 21:18:40', '2026-09-26 22:04:48');
 
+-- Dumping structure for table ohaiyo_japan_erp.jobs
+CREATE TABLE IF NOT EXISTS `jobs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` smallint unsigned NOT NULL,
+  `reserved_at` int unsigned DEFAULT NULL,
+  `available_at` int unsigned NOT NULL,
+  `created_at` int unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.jobs: ~0 rows (approximately)
 
+-- Dumping structure for table ohaiyo_japan_erp.job_batches
+CREATE TABLE IF NOT EXISTS `job_batches` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_jobs` int NOT NULL,
+  `pending_jobs` int NOT NULL,
+  `failed_jobs` int NOT NULL,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `cancelled_at` int DEFAULT NULL,
+  `created_at` int NOT NULL,
+  `finished_at` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.job_batches: ~0 rows (approximately)
+
+-- Dumping structure for table ohaiyo_japan_erp.migrations
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.migrations: ~24 rows (approximately)
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -128,7 +251,36 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(24, '2026_09_27_000000_restore_inventory_current_stock', 12),
 	(25, '2026_10_20_000000_add_exact_location_to_customers_table', 13);
 
+-- Dumping structure for table ohaiyo_japan_erp.password_reset_tokens
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.password_reset_tokens: ~0 rows (approximately)
+
+-- Dumping structure for table ohaiyo_japan_erp.products
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `supplier_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `sale_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `condition` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remarks` text COLLATE utf8mb4_unicode_ci,
+  `date_last_sold` timestamp NULL DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reorder_level` int NOT NULL DEFAULT '5',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `products_sku_unique` (`sku`)
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.products: ~17 rows (approximately)
 INSERT INTO `products` (`id`, `name`, `sku`, `category_id`, `price`, `supplier_price`, `sale_price`, `condition`, `location`, `remarks`, `date_last_sold`, `image`, `reorder_level`, `created_at`, `updated_at`) VALUES
@@ -149,6 +301,18 @@ INSERT INTO `products` (`id`, `name`, `sku`, `category_id`, `price`, `supplier_p
 	(43, '3-Door Wardrobe Cabinet', 'PRD-NJBFDZDIGM', '1', 20000.00, 13000.00, 20000.00, 'Good', 'Showroom - Furniture Section', 'heavy-duty build, dark wood finish', '2026-09-29 16:09:04', 'ee055ce2-858d-4b11-ad3c-3532f332c5c0.jpg', 5, '2026-09-26 21:09:21', '2026-09-29 16:09:04'),
 	(44, 'Victor Upright Piano - Black Gloss', 'PRD-FHXFEMNFYQ', '8', 60000.00, 35000.00, 60000.00, 'Good', NULL, 'full 88-key keyboard with brass pedals', NULL, '6766f36b-36e2-48fd-b195-49f21497a569.jpg', 5, '2026-09-26 21:12:12', '2026-09-26 21:16:30'),
 	(45, 'Bicycle', 'PRD-AKOOH3WVNA', '7', 7000.00, 3500.00, 7000.00, 'Good', NULL, 'durable frame, equipped with fenders/basket', '2026-09-28 17:12:30', '4672a103-4801-427a-aebf-ad95445686d1.jpg', 5, '2026-09-26 21:18:40', '2026-09-28 17:12:30');
+
+-- Dumping structure for table ohaiyo_japan_erp.product_images
+CREATE TABLE IF NOT EXISTS `product_images` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` bigint unsigned NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_images_product_id_foreign` (`product_id`),
+  CONSTRAINT `product_images_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.product_images: ~23 rows (approximately)
 INSERT INTO `product_images` (`id`, `product_id`, `image`, `created_at`, `updated_at`) VALUES
@@ -176,6 +340,25 @@ INSERT INTO `product_images` (`id`, `product_id`, `image`, `created_at`, `update
 	(60, 42, '4a32d460-1a30-46be-980c-a3a93dd13f47.jpg', '2026-09-26 21:06:05', '2026-09-26 21:06:05'),
 	(61, 42, '7f92131a-cd2b-43a2-a938-7782179e6b51.jpg', '2026-09-26 21:06:05', '2026-09-26 21:06:05');
 
+-- Dumping structure for table ohaiyo_japan_erp.sales
+CREATE TABLE IF NOT EXISTS `sales` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `branch_id` bigint unsigned DEFAULT NULL,
+  `order_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'walk-in',
+  `subtotal` decimal(10,2) NOT NULL,
+  `discount` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `total_amount` decimal(10,2) NOT NULL,
+  `money_received` decimal(10,2) NOT NULL,
+  `change` decimal(10,2) NOT NULL,
+  `is_suki` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sales_user_id_foreign` (`user_id`),
+  CONSTRAINT `sales_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.sales: ~8 rows (approximately)
 INSERT INTO `sales` (`id`, `user_id`, `branch_id`, `order_type`, `subtotal`, `discount`, `total_amount`, `money_received`, `change`, `is_suki`, `created_at`, `updated_at`) VALUES
 	(14, 2, 1, 'walk-in', 1000.00, 0.00, 1000.00, 1000.00, 0.00, 0, '2026-09-26 21:43:25', '2026-09-26 21:43:25'),
@@ -186,6 +369,23 @@ INSERT INTO `sales` (`id`, `user_id`, `branch_id`, `order_type`, `subtotal`, `di
 	(19, 3, 2, 'walk-in', 4900.00, 500.00, 4400.00, 4500.00, 100.00, 0, '2026-10-07 18:28:51', '2026-10-07 18:28:51'),
 	(20, 4, 3, 'walk-in', 8000.00, 0.00, 8000.00, 8000.00, 0.00, 0, '2026-10-07 18:29:43', '2026-10-07 18:29:43'),
 	(21, 2, 1, 'walk-in', 5000.00, 0.00, 5000.00, 5000.00, 0.00, 0, '2026-10-19 22:21:47', '2026-10-19 22:21:47');
+
+-- Dumping structure for table ohaiyo_japan_erp.sale_items
+CREATE TABLE IF NOT EXISTS `sale_items` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `sale_id` bigint unsigned NOT NULL,
+  `product_id` bigint unsigned NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sale_items_sale_id_foreign` (`sale_id`),
+  KEY `sale_items_product_id_foreign` (`product_id`),
+  CONSTRAINT `sale_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `sale_items_sale_id_foreign` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.sale_items: ~17 rows (approximately)
 INSERT INTO `sale_items` (`id`, `sale_id`, `product_id`, `quantity`, `price`, `total`, `created_at`, `updated_at`) VALUES
@@ -207,12 +407,52 @@ INSERT INTO `sale_items` (`id`, `sale_id`, `product_id`, `quantity`, `price`, `t
 	(38, 20, 37, 5, 0.00, 0.00, '2026-10-07 18:29:43', '2026-10-07 18:29:43'),
 	(39, 21, 39, 1, 5000.00, 5000.00, '2026-10-19 22:21:47', '2026-10-19 22:21:47');
 
--- Dumping data for table ohaiyo_japan_erp.sessions: ~2 rows (approximately)
+-- Dumping structure for table ohaiyo_japan_erp.sessions
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sessions_user_id_index` (`user_id`),
+  KEY `sessions_last_activity_index` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table ohaiyo_japan_erp.sessions: ~3 rows (approximately)
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('9mUgmf71S1YUT42YMcyGPvq0avaf3jVxMRc5Xlib', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJQT1p4Vmw4Z3BLenhZekw2cnJIT2NYS1l5bW9ReWRJTmIzSkx5WFpyIiwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjEsIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9vd25lclwvcmVwb3J0c1wvc2FsZXM/dHJlbmRfcGVyaW9kPXdlZWtseSIsInJvdXRlIjoib3duZXIucmVwb3J0cy5zYWxlcyJ9fQ==', 1792479341),
+	('9mUgmf71S1YUT42YMcyGPvq0avaf3jVxMRc5Xlib', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJQT1p4Vmw4Z3BLenhZekw2cnJIT2NYS1l5bW9ReWRJTmIzSkx5WFpyIiwibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiOjEsIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9vd25lclwvZGFzaGJvYXJkIiwicm91dGUiOiJvd25lci5kYXNoYm9hcmQifX0=', 1792484856),
+	('BjqTUMduSDvd9tDZWgDrG71o2XmBdnb4k2DAG5w5', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJ1NFh6TDIwWlZlTG5HdGRYeWF3ZTRxTWFNWjQ3UFdTbUp1VWs1SzU3IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cLzEyNy4wLjAuMTo4MDAwXC9vd25lclwvZGFzaGJvYXJkIiwicm91dGUiOiJvd25lci5kYXNoYm9hcmQifSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MX0=', 1792543469),
 	('S58KqlyTgk5xrmyH1UsAQK6RWSnMN2RRLmMTCun6', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJCU09GWnFaY3RGRWs5UzVYUjU5QndGQXFHMEJRMExNQmtnQjZldDN0IiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvMTI3LjAuMC4xOjgwMDBcL2xvZ2luIiwicm91dGUiOiJsb2dpbiJ9LCJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MX0=', 1792479216);
 
+-- Dumping structure for table ohaiyo_japan_erp.sms_logs
+CREATE TABLE IF NOT EXISTS `sms_logs` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Dumping data for table ohaiyo_japan_erp.sms_logs: ~0 rows (approximately)
+
+-- Dumping structure for table ohaiyo_japan_erp.users
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('owner','staff') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'staff',
+  `branch_id` bigint unsigned DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_branch_id_foreign` (`branch_id`),
+  CONSTRAINT `users_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table ohaiyo_japan_erp.users: ~4 rows (approximately)
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `branch_id`, `remember_token`, `created_at`, `updated_at`) VALUES
