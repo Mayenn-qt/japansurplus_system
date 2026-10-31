@@ -1,17 +1,11 @@
 <div class="app-topbar" style="position: fixed; top: 0; left: 250px; right: 0; height: 70px; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; z-index: 9999; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.01);">
     
-    <!-- Left: Hamburger Button (Mobile) & Sleek Search Bar -->
+    <!-- Left: Hamburger Button (Mobile) -->
     <div style="display: flex; align-items: center; gap: 12px;">
         <!-- Hamburger Toggle Button (Lilitaw lang sa Mobile/Tablet) -->
         <button class="btn btn-light border d-lg-none p-2" id="sidebarToggle" type="button" style="border-radius: 8px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background-color: #f8fafc; border-color: #e2e8f0 !important;">
             <i class="fa-solid fa-bars text-dark" style="font-size: 14px;"></i>
         </button>
-
-        <!-- Search Bar -->
-        <form method="GET" action="{{ route('staff.pos') }}" class="d-none d-md-flex align-items-center" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 7px 14px; width: 280px; transition: all 0.2s ease;">
-            <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; font-size: 13px; margin-right: 10px;"></i>
-            <input type="search" name="search" value="{{ request('search') }}" placeholder="Search products, transactions..." aria-label="Search products" style="background: transparent; border: none; color: #0f172a; outline: none; width: 100%; font-size: 13px;">
-        </form>
     </div>
 
     <!-- Right: Branch Info, Utility Actions & Profile Dropdown -->
@@ -46,9 +40,6 @@
 
         <!-- Quick Action Icons (Notifications) -->
         <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
-                <i class="fa-solid fa-moon" aria-hidden="true"></i>
-            </button>
             <a href="{{ route('staff.inventory.out-of-stock') }}" class="btn btn-light border-0 position-relative p-2" title="Stock Alerts" aria-label="Stock Alerts" style="background-color: #f8fafc; border-radius: 8px; color: #475569; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                 <i class="fa-solid fa-bell" style="font-size: 13px;"></i>
                 <span class="position-absolute top-25 start-75 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 7px; height: 7px;"></span>
