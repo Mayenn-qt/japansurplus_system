@@ -250,7 +250,6 @@ class ProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku,' . $product->id,
             'category_id' => 'required|exists:categories,id',
             'supplier_price' => 'required|numeric|min:0',
             'sale_price' => 'required|numeric|min:0',
@@ -290,7 +289,6 @@ class ProductController extends Controller
             // Product details lang ang iu-update
             $product->update([
                 'name' => $request->name,
-                'sku' => $request->sku,
                 'category_id' => $request->category_id,
                 'price' => $request->sale_price,
                 'supplier_price' => $request->supplier_price,

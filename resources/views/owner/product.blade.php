@@ -248,8 +248,8 @@
                                                         <input type="text" name="name" value="{{ $product->name }}" class="form-control bg-light border-0 py-2" required style="border-radius: 10px;">
                                                     </div>
                                                     <div class="col-md-6 mb-3">
-                                                        <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">SKU</label>
-                                                        <input type="text" name="sku" value="{{ $product->sku }}" class="form-control bg-light border-0 py-2" required style="border-radius: 10px;">
+                                                        <label class="form-label fw-semibold text-secondary" style="font-size: 13px;">Item Location</label>
+                                                        <input type="text" name="location" value="{{ $product->location }}" class="form-control bg-light border-0 py-2" placeholder="e.g. Cabinet 3 - Shelf 2" style="border-radius: 10px;">
                                                     </div>
                                                 </div>
                                                 <div class="row">
