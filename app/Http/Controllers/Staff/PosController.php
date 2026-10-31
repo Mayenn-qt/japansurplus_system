@@ -12,6 +12,10 @@ class PosController extends Controller
 {
     public function index(Request $request)
     {
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+        ]);
         $user = Auth::user();
         
         // Kunin ang branch_id ng naka-login na staff
@@ -23,18 +27,21 @@ class PosController extends Controller
             }
         }]);
 
-        // Search filter para sa pangalan o SKU ng produkto
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('sku', 'like', "%{$search}%");
-            });
+        // Search by product name, SKU, or location.
+        if (!empty($filters['search'])) {
+            $search = trim($filters['search']);
+            if ($search !== '') {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('sku', 'like', "%{$search}%")
+                      ->orWhere('location', 'like', "%{$search}%");
+                });
+            }
         }
 
         // Category filter galing sa database
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+        if (!empty($filters['category_id'])) {
+            $query->where('category_id', $filters['category_id']);
         }
 
         // Gamitin ang subquery o branch filter direkta sa inventories para sigurado

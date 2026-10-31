@@ -31,19 +31,19 @@
 
                     <div class="pos-search mb-3">
                         <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search item name or SKU..." aria-label="Search item name or SKU" onchange="this.form.submit()">
+                        <input type="search" name="search" value="{{ request('search') }}" placeholder="Search..." aria-label="Search name, SKU, or location" autocomplete="off">
                     </div>
 
                     
                     <div class="pos-categories" aria-label="Filter by category">
                         <input type="hidden" name="category_id" id="categoryIdInput" value="{{ request('category_id') }}">
 
-                        <button type="button" onclick="filterCategory('')" class="pos-category {{ request('category_id') == '' ? 'active' : '' }}">
+                        <button type="button" data-category-id="" class="pos-category {{ request('category_id') == '' ? 'active' : '' }}" aria-pressed="{{ request('category_id') == '' ? 'true' : 'false' }}">
                             All stock
                         </button>
 
                         @foreach($categories as $cat)
-                            <button type="button" onclick="filterCategory('{{ $cat->id }}')" class="pos-category {{ request('category_id') == $cat->id ? 'active' : '' }}">
+                            <button type="button" data-category-id="{{ $cat->id }}" class="pos-category {{ request('category_id') == $cat->id ? 'active' : '' }}" aria-pressed="{{ request('category_id') == $cat->id ? 'true' : 'false' }}">
                                 {{ $cat->name }}
                             </button>
                         @endforeach
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="pos-product-body">
                                     <h3 class="pos-product-name" title="{{ $product->name }}">{{ $product->name }}</h3>
-                                    <span class="pos-product-sku">{{ $product->sku }}</span>
+                                    <span class="pos-product-location">{{ $product->location ?? 'Not specified' }}</span>
                                     <div class="pos-product-footer">
                                         <span class="pos-price">₱{{ number_format($product->price, 2) }}</span>
                                         <div class="pos-product-actions">

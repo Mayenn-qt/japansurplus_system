@@ -15,6 +15,10 @@ class StaffSalesController extends Controller
 {
     public function sales(Request $request)
     {
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+        ]);
         $user = Auth::user();
         
         // Kunin ang branch_id ng naka-login na staff
@@ -27,17 +31,20 @@ class StaffSalesController extends Controller
         }]);
 
         // Search filter
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('sku', 'like', "%{$search}%");
-            });
+        if (!empty($filters['search'])) {
+            $search = trim($filters['search']);
+            if ($search !== '') {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('sku', 'like', "%{$search}%")
+                      ->orWhere('location', 'like', "%{$search}%");
+                });
+            }
         }
 
         // Category filter
-        if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+        if (!empty($filters['category_id'])) {
+            $query->where('category_id', $filters['category_id']);
         }
 
         $products = $query->orderBy('sku', 'asc')->paginate(12)->appends($request->query());

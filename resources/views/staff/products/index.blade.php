@@ -62,7 +62,7 @@
                         <tr>
                             <th class="py-3 px-4">Image</th>
                             <th class="py-3">Product</th>
-                            <th class="py-3">Category</th>
+                            <th class="py-3">Location</th>
                             <th class="py-3">Price</th>
                             <th class="py-3 text-center">Stock</th>
                             <th class="py-3 text-end px-4">Action</th>
@@ -86,9 +86,9 @@
                                 </td>
                                 <td class="py-3">
                                     <span class="fw-bold d-block" style="color: #2c2925;">{{ $product->name }}</span>
-                                    <span class="small" style="color: #8c857b;">{{ $product->sku }}</span>
+                                    <span class="small" style="color: #8c857b;">{{ $product->category?->name ?? 'Uncategorized' }}</span>
                                 </td>
-                                <td class="py-3" style="color: #8c857b;">{{ $product->category->name ?? 'Uncategorized' }}</td>
+                                <td class="py-3" style="color: #8c857b;">{{ $product->location ?? 'Not specified' }}</td>
                                 <td class="py-3 fw-semibold" style="color: #e2062c;">₱{{ number_format($product->price, 2) }}</td>
                                 <td class="py-3 text-center">
                                     <span class="badge bg-light text-dark border px-2.5 py-1">{{ $currentStock }} units</span>
@@ -136,7 +136,7 @@
                         <!-- Details -->
                         <div class="mb-2">
                             <h6 class="fw-bold mb-1 text-truncate" style="font-size: 12px; color: #2c2925;">{{ $product->name }}</h6>
-                            <span class="d-block text-truncate" style="font-size: 10px; color: #8c857b;">SKU: {{ $product->sku }}</span>
+                            <span class="d-block text-truncate" style="font-size: 10px; color: #8c857b;">{{ $product->category?->name ?? 'Uncategorized' }}</span>
                         </div>
 
                         <!-- Price & Button -->

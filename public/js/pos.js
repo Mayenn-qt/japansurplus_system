@@ -8,6 +8,25 @@ let cart = (JSON.parse(sessionStorage.getItem('pos_cart')) || []).map(item => {
     };
 });
 
+const posFilterForm = document.getElementById('posFilterForm');
+const posSearchInput = posFilterForm?.querySelector('input[name="search"]');
+let posSearchTimeout;
+
+posSearchInput?.addEventListener('input', function () {
+    window.clearTimeout(posSearchTimeout);
+    posSearchTimeout = window.setTimeout(() => posFilterForm.requestSubmit(), 350);
+});
+
+posFilterForm?.querySelectorAll('[data-category-id]').forEach(button => {
+    button.addEventListener('click', function () {
+        const categoryInput = posFilterForm.querySelector('input[name="category_id"]');
+        if (!categoryInput) return;
+
+        categoryInput.value = this.dataset.categoryId ?? '';
+        posFilterForm.requestSubmit();
+    });
+});
+
 function addCartItem(id, name, price, stock, isFree) {
     stock = Number(stock) || 0;
     if (stock <= 0) return;
