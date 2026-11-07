@@ -30,57 +30,56 @@
                 </div>
             </div>
 
-            <!-- 1. Branch Summary Cards -->
-            <div class="row g-3 mb-4">
-                <div class="col-xl-4 col-md-4">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Top Performing Branch</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $topBranch?->branch_name ?? 'No sales yet' }}</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-arrow-up"></i> ₱{{ number_format($topBranch?->sales_sum_total_amount ?? 0, 2) }} total sales</span>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-4">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Active Branches</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $branches->where('sales_count', '>', 0)->count() }} Branches</h3>
-                        <span class="text-muted small mt-1">With sales in the selected period</span>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-4">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Revenue in period</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($branches->sum('sales_sum_total_amount'), 2) }}</h3>
-                        <span class="text-info small mt-1"><i class="fa-solid fa-chart-line"></i> Across all locations</span>
-                    </div>
-                </div>
-            </div>
+           <!-- 1. Branch Summary Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-4 col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Top Performing Branch</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $topBranch?->branch_name ?? 'No sales yet' }}</h3>
+            <span class="small mt-1" style="color: #172B4D;"><i class="fa-solid fa-arrow-up"></i> ₱{{ number_format($topBranch?->sales_sum_total_amount ?? 0, 2) }} total sales</span>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #B91C32 !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Active Branches</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $branches->where('sales_count', '>', 0)->count() }} Branches</h3>
+            <span class="text-muted small mt-1">With sales in the selected period</span>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Revenue in period</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($branches->sum('sales_sum_total_amount'), 2) }}</h3>
+            <span class="small mt-1" style="color: #B91C32;"><i class="fa-solid fa-chart-line"></i> Across all locations</span>
+        </div>
+    </div>
+</div>
 
-            <!-- 2. Simplified Filters Section -->
-            <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
-                <form method="GET" action="{{ route('owner.reports.branchreport') }}" class="row g-3 align-items-end">
-                    <div class="col-xl-3 col-md-4">
-                        <label for="branchStartDate" class="form-label text-muted small fw-semibold">From</label>
-                        <input id="branchStartDate" type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-xl-3 col-md-4">
-                        <label for="branchEndDate" class="form-label text-muted small fw-semibold">To</label>
-                        <input id="branchEndDate" type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;">
-                    </div>
-                    <div class="col-xl-3 col-md-3">
-                        <label for="branchFilter" class="form-label text-muted small fw-semibold">Branch</label>
-                        <select id="branchFilter" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option value="">All branches</option>
-                            @foreach($allBranches as $branch)
-                                <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-xl-3 col-md-1 d-flex gap-2">
-                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
-                        <a href="{{ route('owner.reports.branchreport') }}" class="btn btn-outline-secondary btn-sm" title="Clear filters" aria-label="Clear filters"><i class="fa-solid fa-rotate-left"></i></a>
-                    </div>
-                </form>
-            </div>
+           <!-- 2. Simplified Filters Section -->
+<div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
+    <form method="GET" action="{{ route('owner.reports.branchreport') }}" class="row g-3 align-items-end" id="branchReportForm">
+        <div class="col-xl-4 col-md-4">
+            <label for="branchStartDate" class="form-label text-muted small fw-semibold">From</label>
+            <input id="branchStartDate" type="date" name="start_date" value="{{ $filters['start_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+        </div>
+        <div class="col-xl-4 col-md-4">
+            <label for="branchEndDate" class="form-label text-muted small fw-semibold">To</label>
+            <input id="branchEndDate" type="date" name="end_date" value="{{ $filters['end_date'] ?? '' }}" max="{{ now()->toDateString() }}" class="form-control form-control-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <label for="branchFilter" class="form-label text-muted small fw-semibold">Branch</label>
+            <select id="branchFilter" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+                <option value="">All branches</option>
+                @foreach($allBranches as $branch)
+                    <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xl-1 col-md-1 d-flex">
+            <a href="{{ route('owner.reports.branchreport') }}" class="btn btn-outline-secondary btn-sm w-100 py-1.5" style="border-radius: 8px; display: flex; align-items-center; justify-content: center;" title="Reset filters" aria-label="Reset filters"><i class="fa-solid fa-rotate-left"></i></a>
+        </div>
+    </form>
+</div>
 
             <!-- 3. Branch Performance Table Section -->
             <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">

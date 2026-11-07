@@ -31,72 +31,77 @@
             </div>
 
             <!-- 1. Inventory Summary Cards -->
-            <div class="row g-3 mb-4">
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Total Products</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalProducts ?? 0 }}</h3>
-                        <span class="text-muted small mt-1">Across all categories</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Units in Stock</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $inStockItems ?? 0 }}</h3>
-                        <span class="text-success small mt-1"><i class="fa-solid fa-check"></i> Ready for sale</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Inventory Records</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalInventoryRecords ?? 0 }}</h3>
-                        <span class="text-muted small mt-1"><i class="fa-solid fa-box"></i> Unique items by branch</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-danger h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Products with Zero Stock</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ $outOfStockItems ?? 0 }}</h3>
-                        <span class="text-danger small mt-1"><i class="fa-solid fa-ban"></i> No units remaining</span>
-                    </div>
-                </div>
-            </div>
-
+           <div class="row g-3 mb-4">
+    <!-- Total Products -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Total Products</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalProducts ?? 0 }}</h3>
+            <span class="text-muted small mt-1">Across all categories</span>
+        </div>
+    </div>
+    
+    <!-- Units in Stock -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #B91C32 !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Units in Stock</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $inStockItems ?? 0 }}</h3>
+            <span class="small mt-1" style="color: #B91C32;"><i class="fa-solid fa-check"></i> Ready for sale</span>
+        </div>
+    </div>
+    
+    <!-- Inventory Records -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Inventory Records</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $totalInventoryRecords ?? 0 }}</h3>
+            <span class="text-muted small mt-1"><i class="fa-solid fa-box"></i> Unique items by branch</span>
+        </div>
+    </div>
+    
+    <!-- Products with Zero Stock -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #B91C32 !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Products with Zero Stock</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ $outOfStockItems ?? 0 }}</h3>
+            <span class="small mt-1" style="color: #B91C32;"><i class="fa-solid fa-ban"></i> No units remaining</span>
+        </div>
+    </div>
+</div>
             <!-- 2. Simplified Filters Section -->
             <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">
-                <form method="GET" action="{{ route('owner.reports.inventory') }}" class="row g-3 align-items-end">
-                    <div class="col-xl-3 col-md-4">
-                        <label for="inventoryCategory" class="form-label text-muted small fw-semibold">Category</label>
-                        <select id="inventoryCategory" name="category_id" class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option value="">All categories</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" @selected((string) ($filters['category_id'] ?? '') === (string) $category->id)>{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-xl-3 col-md-4">
-                        <label for="inventoryBranch" class="form-label text-muted small fw-semibold">Branch</label>
-                        <select id="inventoryBranch" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option value="">All branches</option>
-                            @foreach($branches as $branch)
-                                <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-xl-3 col-md-3">
-                        <label for="inventoryStockLevel" class="form-label text-muted small fw-semibold">Stock status</label>
-                        <select id="inventoryStockLevel" name="stock_level" class="form-select form-select-sm" style="border-radius: 8px;">
-                            <option value="all" @selected(($filters['stock_level'] ?? 'all') === 'all')>All stock</option>
-                            <option value="in_stock" @selected(($filters['stock_level'] ?? '') === 'in_stock')>In stock</option>
-                            <option value="out_of_stock" @selected(($filters['stock_level'] ?? '') === 'out_of_stock')>Out of stock</option>
-                        </select>
-                    </div>
-                    <div class="col-xl-3 col-md-1 d-flex gap-2">
-                        <button type="submit" class="btn btn-danger btn-sm w-100 py-1.5 shadow-sm" style="border-radius: 8px; background-color: #db2828;"><i class="fa-solid fa-magnifying-glass me-1"></i>Filter</button>
-                        <a href="{{ route('owner.reports.inventory') }}" class="btn btn-outline-secondary btn-sm" title="Clear filters" aria-label="Clear filters"><i class="fa-solid fa-rotate-left"></i></a>
-                    </div>
-                </form>
-            </div>
+    <form method="GET" action="{{ route('owner.reports.inventory') }}" class="row g-3 align-items-end" id="autoFilterForm">
+        <div class="col-xl-4 col-md-4">
+            <label for="inventoryCategory" class="form-label text-muted small fw-semibold">Category</label>
+            <select id="inventoryCategory" name="category_id" class="form-select form-select-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+                <option value="">All categories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" @selected((string) ($filters['category_id'] ?? '') === (string) $category->id)>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xl-4 col-md-4">
+            <label for="inventoryBranch" class="form-label text-muted small fw-semibold">Branch</label>
+            <select id="inventoryBranch" name="branch_id" class="form-select form-select-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+                <option value="">All branches</option>
+                @foreach($branches as $branch)
+                    <option value="{{ $branch->id }}" @selected((string) ($filters['branch_id'] ?? '') === (string) $branch->id)>{{ $branch->branch_name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-xl-3 col-md-3">
+            <label for="inventoryStockLevel" class="form-label text-muted small fw-semibold">Stock status</label>
+            <select id="inventoryStockLevel" name="stock_level" class="form-select form-select-sm" style="border-radius: 8px;" onchange="this.form.submit()">
+                <option value="all" @selected(($filters['stock_level'] ?? 'all') === 'all')>All stock</option>
+                <option value="in_stock" @selected(($filters['stock_level'] ?? '') === 'in_stock')>In stock</option>
+                <option value="out_of_stock" @selected(($filters['stock_level'] ?? '') === 'out_of_stock')>Out of stock</option>
+            </select>
+        </div>
+        <div class="col-xl-1 col-md-1 d-flex gap-2">
+            <a href="{{ route('owner.reports.inventory') }}" class="btn btn-outline-secondary btn-sm w-100 py-1.5" style="border-radius: 8px; display: flex; align-items-center; justify-content: center;" title="Reset filters" aria-label="Reset filters"><i class="fa-solid fa-rotate-left"></i></a>
+        </div>
+    </form>
+</div>
 
             <!-- 3. Stock Status Table Section -->
             <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white mb-4">

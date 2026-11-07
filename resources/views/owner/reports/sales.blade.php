@@ -30,36 +30,43 @@
             </div>
 
             <!-- 1. Summary Cards -->
-            <div class="row g-3 mb-4">
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-primary h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Sales in period</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($totalSales, 2) }}</h3>
-                        <span class="text-muted small mt-1">Based on selected filters</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-success h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Transactions</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($transactionCount) }}</h3>
-                        <span class="text-muted small mt-1">In selected period</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-warning h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Items sold</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($unitsSold) }}</h3>
-                        <span class="text-muted small mt-1">Units in selected period</span>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 border-info h-100">
-                        <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Average sale</span>
-                        <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($transactionCount ? $totalSales / $transactionCount : 0, 2) }}</h3>
-                        <span class="text-info small mt-1"><i class="fa-solid fa-receipt"></i> Per transaction</span>
-                    </div>
-                </div>
-            </div>
+           <div class="row g-3 mb-4">
+    <!-- Sales in period -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Sales in period</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($totalSales, 2) }}</h3>
+            <span class="text-muted small mt-1">Based on selected filters</span>
+        </div>
+    </div>
+    
+    <!-- Transactions -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #B91C32 !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Transactions</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($transactionCount) }}</h3>
+            <span class="text-muted small mt-1">In selected period</span>
+        </div>
+    </div>
+    
+    <!-- Items sold -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #172B4D !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Items sold</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">{{ number_format($unitsSold) }}</h3>
+            <span class="text-muted small mt-1">Units in selected period</span>
+        </div>
+    </div>
+    
+    <!-- Average sale -->
+    <div class="col-xl-3 col-md-6">
+        <div class="card border-0 shadow-sm rounded-3 p-3 bg-white border-start border-4 h-100" style="border-color: #B91C32 !important;">
+            <span class="text-muted text-uppercase fw-semibold" style="font-size: 11px;">Average sale</span>
+            <h3 class="fw-bold text-dark mt-1 mb-0">₱{{ number_format($transactionCount ? $totalSales / $transactionCount : 0, 2) }}</h3>
+            <span class="small mt-1" style="color: #B91C32;"><i class="fa-solid fa-receipt"></i> Per transaction</span>
+        </div>
+    </div>
+</div>
 
             <!-- 2. Filters Section -->
         <div class="card border-0 shadow-sm rounded-3 p-3 mb-4 bg-white report-filters">

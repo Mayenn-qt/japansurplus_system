@@ -45,7 +45,7 @@
 
                 <!-- This Week Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #f59e0b !important;">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #172B4D !important;">
                         <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Week</span>
                         <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($weekSales ?? 0, 2) }}</h3>
                     </div>
@@ -53,7 +53,7 @@
 
                 <!-- This Month Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #10b981 !important;">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #738477 !important;">
                         <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Month</span>
                         <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($monthSales ?? 0, 2) }}</h3>
                     </div>
@@ -61,7 +61,7 @@
 
                 <!-- This Year Sales -->
                 <div class="col-xl-3 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #6366f1 !important;">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #B91C32 !important;">
                         <span class="text-black-50 small fw-medium d-block mb-1 text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">This Year</span>
                         <h3 class="fw-bold mb-0 text-black">₱ {{ number_format($yearSales ?? 0, 2) }}</h3>
                     </div>
@@ -83,13 +83,13 @@
                 </div>
 
                 <div class="col-xl-6 col-md-6">
-                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #0ea5e9 !important;">
+                    <div class="dashboard-card p-4 h-100 shadow-sm" style="border-left: 4px solid #172B4D !important;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <span class="text-black-50 small fw-medium d-block text-uppercase" style="font-size: 11px; letter-spacing: 0.5px;">Total Customers</span>
                                 <h3 class="fw-bold mb-0 text-black">{{ number_format($totalCustomers ?? 0) }}</h3>
                             </div>
-                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.75rem;">Profiles Database</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2.5 py-1" style="font-size: 0.75rem;">Profiles Database</span>
                         </div>
                     </div>
                 </div>

@@ -25,7 +25,7 @@
                         <h4 class="fw-bold mb-1" style="color: var(--ink); letter-spacing: -0.5px;">Branch Management</h4>
                         <p class="text-muted mb-0" style="font-size:13.5px;">Manage all Ohaiyo Japan Surplus locations and warehouse branches</p>
                     </div>
-                    <button class="btn btn-dark px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddBranch" style="border-radius: 8px; font-size: 13.5px; font-weight: 500; background-color: #0f172a; border-color: #0f172a;">
+                    <button class="btn btn-dark px-3 py-2 d-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAddBranch" style="border-radius: 8px; font-size: 13.5px; font-weight: 500; background-color: #cc1139; border-color: #cc1139;">
                         <i class="fa-solid fa-plus text-white" style="font-size: 12px;"></i> Add Branch
                     </button>
                 </div>
@@ -36,7 +36,9 @@
                         <div class="col-md-4">
                             <div class="card border-0 shadow-sm p-4 rounded-3 h-100 branch-card" style="background-color: var(--bs-card-bg, #fff);">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">{{ $branch->branch_name }}</h6>
+                                    <h6 class="fw-bold mb-0" style="color: var(--ink); font-size: 16px;">
+    {{ $branch->branch_name }}
+</h6>
                                     <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-1.5" style="font-weight: 500; font-size: 11.5px;">Active</span>
                                 </div>
 
@@ -52,7 +54,7 @@
                                 </div>
 
                                 <div class="d-flex gap-2 mt-auto">
-                                    <a href="{{ route('owner.branch.operations', $branch) }}" class="btn btn-outline-dark btn-sm w-100 py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View Operations</a>
+                                    <a href="{{ route('owner.branch.operations', $branch) }}" class="btn btn-outline-danger btn-sm w-100 py-2" style="border-radius: 8px; font-weight: 500; font-size: 13px;">View Operations</a>
                                 </div>
                             </div>
                         </div>
